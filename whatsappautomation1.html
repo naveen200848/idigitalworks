@@ -3,93 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iDigitalWorks - WhatsApp Automation</title>
+    
+    <!-- SEO Meta Tags -->
+    <title>WhatsApp Automation & Marketing Services | iDigitalWorks</title>
+    <meta name="description" content="Scale your business with iDigitalWorks' WhatsApp Automation. 98% open rates, AI chatbots, bulk broadcasts, and CRM integration. Official Meta Partner.">
+    <meta name="keywords" content="WhatsApp Marketing, WhatsApp API, WhatsApp Automation, Chatbots, Bulk Message Sender, WhatsApp Business API India, WhatsApp Marketing Software">
+    <meta name="author" content="iDigitalWorks">
+    <link rel="canonical" href="https://www.idigitalworks.com/whatsapp-automation">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.idigitalworks.com/whatsapp-automation">
+    <meta property="og:title" content="WhatsApp Automation & Marketing Services | iDigitalWorks">
+    <meta property="og:description" content="Drive 3x more sales with WhatsApp Marketing. Automated chatbots, shared team inbox, and bulk broadcasts. Start your free trial today.">
+    <meta property="og:image" content="https://www.idigitalworks.com/images/og-whatsapp.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.idigitalworks.com/whatsapp-automation">
+    <meta property="twitter:title" content="WhatsApp Automation & Marketing Services | iDigitalWorks">
+    <meta property="twitter:description" content="Drive 3x more sales with WhatsApp Marketing. Automated chatbots, shared team inbox, and bulk broadcasts.">
+    <meta property="twitter:image" content="https://www.idigitalworks.com/images/og-whatsapp.jpg">
+
+    <!-- Favicon -->
+    <link rel="icon" href="idigitalworkslogo1.jpg" type="image/jpeg">
+
+    <!-- Google Tag Manager (Replace G-XXXXXXXXXX with your actual ID) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
+    <!-- JSON-LD Schema for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "WhatsApp Automation & Marketing",
+      "provider": {
+        "@type": "Organization",
+        "name": "iDigitalWorks",
+        "logo": "https://www.idigitalworks.com/idigitalworkslogo1.jpg",
+        "url": "https://www.idigitalworks.com"
+      },
+      "serviceType": "Digital Marketing",
+      "areaServed": "Global",
+      "description": "Enterprise-grade WhatsApp Business API solutions including chatbots, bulk messaging, and team inbox."
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "What is WhatsApp Business API?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "WhatsApp Business API is a programmable interface that allows medium and large businesses to automate communication with customers at scale, using features like chatbots and bulk broadcasts."
+        }
+      }, {
+        "@type": "Question",
+        "name": "How much does WhatsApp Marketing cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our pricing starts at ₹1,999 per month for the Starter plan, which includes 35,000 messages. We also offer 6-month and annual packages with significant discounts."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Can I use multiple agents on one number?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, with iDigitalWorks Shared Team Inbox, multiple agents can manage customer conversations from a single WhatsApp number simultaneously."
+        }
+      }]
+    }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Manrope', sans-serif;
             background-color: #F3F4F6;
             color: #111827;
             overflow-x: hidden;
+            cursor: auto;
         }
+
+        /* --- CUSTOM SVG CURSOR --- */
+        #sennep-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 60px;
+            z-index: 9999;
+            pointer-events: none;
+            transform: translate(-20%, -10%); 
+            transition: transform 0.15s ease-out, opacity 0.2s ease;
+            will-change: transform;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+            opacity: 0;
+        }
+
+        /* --- CURSOR STATE CLASSES --- */
+        body.custom-cursor-active #sennep-cursor { opacity: 1; }
+        body.custom-cursor-active .cursor-target,
+        body.custom-cursor-active #radial-menu,
+        body.custom-cursor-active #menu-trigger { cursor: none !important; }
+        body.custom-cursor-active.is-hovering #sennep-cursor { transform: translate(-20%, -10%) scale(0.9) rotate(-10deg); }
 
         /* --- MODERN GRADIENT PALETTE --- */
-        .bg-hero-gradient {
-            background: radial-gradient(circle at top right, #0f3834 0%, #075E54 40%, #054039 100%);
-        }
-        
-        .text-gradient-primary {
-            background: linear-gradient(135deg, #075E54 0%, #25D366 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .btn-gradient {
-            background: linear-gradient(90deg, #25D366 0%, #128C7E 100%);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-        }
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
-            filter: brightness(1.1);
-        }
+        .bg-hero-gradient { background: radial-gradient(circle at top right, #0f3834 0%, #075E54 40%, #054039 100%); }
+        .text-gradient-primary { background: linear-gradient(135deg, #075E54 0%, #25D366 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-gradient { background: linear-gradient(90deg, #25D366 0%, #128C7E 100%); transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); filter: brightness(1.1); }
 
         /* Typography */
-        .display-text {
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-        }
+        .display-text { letter-spacing: -0.03em; line-height: 1.1; }
 
         /* --- RADIAL MENU STYLES --- */
-        .radial-overlay {
-            clip-path: circle(0% at 90% 10%);
-            transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
-            pointer-events: none;
-        }
-        .radial-overlay.open {
-            clip-path: circle(150% at 90% 10%);
-            pointer-events: auto;
-        }
-        .connector-line {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            transition: stroke-dashoffset 1s ease 0.2s, stroke 0.3s;
-        }
+        .radial-overlay { clip-path: circle(0% at 90% 10%); transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1); pointer-events: none; }
+        .radial-overlay.open { clip-path: circle(150% at 90% 10%); pointer-events: auto; }
+        .connector-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1s ease 0.2s, stroke 0.3s; }
         .radial-overlay.open .connector-line { stroke-dashoffset: 0; }
-        .nav-node {
-            transform: scale(0);
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+        .nav-node { transform: scale(0); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .radial-overlay.open .nav-node { transform: scale(1); }
         .radial-overlay.open .node-1 { transition-delay: 0.3s; }
         .radial-overlay.open .node-2 { transition-delay: 0.4s; }
         .radial-overlay.open .node-3 { transition-delay: 0.5s; }
         .radial-overlay.open .node-4 { transition-delay: 0.6s; }
-        .nav-node:hover {
-            transform: scale(1.15) !important;
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            color: white;
-            border-color: #25D366;
-            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
-        }
+        .nav-node:hover { transform: scale(1.15) !important; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; border-color: #25D366; box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4); }
         
         /* --- SCROLL UTILS --- */
         .horizontal-scroll-wrapper { height: 400vh; position: relative; }
         .horizontal-sticky-container { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; }
         .horizontal-track { display: flex; gap: 4rem; padding-left: 5vw; padding-right: 10vw; will-change: transform; }
-        
-        .feature-card { 
-            min-width: 85vw; 
-            height: 70vh; 
-            background: white; 
-            border-radius: 2rem; 
-            overflow: hidden; 
-            position: relative; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255,255,255,0.8);
-        }
+        .feature-card { min-width: 85vw; height: 70vh; background: white; border-radius: 2rem; overflow: hidden; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255,255,255,0.8); }
         @media (min-width: 768px) { .feature-card { min-width: 45vw; height: 600px; } }
 
         /* Cyclemon Vertical Scroll Colors */
@@ -97,49 +155,46 @@
         .cycle-sticky { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         .cycle-slide { position: absolute; inset: 0; opacity: 0; transform: translateY(100%) scale(1); transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; }
         .cycle-slide.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; z-index: 10; }
+        #slide-1 { background-color: #FFC107; color: #1A1A1A; }
+        #slide-2 { background-color: #F48FB1; color: #1A1A1A; }
+        #slide-3 { background-color: #80DEEA; color: #1A1A1A; }
+        #slide-4 { background-color: #CE93D8; color: #1A1A1A; }
         
-        /* Explicit Cyclemon Colors */
-        #slide-1 { background-color: #FFC107; color: #1A1A1A; } /* Vibrant Yellow */
-        #slide-2 { background-color: #F48FB1; color: #1A1A1A; } /* Vibrant Pink */
-        #slide-3 { background-color: #80DEEA; color: #1A1A1A; } /* Vibrant Cyan */
-        #slide-4 { background-color: #CE93D8; color: #1A1A1A; } /* Vibrant Purple */
-        
-        /* Custom Button */
         .rivian-btn { letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; font-size: 0.8rem; }
-
-        /* Header Typewriter Effect */
-        .typing-text::after {
-            content: '|';
-            animation: blink 1s infinite;
-        }
+        .typing-text::after { content: '|'; animation: blink 1s infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-        /* Finger Animation */
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(-5deg); }
-        }
-
-        .hand-illustration {
-            animation: bounce 2s infinite ease-in-out;
-            filter: drop-shadow(0px 10px 20px rgba(0,0,0,0.4));
-            width: 80px;
-            height: 160px;
-        }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .hand-illustration { animation: bounce 2s infinite ease-in-out; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.2)); width: 50px; height: 50px; }
+        .hero-video-container { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
         
-        /* Video Container Styles for "Below Header" Look */
-        .hero-video-container {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+        /* WhatsApp Button Pulse */
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
+        .whatsapp-float { animation: pulse-green 2s infinite; }
+
+        /* ROI Card Gradient */
+        .roi-card-gradient { background: linear-gradient(145deg, #075E54 0%, #044E44 100%); }
+
+        /* Logo Blend */
+        .logo-blend { mix-blend-mode: multiply; }
     </style>
 </head>
 <body class="antialiased bg-gray-50">
 
+    <!-- CUSTOM SVG CURSOR -->
+    <div id="sennep-cursor">
+        <svg width="100%" height="100%" viewBox="0 0 50 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 100 V30 C20 15 25 5 35 5 C45 5 50 15 50 30 V100 Z" fill="#F3C677" stroke="#000000" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M30 10 C27 10 25 13 25 18 L45 18 C45 13 43 10 40 10 Z" fill="#FFFFFF" opacity="0.6"/>
+        </svg>
+    </div>
+
     <!-- RADIAL NETWORK MENU OVERLAY -->
-    <div id="radial-menu" class="radial-overlay fixed inset-0 z-[100] bg-[#075E54]/95 backdrop-blur-2xl flex items-center justify-center">
+    <div id="radial-menu" class="radial-overlay fixed inset-0 z-[100] bg-[#075E54]/95 backdrop-blur-2xl flex items-center justify-center menu-cursor-area">
+        <!-- (Menu Content Same as Before) -->
         <div class="relative w-full h-full max-w-4xl max-h-[800px] mx-auto flex items-center justify-center">
             <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg">
                 <line x1="50%" y1="50%" x2="25%" y2="25%" stroke="#25D366" stroke-width="2" stroke-opacity="0.5" class="connector-line" id="line-1" />
@@ -147,39 +202,37 @@
                 <line x1="50%" y1="50%" x2="75%" y2="75%" stroke="#25D366" stroke-width="2" stroke-opacity="0.5" class="connector-line" id="line-3" />
                 <line x1="50%" y1="50%" x2="25%" y2="75%" stroke="#25D366" stroke-width="2" stroke-opacity="0.5" class="connector-line" id="line-4" />
             </svg>
-            <!-- Center Hub -->
-            <div class="absolute z-20 bg-white/10 p-3 rounded-full shadow-[0_0_60px_rgba(37,211,102,0.6)] animate-pulse cursor-default backdrop-blur-md">
+            <div class="absolute z-20 bg-white/10 p-3 rounded-full shadow-[0_0_60px_rgba(37,211,102,0.6)] animate-pulse cursor-default backdrop-blur-md menu-interactable">
                 <div class="bg-gradient-to-br from-[#25D366] to-[#128C7E] w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center text-white shadow-lg">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 md:h-12 md:w-12" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.54 2 2.08 6.47 2.02 11.96L2 22l10-3.02C17.5 19.92 22 15.46 22 9.96c0-5.5-4.48-10-10-10zm4.5 14.5c-.32.61-1.8.85-2.6 1-.74.1-1.74.07-2.65-.24-.9-.3-1.87-.8-2.65-1.57-.78-.77-1.35-1.75-1.65-2.73-.3-1-.2-2.12.1-3.04.3-.9 1-1.7 1.8-2.26.8-.54 1.7-.8 2.5-.8.15 0 .3.02.45.03l.35.08c.55.13.9.36 1.15.58.26.24.45.52.55.82.1.3.1.6.1 1l-.22.67c-.2.62-.7 1.5-1.2 2.05-.5.54-1.12.87-1.7.92-.6.05-1.1-.2-1.6-.45l-.4-.2c-.3-.12-.6-.18-1.03.1-.42.28-.9.96-.5 1.7.2.4.4.7.7 1.04.3.3.62.6.96.88.34.25.68.46 1.02.66.3.18.63.3.96.4.3.1.6.14.94.07l.3-.07c.92-.25 1.5-.78 1.9-1.34.2-.3.35-.6.45-.9.1-.3.15-.6.15-.9l-.02-.6c-.05-.3-.1-.6-.2-.8-.1-.2-.2-.4-.4-.6-.2-.2-.35-.3-.5-.4-.15-.1-.3-.1-.5-.1h-.1c-.4 0-.8.1-1.1.2l-.3.1c-.2.1-.5.2-.7.4-.2.2-.4.4-.5.6-.2.2-.3.4-.3.6-.1.2-.08.4-.04.6.05.2.1.4.2.6.1.2.2.4.3.5.15.1.3.2.45.3.62.3 1.2.4 1.8.4.6 0 1.2-.1 1.8-.4.7-.3 1.4-.7 1.9-1.3.6-.6 1-1.4 1.2-2.3.15-.9.1-1.8-.1-2.7-.2-.9-.7-1.7-1.3-2.3-.6-.6-1.3-1.1-2.2-1.3-.9-.2-1.8-.3-2.7-.1-.9.2-1.7.6-2.3 1.3-.6.6-1.1 1.3-1.3 2.2-.2.9-.2 1.8.1 2.7.3.9.7 1.7 1.3 2.3.6.6 1.3 1.1 2.2 1.3.9.2 1.8.2 2.7.1l.6-.2c.2-.08.5-.15.7-.24.18-.08.35-.15.5-.24.2-.1.4-.2.6-.3.15-.1.3-.2.45-.3z"/></svg>
                 </div>
             </div>
-            <!-- Nodes -->
-            <a href="#capabilities" onclick="toggleMenu()" class="nav-node node-1 absolute left-[15%] top-[15%] md:left-[25%] md:top-[25%] z-20 flex flex-col items-center group" onmouseenter="highlightLine('line-1')" onmouseleave="resetLine('line-1')">
+            <a href="#capabilities" onclick="toggleMenu()" class="nav-node node-1 absolute left-[15%] top-[15%] md:left-[25%] md:top-[25%] z-20 flex flex-col items-center group menu-interactable" onmouseenter="highlightLine('line-1')" onmouseleave="resetLine('line-1')">
                 <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white border-4 border-white/10 flex items-center justify-center shadow-xl transition-all duration-300">
                     <svg class="w-8 h-8 md:w-10 md:h-10 text-[#075E54] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 </div>
                 <span class="mt-4 text-lg font-bold text-white tracking-widest uppercase">Features</span>
             </a>
-            <a href="#solutions" onclick="toggleMenu()" class="nav-node node-2 absolute right-[15%] top-[15%] md:right-[25%] md:top-[25%] z-20 flex flex-col items-center group" onmouseenter="highlightLine('line-2')" onmouseleave="resetLine('line-2')">
+            <a href="#solutions" onclick="toggleMenu()" class="nav-node node-2 absolute right-[15%] top-[15%] md:right-[25%] md:top-[25%] z-20 flex flex-col items-center group menu-interactable" onmouseenter="highlightLine('line-2')" onmouseleave="resetLine('line-2')">
                 <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white border-4 border-white/10 flex items-center justify-center shadow-xl transition-all duration-300">
                     <svg class="w-8 h-8 md:w-10 md:h-10 text-[#075E54] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                 </div>
                 <span class="mt-4 text-lg font-bold text-white tracking-widest uppercase">Industries</span>
             </a>
-            <a href="#pricing" onclick="toggleMenu()" class="nav-node node-3 absolute right-[15%] bottom-[15%] md:right-[25%] md:bottom-[25%] z-20 flex flex-col items-center group" onmouseenter="highlightLine('line-3')" onmouseleave="resetLine('line-3')">
+            <a href="#pricing" onclick="toggleMenu()" class="nav-node node-3 absolute right-[15%] bottom-[15%] md:right-[25%] md:bottom-[25%] z-20 flex flex-col items-center group menu-interactable" onmouseenter="highlightLine('line-3')" onmouseleave="resetLine('line-3')">
                 <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white border-4 border-white/10 flex items-center justify-center shadow-xl transition-all duration-300">
                     <svg class="w-8 h-8 md:w-10 md:h-10 text-[#075E54] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <span class="mt-4 text-lg font-bold text-white tracking-widest uppercase">Pricing</span>
             </a>
-            <a href="#contact" onclick="toggleMenu()" class="nav-node node-4 absolute left-[15%] bottom-[15%] md:left-[25%] md:bottom-[25%] z-20 flex flex-col items-center group" onmouseenter="highlightLine('line-4')" onmouseleave="resetLine('line-4')">
+            <a href="#contact" onclick="toggleMenu()" class="nav-node node-4 absolute left-[15%] bottom-[15%] md:left-[25%] md:bottom-[25%] z-20 flex flex-col items-center group menu-interactable" onmouseenter="highlightLine('line-4')" onmouseleave="resetLine('line-4')">
                 <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white border-4 border-white/10 flex items-center justify-center shadow-xl transition-all duration-300">
                     <svg class="w-8 h-8 md:w-10 md:h-10 text-[#075E54] group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 </div>
                 <span class="mt-4 text-lg font-bold text-white tracking-widest uppercase">Contact</span>
             </a>
         </div>
-        <button onclick="toggleMenu()" class="absolute top-8 right-8 z-30 text-white/50 hover:text-white transition-colors">
+        <button onclick="toggleMenu()" class="absolute top-8 right-8 z-30 text-white/50 hover:text-white transition-colors menu-interactable">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
     </div>
@@ -187,14 +240,12 @@
     <!-- Navigation Bar -->
     <nav class="fixed w-full z-50 px-6 py-6 transition-all duration-300 bg-[#075E54]/90 backdrop-blur-md shadow-lg border-b border-white/10">
         <div class="max-w-[1600px] mx-auto flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-extrabold tracking-tighter text-white flex items-center gap-2">
-                <div class="w-8 h-8 bg-gradient-to-br from-[#25D366] to-[#128C7E] rounded-lg flex items-center justify-center shadow-lg">
-                    <span class="text-white text-lg font-bold">i</span>
-                </div>
-                iDigitalWorks
+            <a href="index.html" class="flex items-center gap-3 group">
+                <img src="idigitalworkslogo1.jpg" alt="iDigitalWorks Logo" class="h-8 w-auto rounded-md shadow-sm">
+                <span class="text-2xl font-extrabold tracking-tighter text-white">iDigitalWorks</span>
             </a>
             <div class="flex items-center gap-6">
-                <button onclick="toggleMenu()" class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white hover:text-[#25D366] transition-colors">
+                <button onclick="toggleMenu()" id="menu-trigger" class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white hover:text-[#25D366] transition-colors menu-cursor-area">
                     Menu
                     <div class="flex flex-col gap-1">
                         <span class="w-6 h-0.5 bg-white group-hover:w-4 group-hover:bg-[#25D366] transition-all"></span>
@@ -207,7 +258,6 @@
 
     <!-- Hero Section with Video & Scrolling Finger -->
     <section class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-hero-gradient text-white px-6 pt-32 pb-20">
-        <!-- Abstract Gradient Blobs -->
         <div class="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-[#25D366] rounded-full mix-blend-overlay filter blur-[120px] opacity-20 animate-pulse"></div>
         <div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#128C7E] rounded-full mix-blend-overlay filter blur-[100px] opacity-30"></div>
 
@@ -227,7 +277,7 @@
                 <a href="#solutions" class="rivian-btn btn-gradient text-white px-10 py-4 rounded-full text-sm tracking-wider">Explore Features</a>
             </div>
 
-            <!-- AESTHETIC VIDEO EMBED (Below Header, Wide & Cinematic) -->
+            <!-- AESTHETIC VIDEO EMBED (Cinematic Container) -->
             <div class="relative z-10 max-w-6xl mx-auto rounded-2xl overflow-hidden hero-video-container group transform transition-transform duration-500 hover:scale-[1.01]">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0F172A]/80 via-transparent to-transparent z-10 pointer-events-none"></div>
                 <video autoplay loop muted playsinline class="w-full h-auto object-cover">
@@ -244,14 +294,10 @@
         </div>
 
         <!-- SCROLL-LINKED FINGER ILLUSTRATION (Pointing Down) -->
-        <div id="header-finger" class="finger-container" style="bottom: 5%; left: 50%; transform: translateX(-50%);">
-             <!-- Custom Vector Finger based on your image -->
+        <div id="header-finger" class="finger-container" style="bottom: 5%; left: 50%; transform: translateX(-50%); z-index: 20; width: 100px; height: 200px; position: absolute; will-change: transform;">
              <svg width="100%" height="100%" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));">
-                <!-- Finger Body -->
-                <path d="M20,200 L20,60 C20,30 35,10 50,10 C65,10 80,30 80,60 L80,200 Z" fill="#FFD580" stroke="#E0AC69" stroke-width="2"/>
-                <!-- Fingernail -->
+                <path d="M20,200 L20,60 C20,30 35,10 50,10 C65,10 80,30 80,60 L80,200 Z" fill="#F3C677" stroke="#E0AC69" stroke-width="2"/>
                 <path d="M50,15 C40,15 35,25 35,40 L65,40 C65,25 60,15 50,15 Z" fill="white"/>
-                <!-- Knuckle Line -->
                 <path d="M30,90 Q50,95 70,90" stroke="#E0AC69" stroke-width="2" fill="none"/>
             </svg>
         </div>
@@ -265,62 +311,61 @@
                 <p class="text-3xl md:text-4xl font-bold text-[#075E54] display-text">Built for <br>Scale.</p>
             </div>
             <div class="horizontal-track" id="scrolling-track">
-                
                 <!-- Card 1 -->
                 <div class="feature-card group border border-gray-100">
                     <div class="h-1/2 bg-gradient-to-br from-green-50 to-green-100 overflow-hidden relative">
-                         <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Indian Business Team Broadcast">
+                         <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Team">
                          <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
                     </div>
                     <div class="h-1/2 p-8 flex flex-col justify-between bg-white/80 backdrop-blur-sm">
                         <div>
                             <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#128C7E] mb-4">Broadcast & Bulk Messages</h3>
-                            <p class="text-gray-600 leading-relaxed">Run personalized campaigns at scale. Send Diwali offers, updates, and newsletters.</p>
+                            <p class="text-gray-600 leading-relaxed">Run personalized campaigns at scale. Send offers and updates to unlimited opt-in users.</p>
                         </div>
                         <div class="flex gap-2">
                             <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full border border-green-200">98% Open Rate</span>
                         </div>
                     </div>
                 </div>
-
                 <!-- Card 2 -->
                 <div class="feature-card group border border-gray-100">
                     <div class="h-1/2 bg-gradient-to-br from-blue-50 to-blue-100 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Indian Office Team Inbox">
+                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Office">
                         <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
                     </div>
                     <div class="h-1/2 p-8 flex flex-col justify-between bg-white/80 backdrop-blur-sm">
                         <div>
                             <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#128C7E] mb-4">Shared Team Inbox</h3>
-                            <p class="text-gray-600 leading-relaxed">Centralize conversations from Mumbai to Delhi. Collaborate with your team faster.</p>
+                            <p class="text-gray-600 leading-relaxed">Centralize conversations. Collaborate with your team, assign tags, and respond faster with a unified dashboard.</p>
                         </div>
                     </div>
                 </div>
-
                 <!-- Card 3 -->
                 <div class="feature-card group border border-gray-100">
                     <div class="h-1/2 bg-gradient-to-br from-gray-50 to-gray-200 overflow-hidden relative">
-                        <img src="https://images.unsplash.com/photo-1601121141499-17ae80afc03a?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-110" alt="Indian Retail Chatbot">
+                        <img src="https://images.unsplash.com/photo-1601121141499-17ae80afc03a?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover opacity-90 transition-transform duration-700 group-hover:scale-110" alt="Retail">
                         <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
                     </div>
                     <div class="h-1/2 p-8 flex flex-col justify-between bg-white/80 backdrop-blur-sm">
                         <div>
                             <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#128C7E] mb-4">No-Code Chatbots</h3>
-                            <p class="text-gray-600 leading-relaxed">Automate support 24/7. Use the visual drag-and-drop builder to create flows.</p>
+                            <p class="text-gray-600 leading-relaxed">Automate support 24/7. Create flows that qualify leads and answer FAQs instantly.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="bg-gray-200 text-gray-800 text-xs font-bold px-3 py-1 rounded-full border border-gray-300">60% Automation</span>
                         </div>
                     </div>
                 </div>
-
                 <!-- Card 4 -->
                 <div class="feature-card group border border-gray-100">
                     <div class="h-1/2 bg-gradient-to-br from-yellow-50 to-yellow-100 overflow-hidden relative">
-                         <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Indian Tech API">
+                         <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Tech">
                         <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
                     </div>
                     <div class="h-1/2 p-8 flex flex-col justify-between bg-white/80 backdrop-blur-sm">
                         <div>
                             <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#128C7E] mb-4">Developer API</h3>
-                            <p class="text-gray-600 leading-relaxed">Build custom solutions. Connect iDigitalWorks to your own stack.</p>
+                            <p class="text-gray-600 leading-relaxed">Build custom solutions. Connect iDigitalWorks to your stack with robust webhooks.</p>
                         </div>
                     </div>
                 </div>
@@ -331,59 +376,136 @@
     <!-- VERTICAL SCROLL: "Industries" -->
     <section id="industries" class="cycle-wrapper">
         <div class="cycle-sticky">
-            
-            <!-- Slide 1: Education (Yellow) -->
-            <div class="cycle-slide active" id="slide-1">
-                <div class="absolute inset-0 z-0">
-                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 mix-blend-multiply" alt="Indian Education">
-                </div>
-                <div class="relative z-10 text-center max-w-4xl px-6">
-                    <div class="inline-block bg-white/80 text-yellow-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Education & EdTech</div>
-                    <h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Boost Student <br>Enrollment.</h2>
-                    <p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Automate counseling sessions, send exam reminders, and streamline admission.</p>
-                </div>
-            </div>
-
-            <!-- Slide 2: Retail (Pink) -->
-            <div class="cycle-slide" id="slide-2">
-                <div class="absolute inset-0 z-0">
-                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 mix-blend-multiply" style="filter: contrast(1.3) brightness(1.1) grayscale(10%);" alt="Retail Shopping">
-                </div>
-                <div class="relative z-10 text-center max-w-4xl px-6">
-                    <div class="inline-block bg-white/80 text-pink-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">E-commerce & Retail</div>
-                    <h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Recover Lost <br>Sales.</h2>
-                    <p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Trigger automated WhatsApp messages for abandoned carts.</p>
-                </div>
-            </div>
-
-            <!-- Slide 3: Healthcare (Cyan) -->
-            <div class="cycle-slide" id="slide-3">
-                <div class="absolute inset-0 z-0">
-                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?q=80&w=2571&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 mix-blend-multiply" alt="Indian Healthcare">
-                </div>
-                <div class="relative z-10 text-center max-w-4xl px-6">
-                    <div class="inline-block bg-white/80 text-cyan-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Healthcare</div>
-                    <h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Automate <br>Appointments.</h2>
-                    <p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Reduce no-shows by 40%. Let patients book slots directly on WhatsApp.</p>
-                </div>
-            </div>
-
-             <!-- Slide 4: Jewellery (Purple) -->
-             <div class="cycle-slide" id="slide-4">
-                <div class="absolute inset-0 z-0">
-                    <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 mix-blend-multiply" style="filter: sepia(20%);" alt="Indian Jewellery">
-                </div>
-                <div class="relative z-10 text-center max-w-4xl px-6">
-                    <div class="inline-block bg-white/80 text-purple-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Jewellery & Luxury</div>
-                    <h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Exclusive Collection <br>Drops.</h2>
-                    <p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Treat your VIP clients like royalty. Send personalized catalogs.</p>
-                </div>
-            </div>
+            <div class="cycle-slide active" id="slide-1"><div class="absolute inset-0 z-0"><img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 mix-blend-multiply"></div><div class="relative z-10 text-center max-w-4xl px-6"><div class="inline-block bg-white/80 text-yellow-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Education & EdTech</div><h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Boost Student <br>Enrollment.</h2><p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Automate counseling and send exam reminders.</p></div></div>
+            <div class="cycle-slide" id="slide-2"><div class="absolute inset-0 z-0"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover opacity-30 mix-blend-multiply" style="filter: contrast(1.3) brightness(1.1) grayscale(10%);"></div><div class="relative z-10 text-center max-w-4xl px-6"><div class="inline-block bg-white/80 text-pink-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">E-commerce & Retail</div><h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Recover Lost <br>Sales.</h2><p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Trigger automated WhatsApp messages for abandoned carts.</p></div></div>
+            <div class="cycle-slide" id="slide-3"><div class="absolute inset-0 z-0"><img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?q=80&w=2571&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 mix-blend-multiply"></div><div class="relative z-10 text-center max-w-4xl px-6"><div class="inline-block bg-white/80 text-cyan-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Healthcare</div><h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Automate <br>Appointments.</h2><p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Reduce no-shows by 40%.</p></div></div>
+             <div class="cycle-slide" id="slide-4"><div class="absolute inset-0 z-0"><img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=2670&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 mix-blend-multiply" style="filter: sepia(20%);"></div><div class="relative z-10 text-center max-w-4xl px-6"><div class="inline-block bg-white/80 text-purple-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Jewellery & Luxury</div><h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Exclusive Collection <br>Drops.</h2><p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Treat your VIP clients like royalty.</p></div></div>
         </div>
     </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="bg-gradient-to-b from-gray-50 to-white py-24 border-t border-gray-200">
+    <!-- ADVANTAGES / ROI SECTION (FIXED LAYOUT & AOV) -->
+    <section id="advantages" class="py-24 bg-white">
+        <div class="max-w-[1400px] mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold text-[#075E54] mb-6 display-text">Why WhatsApp Wins.</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Calculate the real impact on your bottom line.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+                <!-- Metric 1: Conversion -->
+                <div class="lg:col-span-4 bg-[#F3F4F6] rounded-[2rem] p-8 flex flex-col justify-between">
+                    <h3 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-4">Conversion Rate</h3>
+                    <div class="flex items-end gap-4">
+                        <div>
+                            <span class="text-6xl font-bold text-[#075E54]">4.0%</span>
+                            <p class="text-sm text-gray-500 mt-2">WhatsApp API</p>
+                        </div>
+                        <div class="mb-2">
+                            <span class="text-2xl font-bold text-gray-400 line-through decoration-red-500 decoration-2">1.5%</span>
+                            <p class="text-xs text-gray-400">Email / SMS</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-[#25D366] w-[72%]"></div>
+                    </div>
+                    <p class="text-sm text-[#25D366] font-bold mt-2">2.6x Higher Conversions</p>
+                </div>
+
+                <!-- Metric 2: Funnel Visualization (STACKED ON MOBILE, 3-COL ON DESKTOP) -->
+                <div class="lg:col-span-8 bg-[#075E54] rounded-[2rem] p-8 text-white relative overflow-hidden roi-card-gradient shadow-2xl">
+                   <div class="absolute top-0 right-0 w-64 h-64 bg-[#25D366] rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
+                   
+                   <div class="relative z-10 h-full flex flex-col justify-between">
+                       <h3 class="text-xl font-bold uppercase tracking-wider mb-8 text-white/80">Campaign ROI Model</h3>
+                       
+                       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 text-center md:text-left items-center">
+                           <!-- Step 1 -->
+                           <div class="bg-white/10 p-4 rounded-xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                               <p class="text-sm text-white/70 mb-1 font-medium uppercase tracking-wide">Audience</p>
+                               <p class="text-3xl font-bold text-white">20,000</p>
+                               <p class="text-xs text-white/50 mt-1">Messages Sent</p>
+                           </div>
+                           <!-- Arrow 1 -->
+                           <div class="hidden md:flex justify-center text-[#25D366] text-2xl"><i class="fas fa-arrow-right"></i></div>
+                           <div class="md:hidden text-[#25D366] text-xl py-2"><i class="fas fa-arrow-down"></i></div>
+
+                           <!-- Step 2 -->
+                           <div class="bg-white/10 p-4 rounded-xl border border-white/10 backdrop-blur-sm relative hover:bg-white/20 transition-colors">
+                               <p class="text-sm text-white/70 mb-1 font-medium uppercase tracking-wide">Sales (4%)</p>
+                               <p class="text-3xl font-bold text-white">800</p>
+                               <p class="text-xs text-white/50 mt-1">Orders Generated</p>
+                               <div class="absolute -top-3 -right-3 bg-[#25D366] text-[#075E54] text-[10px] font-bold px-2 py-1 rounded-full shadow-md">AOV: ₹500</div>
+                           </div>
+                           <!-- Arrow 2 -->
+                           <div class="hidden md:flex justify-center text-[#25D366] text-2xl"><i class="fas fa-arrow-right"></i></div>
+                           <div class="md:hidden text-[#25D366] text-xl py-2"><i class="fas fa-arrow-down"></i></div>
+
+                           <!-- Step 3 -->
+                           <div class="bg-white p-4 rounded-xl shadow-lg border-2 border-[#25D366] transform scale-105">
+                               <p class="text-sm text-[#075E54] mb-1 font-bold uppercase tracking-wide">Net Revenue</p>
+                               <p class="text-3xl font-bold text-[#25D366]">₹3.84 L</p>
+                               <p class="text-xs text-gray-500 mt-1">After Cost</p>
+                           </div>
+                       </div>
+                   </div>
+                </div>
+            </div>
+
+            <!-- Detailed Breakdown Table (MATCHING USER REQUEST EXACTLY) -->
+            <div class="bg-white border border-gray-200 rounded-[1.5rem] overflow-hidden shadow-lg">
+                <div class="p-6 bg-gray-50 border-b border-gray-200">
+                     <h4 class="text-lg font-bold text-gray-800">Detailed ROI Calculation</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-600">
+                        <thead class="bg-gray-100 text-gray-500 uppercase font-bold text-xs">
+                            <tr>
+                                <th class="px-6 py-4">Step</th>
+                                <th class="px-6 py-4">Calculation</th>
+                                <th class="px-6 py-4 text-right">Value (INR)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 font-medium">1. Total Campaign Volume</td>
+                                <td class="px-6 py-4">20,000 Messages Sent</td>
+                                <td class="px-6 py-4 text-right font-bold">20,000</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 font-medium">2. Conversions via Standard Channels (1.5%)</td>
+                                <td class="px-6 py-4">20,000 * 1.5%</td>
+                                <td class="px-6 py-4 text-right">300 Sales</td>
+                            </tr>
+                            <tr class="bg-green-50/50 hover:bg-green-50">
+                                <td class="px-6 py-4 font-medium text-[#075E54]">3. Conversions via WhatsApp API (4.0%)</td>
+                                <td class="px-6 py-4 text-[#075E54]">20,000 * 4%</td>
+                                <td class="px-6 py-4 text-right font-bold text-[#075E54]">800 Sales</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 font-medium">4. Gross Revenue from WhatsApp API</td>
+                                <td class="px-6 py-4">800 * 500 (AOV)</td>
+                                <td class="px-6 py-4 text-right font-bold">₹ 4,00,000</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 text-red-500">
+                                <td class="px-6 py-4 font-medium">5. Total Monthly API Cost</td>
+                                <td class="px-6 py-4">20,000 * ₹0.80</td>
+                                <td class="px-6 py-4 text-right">₹ 16,000</td>
+                            </tr>
+                            <tr class="bg-[#075E54] text-white">
+                                <td class="px-6 py-4 font-bold">6. Net Additional Revenue</td>
+                                <td class="px-6 py-4">Revenue - Marketing Cost</td>
+                                <td class="px-6 py-4 text-right font-bold text-xl">₹ 3,84,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- UPDATED PRICING SECTION -->
+    <section id="pricing" class="bg-white py-24 border-t border-gray-100">
         <div class="max-w-[1600px] mx-auto px-6">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 <div class="lg:col-span-4">
@@ -391,26 +513,79 @@
                     <p class="text-gray-600 mb-8 leading-relaxed">
                         Choose the plan that fits your scale. All plans include Green Tick Verification support.
                     </p>
-                    <a href="#contact" class="rivian-btn border border-[#25D366] text-[#075E54] px-8 py-4 rounded-full hover:bg-gradient-to-r hover:from-[#25D366] hover:to-[#128C7E] hover:text-white hover:border-transparent transition-all inline-block shadow-md">Contact Sales</a>
+                    <a href="#contact" class="rivian-btn border border-[#25D366] text-[#075E54] px-8 py-4 rounded-full hover:bg-gradient-to-r hover:from-[#25D366] hover:to-[#128C7E] hover:text-white hover:border-transparent transition-all inline-block shadow-md interactable">Contact Sales</a>
                 </div>
-                <div class="lg:col-span-8">
-                    <!-- Pricing Cards (Growth/Pro/Business) -->
-                    <div class="border-b border-gray-200 py-8 hover:bg-white hover:shadow-lg transition-all duration-300 px-6 -mx-6 rounded-2xl">
-                        <div class="flex flex-col md:flex-row justify-between md:items-center">
-                            <div><h3 class="text-2xl font-bold text-[#075E54]">Growth</h3><p class="text-sm text-gray-500 mt-1">For startups.</p></div>
-                            <span class="text-3xl font-bold text-gradient-primary mt-2 md:mt-0">$49<span class="text-sm text-gray-400 font-normal">/mo</span></span>
+                <div class="lg:col-span-8 space-y-6">
+                    <!-- Pricing Plan 1: Starter Month -->
+                    <div class="border border-gray-200 p-8 rounded-[2rem] hover:shadow-xl transition-all duration-300 interactable bg-white">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-6">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-2xl font-bold text-[#075E54]">STARTER MONTH</h3>
+                                </div>
+                                <p class="text-sm text-gray-500">Perfect for trying out WhatsApp Marketing.</p>
+                                <div class="mt-4 grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-600">
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 35,000 Messages</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 10 Templates</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 2 Bots</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 10,000 Contacts</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> Labels: 15 | Team: 2</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> Support: YouTube</div>
+                                </div>
+                            </div>
+                            <div class="text-right min-w-[120px]">
+                                <span class="block text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#25D366]">₹1,999</span>
+                                <span class="text-xs text-gray-400 uppercase tracking-wide">/ Month</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="border-b border-gray-200 py-8 bg-white px-6 -mx-6 rounded-2xl my-2 shadow-xl border border-green-100">
-                        <div class="flex flex-col md:flex-row justify-between md:items-center">
-                            <div><span class="text-xs font-bold text-[#25D366] uppercase tracking-wider mb-1 block">Most Popular</span><h3 class="text-2xl font-bold text-[#075E54]">Pro</h3><p class="text-sm text-gray-500 mt-1">Advanced automation.</p></div>
-                            <span class="text-3xl font-bold text-gradient-primary mt-2 md:mt-0">$99<span class="text-sm text-gray-400 font-normal">/mo</span></span>
+
+                    <!-- Pricing Plan 2: Best 6 Months -->
+                    <div class="border-2 border-[#25D366] p-8 rounded-[2rem] shadow-2xl relative overflow-hidden interactable bg-[#f0fdf4]">
+                        <div class="absolute top-0 right-0 bg-[#25D366] text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-widest">Best Value</div>
+                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-6">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-2xl font-bold text-[#075E54]">BEST 6 MONTHS</h3>
+                                </div>
+                                <p class="text-sm text-gray-500">Scale your business effectively.</p>
+                                <div class="mt-4 grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-700 font-medium">
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 50,000 Messages</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 20 Templates</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 5 Bots</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 50,000 Contacts</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> Labels: 30 | Team: 5</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> Support: 8hrs/5 Days</div>
+                                </div>
+                            </div>
+                            <div class="text-right min-w-[120px]">
+                                <span class="block text-4xl font-bold text-[#075E54]">₹5,999</span>
+                                <span class="text-xs text-gray-500 uppercase tracking-wide">For 6 Months</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="border-b border-gray-200 py-8 hover:bg-white hover:shadow-lg transition-all duration-300 px-6 -mx-6 rounded-2xl">
-                        <div class="flex flex-col md:flex-row justify-between md:items-center">
-                            <div><h3 class="text-2xl font-bold text-[#075E54]">Business</h3><p class="text-sm text-gray-500 mt-1">Enterprise scale.</p></div>
-                            <span class="text-3xl font-bold text-gradient-primary mt-2 md:mt-0">$299<span class="text-sm text-gray-400 font-normal">/mo</span></span>
+
+                    <!-- Pricing Plan 3: Best 1 Year Deal -->
+                    <div class="border border-gray-200 p-8 rounded-[2rem] hover:shadow-xl transition-all duration-300 interactable bg-white">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-6">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-2xl font-bold text-[#075E54]">BEST 1 YEAR DEAL</h3>
+                                </div>
+                                <p class="text-sm text-gray-500">Ultimate tool to skyrocket your business.</p>
+                                <div class="mt-4 grid grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-600">
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 80,000 Messages</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 50 Templates</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 10 Bots</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 50,000 Contacts</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> Labels: 30 | Team: 7</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> Support: Chat/Direct</div>
+                                </div>
+                            </div>
+                            <div class="text-right min-w-[120px]">
+                                <span class="block text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#25D366]">₹17,999</span>
+                                <span class="text-xs text-gray-400 uppercase tracking-wide">/ Year</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -418,35 +593,79 @@
         </div>
     </section>
 
-    <!-- Footer (Finger Removed) -->
+    <!-- FOOTER -->
     <footer class="bg-[#075E54] text-white py-20 px-6 relative" id="contact">
-        <div class="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-white/10 pb-12 mb-12">
+        <div class="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-white/10 pb-12 mb-12">
              <div class="col-span-1">
                 <a href="#" class="text-2xl font-extrabold tracking-tighter flex items-center gap-2">
                     <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-[#075E54] font-bold">i</div>
                     iDigitalWorks
                 </a>
-                <p class="mt-6 text-gray-300 text-sm leading-relaxed">Empowering businesses on WhatsApp.</p>
+                <p class="mt-6 text-gray-300 text-sm leading-relaxed max-w-md">
+                    Empowering businesses to connect, engage, and grow on the world's most popular messaging platform.
+                </p>
              </div>
-             <div><h4 class="font-bold text-white mb-6">Product</h4><ul class="space-y-4 text-sm text-gray-300"><li>WhatsApp API</li><li>Shared Inbox</li><li>Chatbots</li></ul></div>
-             <div><h4 class="font-bold text-white mb-6">Resources</h4><ul class="space-y-4 text-sm text-gray-300"><li>Blog</li><li>Case Studies</li><li>Help Center</li></ul></div>
-             <div><h4 class="font-bold text-white mb-6">Company</h4><ul class="space-y-4 text-sm text-gray-300"><li>About Us</li><li>Contact</li><li>Privacy</li></ul></div>
+             
+             <!-- SIMPLIFIED CONTACT SECTION -->
+             <div class="col-span-1 flex flex-col justify-center items-start md:items-end">
+                 <h4 class="font-bold text-white mb-6 text-2xl">Contact Us</h4>
+                 <div class="space-y-4 text-right">
+                     <p class="text-xl text-white font-bold flex items-center gap-3 justify-end interactable">
+                         <i class="fas fa-phone-alt text-[#25D366]"></i> +91-9493509921
+                     </p>
+                     <a href="mailto:hello@idigitalworks.com" class="text-lg text-gray-300 hover:text-white transition-colors interactable">
+                         hello@idigitalworks.com
+                     </a>
+                 </div>
+             </div>
         </div>
         <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
             <p>&copy; 2025 iDigitalWorks Inc. All rights reserved.</p>
+            <div class="flex gap-6 mt-4 md:mt-0">
+                <a href="#" class="hover:text-white transition-colors interactable"><i class="fab fa-instagram"></i> Youtube</a>
+                <a href="#" class="hover:text-white transition-colors interactable"><i class="fab fa-youtube"></i> Youtube</a>
+                <a href="#" class="hover:text-white transition-colors interactable"><i class="fab fa-facebook"></i> Facebook</a>
+            </div>
         </div>
     </footer>
 
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/919493509921" target="_blank" class="fixed bottom-8 right-8 z-[9999] whatsapp-float transition-transform hover:scale-110 interactable">
+        <div class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl border-4 border-white">
+            <i class="fab fa-whatsapp text-white text-4xl"></i>
+        </div>
+    </a>
+
     <!-- Interactions Script -->
     <script>
-        // ... (Toggle Menu & Typewriter) ...
+        // ... (Previous scripts for menu toggling, scrolling, and cursor remain here) ...
         function toggleMenu() {
             const overlay = document.getElementById('radial-menu');
             overlay.classList.toggle('open');
         }
-        function highlightLine(lineId) { /*...*/ }
-        function resetLine(lineId) { /*...*/ }
 
+        // FIXED: Defined Highlight/Reset Line functions
+        function highlightLine(lineId) {
+            const line = document.getElementById(lineId);
+            if(line) {
+                line.setAttribute('stroke', '#25D366');
+                line.setAttribute('stroke-width', '4');
+                line.style.filter = 'drop-shadow(0 0 5px #25D366)';
+                line.setAttribute('stroke-opacity', '1');
+            }
+        }
+
+        function resetLine(lineId) {
+            const line = document.getElementById(lineId);
+            if(line) {
+                line.setAttribute('stroke', '#25D366');
+                line.setAttribute('stroke-width', '2');
+                line.style.filter = 'none';
+                line.setAttribute('stroke-opacity', '0.5');
+            }
+        }
+
+        // Typewriter
         const textElement = document.getElementById('typewriter');
         const phrases = ["on WhatsApp", "on Autopilot", "at Scale"];
         let phraseIndex = 0;
@@ -463,39 +682,53 @@
         }
         document.addEventListener('DOMContentLoaded', type);
 
-        // --- SCROLL PHYSICS ---
+        // --- CURSOR LOGIC ---
+        const cursor = document.getElementById('sennep-cursor');
+        // Specific targeting for menu elements
+        const cursorTargets = document.querySelectorAll('#radial-menu, #radial-menu *, #menu-trigger, .menu-interactable');
+
+        document.addEventListener('mousemove', (e) => {
+            if(cursor) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            }
+        });
+
+        cursorTargets.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('custom-cursor-active');
+                document.body.classList.add('is-hovering');
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('custom-cursor-active');
+                document.body.classList.remove('is-hovering');
+            });
+        });
+
+        // --- SCROLL LOGIC ---
+        const hSection = document.querySelector('.horizontal-scroll-wrapper');
+        const hTrack = document.querySelector('.horizontal-track');
+        const cSection = document.querySelector('.cycle-wrapper');
+        const cSlides = document.querySelectorAll('.cycle-slide');
         const headerFinger = document.getElementById('header-finger');
 
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
             const windowHeight = window.innerHeight;
-            const docHeight = document.documentElement.scrollHeight;
+            const sectionRect = hSection ? hSection.getBoundingClientRect() : null;
+            const sectionTop = sectionRect ? sectionRect.top : 0;
             
-            // 1. Header Finger Parallax
-            if (scrollY < windowHeight) {
+            if (headerFinger && scrollY < windowHeight) {
                 headerFinger.style.transform = `translate(-50%, ${scrollY * 0.5}px)`;
             }
-
-            // 2. Horizontal Scroll Logic
-            const hSection = document.querySelector('.horizontal-scroll-wrapper');
-            const hTrack = document.querySelector('.horizontal-track');
-            if(hSection) {
-                const sectionRect = hSection.getBoundingClientRect();
-                const sectionTop = sectionRect.top;
-                const sectionHeight = sectionRect.height;
-                let percentage = -sectionTop / (sectionHeight - windowHeight);
+            if(hSection && sectionTop < windowHeight && sectionRect.bottom > 0) {
+                let percentage = -sectionTop / (sectionRect.height - windowHeight);
                 percentage = Math.max(0, Math.min(1, percentage));
                 const trackWidth = hTrack.scrollWidth;
                 const viewportWidth = window.innerWidth;
                 const maxTranslate = trackWidth - viewportWidth + 100;
-                if (sectionTop < windowHeight && sectionRect.bottom > 0) {
-                    hTrack.style.transform = `translateX(-${percentage * maxTranslate}px)`;
-                }
+                hTrack.style.transform = `translateX(-${percentage * maxTranslate}px)`;
             }
-
-            // 3. Vertical Cycle Scroll Logic
-            const cSection = document.querySelector('.cycle-wrapper');
-            const cSlides = document.querySelectorAll('.cycle-slide');
             if(cSection) {
                 const rect = cSection.getBoundingClientRect();
                 const totalHeight = rect.height - windowHeight;
