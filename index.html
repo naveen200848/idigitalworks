@@ -3,59 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iDigitalWorks - Digital Transformation Agency</title>
+    
+    <!-- SEO & Meta Data -->
+    <title>iDigitalWorks | #1 Digital Transformation & WhatsApp Automation Agency</title>
+    <meta name="description" content="iDigitalWorks is a premier digital agency based in Hyderabad. We specialize in WhatsApp Automation API, Account Unbanning Recovery, Web Development, and AI Growth Solutions.">
+    <meta name="keywords" content="WhatsApp Automation, WhatsApp Ban Recovery, Digital Marketing Agency Hyderabad, Web Development Services, WhatsApp API India, AI Automation Agency">
+    <meta name="author" content="iDigitalWorks">
+    <link rel="canonical" href="https://www.idigitalworks.com/">
     <link rel="icon" href="idigitalworkslogo1.jpg" type="image/jpeg">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.idigitalworks.com/">
+    <meta property="og:title" content="iDigitalWorks - Build Digital Superpowers">
+    <meta property="og:description" content="Automate your business with WhatsApp API, recover banned accounts, and scale with custom web solutions.">
+    <meta property="og:image" content="idigitalworkslogo1.jpg">
+
+    <!-- Google Tag Manager (Replace G-XXXXXXXXXX) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         body {
             font-family: 'Manrope', sans-serif;
-            background-color: #F8FAFC; /* Slate 50 */
-            color: #0F172A; /* Slate 900 */
+            background-color: #F8FAFC; /* Matched to Service Page */
+            color: #0F172A;
             overflow-x: hidden;
         }
 
-        /* --- SCROLL REVEAL UTILITIES --- */
+        /* --- ANIMATIONS --- */
         .reveal-on-scroll {
             opacity: 0;
             transform: translateY(40px);
             transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: opacity, transform;
         }
-        
-        .reveal-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal-on-scroll.is-visible { opacity: 1; transform: translateY(0); }
 
-        /* --- HERO TEXT ANIMATIONS --- */
-        /* 1. Text Gradient Flow Animation */
+        /* Gradient Text */
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
         .text-gradient-flow {
-            background: linear-gradient(
-                90deg, 
-                #0F172A 0%, 
-                #475569 25%, 
-                #0F172A 50%, 
-                #25D366 75%, 
-                #0F172A 100%
-            );
+            background: linear-gradient(90deg, #0F172A 0%, #475569 25%, #0F172A 50%, #25D366 75%, #0F172A 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: gradientFlow 6s linear infinite;
         }
 
-        /* 2. Reveal Container */
-        .reveal-container {
-            overflow: hidden;
-            display: block;
-        }
+        /* Reveal Text */
+        .reveal-container { overflow: hidden; display: block; }
         .reveal-content {
             display: block;
             transform: translateY(110%) skewY(5deg);
@@ -65,25 +74,16 @@
         }
         .delay-100 .reveal-content { animation-delay: 0.1s; }
         .delay-200 .reveal-content { animation-delay: 0.2s; }
-        .delay-300 .reveal-content { animation-delay: 0.3s; }
+        @keyframes revealUp { to { transform: translateY(0) skewY(0deg); opacity: 1; } }
 
-        @keyframes revealUp {
-            to { transform: translateY(0) skewY(0deg); opacity: 1; }
-        }
-
-        /* Typewriter Cursor */
-        .typing-text::after {
-            content: '|';
-            animation: blink 1s infinite;
-            color: #25D366; /* Green Cursor */
-            margin-left: 0.5rem;
-        }
+        /* Typewriter */
+        .typing-text::after { content: '|'; animation: blink 1s infinite; color: #25D366; margin-left: 0.5rem; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* --- BENTO GRID (Gradient Glass) --- */
+        /* --- BENTO GRID --- */
         .bento-card {
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(226, 232, 240, 0.8);
             border-radius: 2rem;
             transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
             overflow: hidden;
@@ -92,97 +92,56 @@
             box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.02);
         }
         
-        /* Specific Gradients per Card Type */
+        /* Specific Card Styles */
         .card-whatsapp { background: linear-gradient(145deg, #ffffff 0%, #f0fdf4 100%); }
+        .card-recovery { background: linear-gradient(145deg, #ffffff 0%, #fff1f2 100%); border-color: #ffe4e6; }
         .card-web { background: linear-gradient(145deg, #ffffff 0%, #eff6ff 100%); }
         .card-seo { background: linear-gradient(145deg, #ffffff 0%, #fff7ed 100%); }
         .card-ai { background: linear-gradient(145deg, #ffffff 0%, #faf5ff 100%); }
 
-        .bento-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.12);
-            border-color: rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-
-        /* Hover Gradient Overlay */
-        .bento-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 100%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        .bento-card:hover::after { opacity: 1; }
+        .bento-card:hover { transform: translateY(-10px) scale(1.01); box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.12); z-index: 10; }
 
         /* Icon Box */
         .icon-box {
-            width: 4rem;
-            height: 4rem;
-            border-radius: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 4rem; height: 4rem; border-radius: 1rem;
+            display: flex; align-items: center; justify-content: center;
             transition: transform 0.4s ease;
-            background: #FFFFFF;
-            color: #0F172A;
+            background: #FFFFFF; color: #0F172A;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            z-index: 10;
-            position: relative;
+            z-index: 10; position: relative;
         }
-        .bento-card:hover .icon-box {
-            background: #0F172A;
-            color: #FFFFFF;
-            transform: rotate(-10deg) scale(1.1);
-        }
+        .bento-card:hover .icon-box { background: #0F172A; color: #FFFFFF; transform: rotate(-10deg) scale(1.1); }
 
         /* Marquee */
-        .marquee-container {
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        }
-        .marquee-content {
-            display: flex;
-            animation: marquee 40s linear infinite;
-        }
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
+        .marquee-container { mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+        .marquee-content { display: flex; animation: marquee 40s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* Aurora Background */
-        .aurora-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            background: #F8FAFC;
-            overflow: hidden;
-        }
-        .aurora-blob {
-            position: absolute;
-            filter: blur(90px);
-            opacity: 0.5;
-            border-radius: 50%;
-            animation: float 20s infinite ease-in-out;
-        }
+        /* Aurora BG */
+        .aurora-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; background: #F8FAFC; overflow: hidden; }
+        .aurora-blob { position: absolute; filter: blur(90px); opacity: 0.5; border-radius: 50%; animation: float 20s infinite ease-in-out; }
         .blob-1 { top: -10%; right: -10%; width: 60vw; height: 60vw; background: #dcfce7; animation-delay: 0s; }
         .blob-2 { bottom: -20%; left: -10%; width: 70vw; height: 70vw; background: #dbeafe; animation-delay: -5s; }
-        
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(30px, -30px) scale(1.05); }
-            100% { transform: translate(0, 0) scale(1); }
-        }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(30px, -30px) scale(1.05); } 100% { transform: translate(0, 0) scale(1); } }
 
-        /* Video Blend */
-        .video-blend-mask {
-            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
-            mask-image: radial-gradient(circle at center, black 30%, transparent 80%);
-        }
+        .video-blend-mask { -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 80%); mask-image: radial-gradient(circle at center, black 30%, transparent 80%); }
         .logo-blend { mix-blend-mode: multiply; }
+        
+        /* Custom Button */
+        .rivian-btn {
+            background: #0F172A; color: white; padding: 0.75rem 2rem; border-radius: 9999px;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        .rivian-btn:hover { background: #334155; transform: translateY(-2px); box-shadow: 0 10px 20px -10px rgba(0,0,0,0.3); }
+        
+        /* WhatsApp Float */
+        .whatsapp-float { animation: pulse-green 2s infinite; }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen">
@@ -194,17 +153,16 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 px-8 py-6 top-0 bg-white/70 backdrop-blur-xl border-b border-slate-100/50 transition-all duration-500" id="navbar">
+    <nav class="fixed w-full z-50 px-8 py-6 top-0 bg-white/70 backdrop-blur-xl border-b border-slate-100/50 transition-all duration-500">
         <div class="max-w-[1600px] mx-auto flex justify-between items-center">
             <a href="#" class="flex items-center gap-3 group">
                 <img src="idigitalworkslogo1.jpg" alt="iDigitalWorks Logo" class="h-10 w-auto rounded-lg logo-blend group-hover:scale-105 transition-transform duration-300">
+                <span class="font-extrabold text-slate-900 tracking-tight text-lg hidden sm:block">iDigitalWorks</span>
             </a>
             <div class="hidden md:flex gap-8 items-center">
                 <a href="#services" class="text-sm font-semibold text-slate-600 hover:text-black transition-colors">Services</a>
-                <a href="#agency" class="text-sm font-semibold text-slate-600 hover:text-black transition-colors">Agency</a>
-                <a href="#contact" class="text-xs font-bold uppercase tracking-widest text-white bg-black px-6 py-3 rounded-full hover:bg-slate-800 transition-all hover:scale-105">
-                    Start Project
-                </a>
+                <a href="whatsapp-recovery.html" class="text-sm font-semibold text-red-500 hover:text-red-700 transition-colors">Unban WhatsApp</a>
+                <a href="#contact" class="rivian-btn">Contact Us</a>
             </div>
         </div>
     </nav>
@@ -213,7 +171,6 @@
     <section class="relative pt-48 pb-20 px-6 min-h-[90vh] flex flex-col justify-center items-center text-center z-10">
         
         <div class="relative max-w-7xl mx-auto">
-            <!-- Animated Badge -->
             <div class="flex justify-center mb-10 reveal-on-scroll">
                 <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-xs font-bold tracking-widest text-slate-500 uppercase">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -221,7 +178,6 @@
                 </span>
             </div>
             
-            <!-- Massive Hero Text with Gradient Flow & Moving Typewriter -->
             <h1 class="text-[12vw] md:text-[9rem] font-extrabold leading-[0.85] tracking-tighter mb-12">
                 <div class="reveal-container">
                     <span class="reveal-content text-gradient-flow">WE BUILD</span>
@@ -230,12 +186,10 @@
                     <span class="reveal-content text-slate-900">DIGITAL</span>
                 </div>
                 <div class="reveal-container delay-200">
-                    <!-- Typewriter Animation ID applied here -->
                     <span id="typewriter" class="reveal-content text-gradient-flow typing-text uppercase">SUPERPOWERS</span>
                 </div>
             </h1>
             
-            <!-- Subtext Fade In -->
             <div class="reveal-on-scroll delay-300 max-w-2xl mx-auto">
                 <span class="text-xl md:text-2xl text-slate-500 font-medium leading-relaxed block">
                     Your growth ecosystem. We combine intelligent automation, world-class design, and scalable engineering.
@@ -243,39 +197,33 @@
             </div>
         </div>
 
-        <!-- FRAMELESS VIDEO (Blending) -->
+        <!-- Frameless Video -->
         <div class="w-full max-w-6xl mt-24 reveal-on-scroll delay-300 relative">
             <div class="video-blend-mask overflow-hidden opacity-90 hover:opacity-100 transition-opacity duration-700">
                 <video autoplay loop muted playsinline class="w-full h-auto object-cover">
                     <source src="support-hero.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
                 </video>
             </div>
-            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-xs font-bold uppercase tracking-[0.2em] text-slate-400">
-                Showreel 2025
-            </div>
         </div>
-
     </section>
 
-    <!-- Marquee Divider (Reveal on Scroll) -->
+    <!-- Marquee Divider -->
     <section class="py-12 border-y border-slate-100 bg-white/50 backdrop-blur-sm overflow-hidden reveal-on-scroll">
         <div class="marquee-container">
             <div class="marquee-content">
                 <span class="text-6xl md:text-8xl font-bold text-slate-200 px-12">STRATEGY</span>
                 <span class="text-6xl md:text-8xl font-bold text-slate-900 px-12">AUTOMATION</span>
-                <span class="text-6xl md:text-8xl font-bold text-slate-200 px-12">DESIGN</span>
+                <span class="text-6xl md:text-8xl font-bold text-slate-200 px-12">RECOVERY</span>
                 <span class="text-6xl md:text-8xl font-bold text-slate-200 px-12">DEVELOPMENT</span>
                 <span class="text-6xl md:text-8xl font-bold text-slate-200 px-12">GROWTH</span>
                 <span class="text-6xl md:text-8xl font-bold text-slate-200 px-12">STRATEGY</span>
                 <span class="text-6xl md:text-8xl font-bold text-slate-900 px-12">AUTOMATION</span>
-                <span class="text-6xl md:text-8xl font-bold text-slate-200 px-12">DESIGN</span>
-                <span class="text-6xl md:text-8xl font-bold text-slate-200 px-12">DEVELOPMENT</span>
+                <span class="text-6xl md:text-8xl font-bold text-slate-200 px-12">RECOVERY</span>
             </div>
         </div>
     </section>
 
-    <!-- Services Grid (Gradient Bento) -->
+    <!-- Services Grid -->
     <section id="services" class="px-6 py-40 max-w-[1600px] mx-auto relative z-20">
         <div class="flex flex-col md:flex-row justify-between items-end mb-24 reveal-on-scroll">
             <h2 class="text-5xl md:text-7xl font-bold text-slate-900 tracking-tight">Our Expertise.</h2>
@@ -284,24 +232,19 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[450px]">
             
-            <!-- Card 1: WhatsApp Automation (Flagship) -->
-            <a href="whatsappautomation1.html" class="bento-card card-whatsapp col-span-1 md:col-span-2 lg:col-span-2 group block relative reveal-on-scroll">
+            <!-- 1. WhatsApp Automation (Flagship) -->
+            <a href="whatsapp-automation.html" class="bento-card card-whatsapp col-span-1 md:col-span-2 lg:col-span-2 group block relative reveal-on-scroll">
                 <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-100 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 translate-x-1/4 -translate-y-1/4"></div>
-                
                 <div class="relative z-10 h-full p-12 flex flex-col justify-between">
                     <div class="flex justify-between items-start w-full">
                         <div class="icon-box group-hover:bg-[#25D366] group-hover:text-white transition-colors">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.54 2 2.08 6.47 2.02 11.96L2 22l10-3.02C17.5 19.92 22 15.46 22 9.96c0-5.5-4.48-10-10-10zm4.5 14.5c-.32.61-1.8.85-2.6 1-.74.1-1.74.07-2.65-.24-.9-.3-1.87-.8-2.65-1.57-.78-.77-1.35-1.75-1.65-2.73-.3-1-.2-2.12.1-3.04.3-.9 1-1.7 1.8-2.26.8-.54 1.7-.8 2.5-.8.15 0 .3.02.45.03l.35.08c.55.13.9.36 1.15.58.26.24.45.52.55.82.1.3.1.6.1 1l-.22.67c-.2.62-.7 1.5-1.2 2.05-.5.54-1.12.87-1.7.92-.6.05-1.1-.2-1.6-.45l-.4-.2c-.3-.12-.6-.18-1.03.1-.42.28-.9.96-.5 1.7.2.4.4.7.7 1.04.3.3.62.6.96.88.34.25.68.46 1.02.66.3.18.63.3.96.4.3.1.6.14.94.07l.3-.07c.92-.25 1.5-.78 1.9-1.34.2-.3.35-.6.45-.9.1-.3.15-.6.15-.9l-.02-.6c-.05-.3-.1-.6-.2-.8-.1-.2-.2-.4-.4-.6-.2-.2-.35-.3-.5-.4-.15-.1-.3-.1-.5-.1h-.1c-.4 0-.8.1-1.1.2l-.3.1c-.2.1-.5.2-.7.4-.2.2-.4.4-.5.6-.2.2-.3.4-.3.6-.1.2-.08.4-.04.6.05.2.1.4.2.6.1.2.2.4.3.5.15.1.3.2.45.3.62.3 1.2.4 1.8.4.6 0 1.2-.1 1.8-.4.7-.3 1.4-.7 1.9-1.3.6-.6 1-1.4 1.2-2.3.15-.9.1-1.8-.1-2.7-.2-.9-.7-1.7-1.3-2.3-.6-.6-1.3-1.1-2.2-1.3-.9-.2-1.8-.3-2.7-.1-.9.2-1.7.6-2.3 1.3-.6.6-1.1 1.3-1.3 2.2-.2.9-.2 1.8.1 2.7.3.9.7 1.7 1.3 2.3.6.6 1.3 1.1 2.2 1.3.9.2 1.8.2 2.7.1l.6-.2c.2-.08.5-.15.7-.24.18-.08.35-.15.5-.24.2-.1.4-.2.6-.3.15-.1.3-.2.45-.3z"/></svg>
+                            <i class="fab fa-whatsapp text-3xl"></i>
                         </div>
-                        <div class="px-4 py-1.5 rounded-full border border-slate-200 bg-white text-slate-600 text-xs font-bold uppercase tracking-wider">
-                            Flagship Platform
-                        </div>
+                        <div class="px-4 py-1.5 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-800 text-xs font-bold uppercase tracking-wider">Flagship Platform</div>
                     </div>
-                    
                     <div class="mt-auto">
                         <h2 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6">WhatsApp Automation</h2>
                         <p class="text-slate-500 text-xl max-w-lg leading-relaxed">Chatbots, Broadcasts, and CRM integration. Drive 98% open rates with our enterprise-grade suite.</p>
-                        
                         <div class="mt-8 flex items-center gap-4 text-emerald-600 font-bold tracking-widest uppercase text-sm group-hover:gap-6 transition-all">
                             Explore Platform <span>&rarr;</span>
                         </div>
@@ -309,11 +252,30 @@
                 </div>
             </a>
 
-            <!-- Card 2: Web Development -->
-            <div class="bento-card card-web group p-10 flex flex-col justify-between reveal-on-scroll delay-100">
-                <div class="absolute top-0 right-0 w-[300px] h-[300px] bg-blue-100 rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 translate-x-1/4 -translate-y-1/4"></div>
+            <!-- 2. WhatsApp Recovery (NEW SECTION) -->
+            <a href="whatsapp-recovery.html" class="bento-card card-recovery col-span-1 group p-10 flex flex-col justify-between reveal-on-scroll delay-100 relative block">
+                <div class="absolute top-0 right-0 w-[300px] h-[300px] bg-red-100 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 translate-x-1/4 -translate-y-1/4"></div>
+                <div class="relative z-10">
+                    <div class="icon-box group-hover:bg-red-500 group-hover:text-white transition-colors mb-6">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+                        <span class="text-xs font-bold text-red-500 uppercase tracking-wide">Urgent Service</span>
+                    </div>
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4">Account Recovery</h3>
+                    <p class="text-slate-500 text-lg leading-relaxed">Banned on WhatsApp? We restore 95% of accounts within 24-48 hours using compliant protocols.</p>
+                </div>
+                <div class="relative z-10 mt-6 text-red-500 font-bold border-b border-red-200 pb-1 inline-block hover:border-red-500 transition-all w-max">
+                    Get Unbanned Now &rarr;
+                </div>
+            </a>
+
+            <!-- 3. Web Development -->
+            <div class="bento-card card-web group p-10 flex flex-col justify-between reveal-on-scroll delay-200">
+                <div class="absolute top-0 right-0 w-[300px] h-[300px] bg-blue-100 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 translate-x-1/4 -translate-y-1/4"></div>
                 <div class="relative z-10 icon-box group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    <i class="fas fa-code text-2xl"></i>
                 </div>
                 <div class="relative z-10">
                     <h3 class="text-3xl font-bold text-slate-900 mb-4">Web Platforms</h3>
@@ -321,11 +283,11 @@
                 </div>
             </div>
 
-            <!-- Card 3: Digital Marketing -->
+            <!-- 4. Digital Marketing -->
             <div class="bento-card card-seo group p-10 flex flex-col justify-between reveal-on-scroll delay-200">
-                <div class="absolute top-0 right-0 w-[300px] h-[300px] bg-orange-100 rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 translate-x-1/4 -translate-y-1/4"></div>
+                <div class="absolute top-0 right-0 w-[300px] h-[300px] bg-orange-100 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 translate-x-1/4 -translate-y-1/4"></div>
                 <div class="relative z-10 icon-box group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    <i class="fas fa-bullhorn text-2xl"></i>
                 </div>
                 <div class="relative z-10">
                     <h3 class="text-3xl font-bold text-slate-900 mb-4">Growth Marketing</h3>
@@ -333,12 +295,12 @@
                 </div>
             </div>
 
-            <!-- Card 4: AI Solutions (Wide) -->
+            <!-- 5. AI Solutions (Wide) -->
             <div class="bento-card card-ai col-span-1 md:col-span-2 group p-10 flex items-center justify-between reveal-on-scroll delay-300">
-                <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-purple-100 rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-opacity duration-500 translate-x-1/4 -translate-y-1/4"></div>
+                <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-purple-100 rounded-full blur-3xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 translate-x-1/4 -translate-y-1/4"></div>
                 <div class="max-w-lg relative z-10">
                     <div class="icon-box mb-8 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        <i class="fas fa-robot text-2xl"></i>
                     </div>
                     <h3 class="text-3xl font-bold text-slate-900 mb-4">AI & Automation</h3>
                     <p class="text-slate-500 text-lg leading-relaxed">Custom LLM integrations and intelligent agents to automate your entire workflow.</p>
@@ -351,68 +313,60 @@
         </div>
     </section>
 
-    <!-- Big Typography Footer -->
+    <!-- Footer -->
     <footer class="bg-black text-white py-32 px-6 reveal-on-scroll" id="contact">
         <div class="max-w-[1400px] mx-auto">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-20 mb-20">
                 <div>
                     <h2 class="text-5xl md:text-7xl font-bold mb-8 tracking-tight">Let's build<br>the future.</h2>
-                    <a href="mailto:hello@idigitalworks.com" class="text-2xl md:text-3xl text-slate-400 hover:text-white transition-colors border-b border-slate-700 pb-2 inline-block">hello@idigitalworks.com</a>
+                    <div class="space-y-4">
+                         <a href="mailto:team@idigitalworks.com" class="text-2xl md:text-3xl text-slate-400 hover:text-white transition-colors border-b border-slate-700 pb-2 inline-block">team@idigitalworks.com</a>
+                         <p class="text-xl text-slate-400"><i class="fas fa-phone-alt mr-3 text-green-500"></i>+91-9493509921</p>
+                    </div>
                 </div>
                 <div class="flex flex-col justify-end items-start md:items-end">
-                    <a href="#" class="text-lg hover:text-emerald-400 transition-colors mb-4">Instagram</a>
-                    <a href="#" class="text-lg hover:text-blue-400 transition-colors mb-4">LinkedIn</a>
-                    <a href="#" class="text-lg hover:text-blue-500 transition-colors">Twitter</a>
+                    <a href="#" class="text-lg hover:text-pink-500 transition-colors mb-4"><i class="fab fa-instagram mr-2"></i> Instagram</a>
+                    <a href="#" class="text-lg hover:text-red-500 transition-colors mb-4"><i class="fab fa-youtube mr-2"></i> YouTube</a>
                 </div>
             </div>
             
             <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center text-slate-500 text-sm">
                 <p>&copy; 2025 iDigitalWorks.</p>
-                <p>Bengaluru • India</p>
+                <p>Hyderabad • India</p>
             </div>
         </div>
     </footer>
 
+    <!-- Floating WhatsApp -->
+    <a href="https://wa.me/919493509921" target="_blank" class="fixed bottom-8 right-8 z-[9999] whatsapp-float transition-transform hover:scale-110">
+        <div class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl border-4 border-white">
+            <i class="fab fa-whatsapp text-white text-4xl"></i>
+        </div>
+    </a>
+
     <script>
-        // 1. Typewriter Effect
-        const textElement = document.getElementById('typewriter');
-        // Updated phrases for better agency context
-        const phrases = ["SUPERPOWERS", "ECOSYSTEMS", "GROWTH", "FUTURE"];
-        let phraseIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        let typeSpeed = 100;
-
-        function type() {
-            const currentPhrase = phrases[phraseIndex];
-            if (isDeleting) { textElement.textContent = currentPhrase.substring(0, charIndex - 1); charIndex--; typeSpeed = 50; } 
-            else { textElement.textContent = currentPhrase.substring(0, charIndex + 1); charIndex++; typeSpeed = 150; }
-            
-            if (!isDeleting && charIndex === currentPhrase.length) { isDeleting = true; typeSpeed = 2000; } 
-            else if (isDeleting && charIndex === 0) { isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; typeSpeed = 500; }
-            
-            setTimeout(type, typeSpeed);
-        }
-        document.addEventListener('DOMContentLoaded', type);
-
-        // 2. Intersection Observer for Scroll Reveals
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px" // Trigger slightly before element enters
-        };
-
+        // Intersection Observer
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                }
+                if (entry.isIntersecting) { entry.target.classList.add('is-visible'); }
             });
         }, observerOptions);
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
 
-        document.querySelectorAll('.reveal-on-scroll').forEach(el => {
-            observer.observe(el);
-        });
+        // Typewriter
+        const textElement = document.getElementById('typewriter');
+        const phrases = ["SUPERPOWERS", "ECOSYSTEMS", "GROWTH", "FUTURE"];
+        let phraseIndex = 0, charIndex = 0, isDeleting = false;
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            if (isDeleting) { textElement.textContent = currentPhrase.substring(0, charIndex - 1); charIndex--; } 
+            else { textElement.textContent = currentPhrase.substring(0, charIndex + 1); charIndex++; }
+            if (!isDeleting && charIndex === currentPhrase.length) { isDeleting = true; setTimeout(type, 2000); return; } 
+            else if (isDeleting && charIndex === 0) { isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; }
+            setTimeout(type, isDeleting ? 50 : 150);
+        }
+        document.addEventListener('DOMContentLoaded', type);
     </script>
 </body>
-
 </html>
