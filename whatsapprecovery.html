@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags (Enhanced) -->
+    <title>WhatsApp Unban Service India | iDigitalWorks - Recover Banned Accounts</title>
+    <meta name="description" content="Professional WhatsApp account recovery service in India. We fix 'This account can no longer use WhatsApp' & spam bans in 24-48 hours. 98% success rate. Secure & Guaranteed.">
+    <meta name="keywords" content="WhatsApp Unban India, WhatsApp recovery service, banned WhatsApp account, account recovery India, WhatsApp support India, unban WhatsApp number, whatsapp banned due to spam, whatsapp business api unban">
+    <meta name="author" content="iDigitalWorks">
+    <link rel="canonical" href="https://www.idigitalworks.com/whatsapp-recovery">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.idigitalworks.com/whatsapp-recovery">
+    <meta property="og:title" content="WhatsApp Account Banned? We Recover It in 24-48 Hours.">
+    <meta property="og:description" content="Professional WhatsApp account recovery service in India. 98% success rate. Fix spam bans and policy violations safely.">
+    <meta property="og:image" content="https://www.idigitalworks.com/idigitgalworkslogo1.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.idigitalworks.com/whatsapp-recovery">
+    <meta property="twitter:title" content="WhatsApp Unban Service India | iDigitalWorks">
+    <meta property="twitter:description" content="Professional WhatsApp account recovery service. Get your banned WhatsApp account unbanned safely for ₹5000.">
+    <meta property="twitter:image" content="https://www.idigitalworks.com/idigitgalworkslogo1.png">
+
+    <!-- JSON-LD Structured Data for Service -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "WhatsApp Account Recovery Service",
+      "provider": {
+        "@type": "Organization",
+        "name": "iDigitalWorks",
+        "logo": "https://www.idigitalworks.com/idigitgalworkslogo1.png",
+        "email": "team@idigitalworks.com"
+      },
+      "serviceType": "Tech Support",
+      "areaServed": "India",
+      "description": "Professional unbanning service for WhatsApp personal and business accounts.",
+      "offers": {
+        "@type": "Offer",
+        "price": "5000",
+        "priceCurrency": "INR"
+      }
+    }
+    </script>
+    
+    <!-- Google Tag Manager / Analytics Placeholder -->
+    <!-- PASTE YOUR GTM/GA4 CODE HERE IN EVERY HTML FILE -->
+    
+    <!-- Favicon -->
+    <link rel="icon" href="idigitgalworkslogo1.png" type="image/png">
+
+    <!-- Fonts & Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #F3F4F6;
+            color: #111827;
+            overflow-x: hidden;
+            cursor: auto;
+        }
+
+        /* --- CUSTOM SVG CURSOR --- */
+        #sennep-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 60px;
+            height: 60px;
+            z-index: 9999;
+            pointer-events: none;
+            transform: translate(-20%, -10%); 
+            transition: transform 0.15s ease-out, opacity 0.2s ease;
+            will-change: transform;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+            opacity: 0;
+        }
+
+        /* --- CURSOR STATE CLASSES --- */
+        body.custom-cursor-active #sennep-cursor { opacity: 1; }
+        body.custom-cursor-active .cursor-target,
+        body.custom-cursor-active #radial-menu,
+        body.custom-cursor-active #menu-trigger { cursor: none !important; }
+        body.custom-cursor-active.is-hovering #sennep-cursor { transform: translate(-20%, -10%) scale(0.9) rotate(-10deg); }
+
+        /* --- MODERN GRADIENT PALETTE --- */
+        .bg-hero-gradient { background: radial-gradient(circle at top right, #0f3834 0%, #075E54 40%, #054039 100%); }
+        .text-gradient-primary { background: linear-gradient(135deg, #075E54 0%, #25D366 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-gradient { background: linear-gradient(90deg, #25D366 0%, #128C7E 100%); transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4); filter: brightness(1.1); }
+
+        /* Typography */
+        .display-text { letter-spacing: -0.03em; line-height: 1.1; }
+
+        /* --- RADIAL MENU STYLES --- */
+        .radial-overlay { clip-path: circle(0% at 90% 10%); transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1); pointer-events: none; }
+        .radial-overlay.open { clip-path: circle(150% at 90% 10%); pointer-events: auto; }
+        .connector-line { stroke-dasharray: 1000; stroke-dashoffset: 1000; transition: stroke-dashoffset 1s ease 0.2s, stroke 0.3s; }
+        .radial-overlay.open .connector-line { stroke-dashoffset: 0; }
+        .nav-node { transform: scale(0); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .radial-overlay.open .nav-node { transform: scale(1); }
+        .radial-overlay.open .node-1 { transition-delay: 0.3s; }
+        .radial-overlay.open .node-2 { transition-delay: 0.4s; }
+        .radial-overlay.open .node-3 { transition-delay: 0.5s; }
+        .radial-overlay.open .node-4 { transition-delay: 0.6s; }
+        .nav-node:hover { transform: scale(1.15) !important; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; border-color: #25D366; box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4); }
+        
+        /* --- SCROLL UTILS --- */
+        .horizontal-scroll-wrapper { height: 400vh; position: relative; }
+        .horizontal-sticky-container { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; }
+        .horizontal-track { display: flex; gap: 4rem; padding-left: 5vw; padding-right: 10vw; will-change: transform; }
+        .feature-card { min-width: 85vw; height: 70vh; background: white; border-radius: 2rem; overflow: hidden; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255,255,255,0.8); }
+        @media (min-width: 768px) { .feature-card { min-width: 45vw; height: 600px; } }
+
+        /* Cyclemon Vertical Scroll Colors */
+        .cycle-wrapper { position: relative; height: 500vh; }
+        .cycle-sticky { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; }
+        .cycle-slide { position: absolute; inset: 0; opacity: 0; transform: translateY(100%) scale(1); transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1); display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; }
+        .cycle-slide.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; z-index: 10; }
+        
+        /* Recovery Themed Slide Colors */
+        #slide-1 { background-color: #FEE2E2; color: #1A1A1A; } 
+        #slide-2 { background-color: #FEF3C7; color: #1A1A1A; } 
+        #slide-3 { background-color: #E0F2FE; color: #1A1A1A; } 
+        #slide-4 { background-color: #DCFCE7; color: #1A1A1A; } 
+        
+        .rivian-btn { letter-spacing: 0.05em; text-transform: uppercase; font-weight: 700; font-size: 0.8rem; }
+        .typing-text::after { content: '|'; animation: blink 1s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .hero-video-container { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
+        
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        .whatsapp-float { animation: pulse-green 2s infinite; }
+        .roi-card-gradient { background: linear-gradient(145deg, #075E54 0%, #044E44 100%); }
+    </style>
+</head>
+<body class="antialiased bg-gray-50">
+
+    <!-- CUSTOM SVG CURSOR -->
+    <div id="sennep-cursor">
+        <svg width="100%" height="100%" viewBox="0 0 50 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 100 V30 C20 15 25 5 35 5 C45 5 50 15 50 30 V100 Z" fill="#F3C677" stroke="#000000" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M30 10 C27 10 25 13 25 18 L45 18 C45 13 43 10 40 10 Z" fill="#FFFFFF" opacity="0.6"/>
+        </svg>
+    </div>
+
+    <!-- RADIAL NETWORK MENU OVERLAY -->
+    <div id="radial-menu" class="radial-overlay fixed inset-0 z-[100] bg-[#075E54]/95 backdrop-blur-2xl flex items-center justify-center menu-cursor-area">
+        <div class="relative w-full h-full max-w-4xl max-h-[800px] mx-auto flex items-center justify-center">
+            <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg">
+                <line x1="50%" y1="50%" x2="25%" y2="25%" stroke="#25D366" stroke-width="2" stroke-opacity="0.5" class="connector-line" id="line-1" />
+                <line x1="50%" y1="50%" x2="75%" y2="25%" stroke="#25D366" stroke-width="2" stroke-opacity="0.5" class="connector-line" id="line-2" />
+                <line x1="50%" y1="50%" x2="75%" y2="75%" stroke="#25D366" stroke-width="2" stroke-opacity="0.5" class="connector-line" id="line-3" />
+                <line x1="50%" y1="50%" x2="25%" y2="75%" stroke="#25D366" stroke-width="2" stroke-opacity="0.5" class="connector-line" id="line-4" />
+            </svg>
+            <div class="absolute z-20 bg-white/10 p-3 rounded-full shadow-[0_0_60px_rgba(37,211,102,0.6)] animate-pulse cursor-default backdrop-blur-md menu-interactable">
+                <div class="bg-gradient-to-br from-[#25D366] to-[#128C7E] w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center text-white shadow-lg">
+                    <img src="idigitgalworkslogo1.png" alt="Logo" class="w-12 h-12 object-contain rounded-full">
+                </div>
+            </div>
+            <!-- Menu Items -->
+            <a href="#capabilities" onclick="toggleMenu()" class="nav-node node-1 absolute left-[15%] top-[15%] md:left-[25%] md:top-[25%] z-20 flex flex-col items-center group menu-interactable" onmouseenter="highlightLine('line-1')" onmouseleave="resetLine('line-1')">
+                <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white border-4 border-white/10 flex items-center justify-center shadow-xl transition-all duration-300">
+                    <i class="fas fa-stopwatch text-3xl md:text-4xl text-[#075E54] group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="mt-4 text-lg font-bold text-white tracking-widest uppercase">Process</span>
+            </a>
+            <a href="#solutions" onclick="toggleMenu()" class="nav-node node-2 absolute right-[15%] top-[15%] md:right-[25%] md:top-[25%] z-20 flex flex-col items-center group menu-interactable" onmouseenter="highlightLine('line-2')" onmouseleave="resetLine('line-2')">
+                <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white border-4 border-white/10 flex items-center justify-center shadow-xl transition-all duration-300">
+                   <i class="fas fa-exclamation-triangle text-3xl md:text-4xl text-[#075E54] group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="mt-4 text-lg font-bold text-white tracking-widest uppercase">Ban Types</span>
+            </a>
+            <a href="#pricing" onclick="toggleMenu()" class="nav-node node-3 absolute right-[15%] bottom-[15%] md:right-[25%] md:bottom-[25%] z-20 flex flex-col items-center group menu-interactable" onmouseenter="highlightLine('line-3')" onmouseleave="resetLine('line-3')">
+                <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white border-4 border-white/10 flex items-center justify-center shadow-xl transition-all duration-300">
+                    <i class="fas fa-tag text-3xl md:text-4xl text-[#075E54] group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="mt-4 text-lg font-bold text-white tracking-widest uppercase">Pricing</span>
+            </a>
+            <a href="#contact" onclick="toggleMenu()" class="nav-node node-4 absolute left-[15%] bottom-[15%] md:left-[25%] md:bottom-[25%] z-20 flex flex-col items-center group menu-interactable" onmouseenter="highlightLine('line-4')" onmouseleave="resetLine('line-4')">
+                <div class="w-24 h-24 md:w-32 md:h-32 rounded-full bg-white border-4 border-white/10 flex items-center justify-center shadow-xl transition-all duration-300">
+                    <i class="fas fa-envelope text-3xl md:text-4xl text-[#075E54] group-hover:text-white transition-colors"></i>
+                </div>
+                <span class="mt-4 text-lg font-bold text-white tracking-widest uppercase">Contact</span>
+            </a>
+        </div>
+        <button onclick="toggleMenu()" class="absolute top-8 right-8 z-30 text-white/50 hover:text-white transition-colors menu-interactable">
+            <i class="fas fa-times text-4xl"></i>
+        </button>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed w-full z-50 px-6 py-6 transition-all duration-300 bg-[#075E54]/90 backdrop-blur-md shadow-lg border-b border-white/10">
+        <div class="max-w-[1600px] mx-auto flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <!-- UPDATED: Logo in Header -->
+                <img src="idigitgalworkslogo1.png" alt="iDigitalWorks" class="w-10 h-10 rounded-lg shadow-lg object-contain bg-white">
+                <span class="text-2xl font-extrabold tracking-tighter text-white">iDigitalWorks</span>
+            </a>
+            <div class="flex items-center gap-6">
+                <button onclick="toggleMenu()" id="menu-trigger" class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white hover:text-[#25D366] transition-colors menu-cursor-area">
+                    Menu
+                    <div class="flex flex-col gap-1">
+                        <span class="w-6 h-0.5 bg-white group-hover:w-4 group-hover:bg-[#25D366] transition-all"></span>
+                        <span class="w-6 h-0.5 bg-white group-hover:bg-[#25D366] transition-colors"></span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-hero-gradient text-white px-6 pt-32 pb-20">
+        <div class="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-[#25D366] rounded-full mix-blend-overlay filter blur-[120px] opacity-20 animate-pulse"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#128C7E] rounded-full mix-blend-overlay filter blur-[100px] opacity-30"></div>
+
+        <div class="relative z-10 text-center max-w-5xl mx-auto">
+            <div class="inline-flex items-center gap-2 border border-white/20 bg-white/5 rounded-full px-4 py-1 mb-8 backdrop-blur-md shadow-xl">
+                <span class="w-2 h-2 bg-[#25D366] rounded-full shadow-[0_0_10px_#25D366] animate-pulse"></span>
+                <span class="text-xs font-bold tracking-widest uppercase text-gray-100">98% Success Rate in India</span>
+            </div>
+            <h1 class="text-5xl md:text-8xl font-bold display-text mb-8 drop-shadow-2xl h-[1.3em] md:h-[1.2em]">
+                Account Banned? <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#25D366] to-[#128C7E] typing-text" id="typewriter">We Recover It.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 font-medium max-w-2xl mx-auto mb-12 leading-relaxed opacity-90">
+                Professional unban service for personal & business accounts. "This account can no longer use WhatsApp" errors fixed in 24-48 hours.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mb-16">
+                <a href="https://wa.me/919493509921" class="rivian-btn btn-gradient text-white px-10 py-4 rounded-full text-sm tracking-wider flex items-center gap-2">
+                    <i class="fab fa-whatsapp text-lg"></i> Chat with Expert
+                </a>
+            </div>
+
+            <!-- Video/Graphic Container -->
+            <div class="relative z-10 max-w-6xl mx-auto rounded-2xl overflow-hidden hero-video-container group transform transition-transform duration-500 hover:scale-[1.01] aspect-video flex items-center justify-center bg-black/40">
+                <div class="text-center p-12">
+                    <div class="w-24 h-24 mx-auto mb-6 bg-[#25D366]/20 rounded-full flex items-center justify-center animate-pulse">
+                        <i class="fas fa-shield-alt text-5xl text-[#25D366]"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2">Secure Recovery Process</h3>
+                    <p class="text-gray-400">Official Appeal & Verification Protocol</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCROLL-LINKED FINGER ILLUSTRATION -->
+        <div id="header-finger" class="finger-container" style="bottom: 5%; left: 50%; transform: translateX(-50%); z-index: 20; width: 100px; height: 200px; position: absolute; will-change: transform;">
+             <svg width="100%" height="100%" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));">
+                <path d="M20,200 L20,60 C20,30 35,10 50,10 C65,10 80,30 80,60 L80,200 Z" fill="#F3C677" stroke="#E0AC69" stroke-width="2"/>
+                <path d="M50,15 C40,15 35,25 35,40 L65,40 C65,25 60,15 50,15 Z" fill="white"/>
+                <path d="M30,90 Q50,95 70,90" stroke="#E0AC69" stroke-width="2" fill="none"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- HORIZONTAL SCROLL: "Recovery Features" -->
+    <section id="capabilities" class="horizontal-scroll-wrapper bg-gray-50">
+        <div class="horizontal-sticky-container">
+            <div class="absolute top-10 left-10 md:left-20 z-20">
+                <h2 class="text-xs font-bold tracking-[0.2em] uppercase text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#128C7E] mb-2">Service Features</h2>
+                <p class="text-3xl md:text-4xl font-bold text-[#075E54] display-text">Restoring <br>Access.</p>
+            </div>
+            <div class="horizontal-track" id="scrolling-track">
+                <!-- Card 1 -->
+                <div class="feature-card group border border-gray-100">
+                    <div class="h-1/2 bg-gradient-to-br from-green-50 to-green-100 overflow-hidden relative flex items-center justify-center">
+                         <i class="fas fa-stopwatch text-8xl text-[#25D366] opacity-80 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="h-1/2 p-8 flex flex-col justify-between bg-white/80 backdrop-blur-sm">
+                        <div>
+                            <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#128C7E] mb-4">24-48 Hour Turnaround</h3>
+                            <p class="text-gray-600 leading-relaxed">Time is money. We prioritize your case to get your number unbanned as quickly as possible.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full border border-green-200">Fast Track</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="feature-card group border border-gray-100">
+                    <div class="h-1/2 bg-gradient-to-br from-blue-50 to-blue-100 overflow-hidden relative flex items-center justify-center">
+                        <i class="fas fa-shield-virus text-8xl text-blue-500 opacity-80 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="h-1/2 p-8 flex flex-col justify-between bg-white/80 backdrop-blur-sm">
+                        <div>
+                            <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#128C7E] mb-4">Spam Ban Specialists</h3>
+                            <p class="text-gray-600 leading-relaxed">Flagged for spam or bulk messaging? We know exactly how to appeal these specific violations.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="feature-card group border border-gray-100">
+                    <div class="h-1/2 bg-gradient-to-br from-gray-50 to-gray-200 overflow-hidden relative flex items-center justify-center">
+                        <i class="fas fa-file-contract text-8xl text-gray-500 opacity-80 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="h-1/2 p-8 flex flex-col justify-between bg-white/80 backdrop-blur-sm">
+                        <div>
+                            <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#128C7E] mb-4">Official Process</h3>
+                            <p class="text-gray-600 leading-relaxed">No hacks or illegal tools. We use legitimate channels to ensure your account stays safe.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="bg-gray-200 text-gray-800 text-xs font-bold px-3 py-1 rounded-full border border-gray-300">100% Safe</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="feature-card group border border-gray-100">
+                    <div class="h-1/2 bg-gradient-to-br from-yellow-50 to-yellow-100 overflow-hidden relative flex items-center justify-center">
+                         <i class="fas fa-undo text-8xl text-yellow-500 opacity-80 group-hover:scale-110 transition-transform duration-500"></i>
+                    </div>
+                    <div class="h-1/2 p-8 flex flex-col justify-between bg-white/80 backdrop-blur-sm">
+                        <div>
+                            <h3 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#075E54] to-[#128C7E] mb-4">Money Back Guarantee</h3>
+                            <p class="text-gray-600 leading-relaxed">If we can't recover your account within the stipulated time, you get your money back.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VERTICAL SCROLL: "Ban Types" -->
+    <section id="solutions" class="cycle-wrapper">
+        <div class="cycle-sticky">
+            <div class="cycle-slide active" id="slide-1">
+                <div class="absolute inset-0 z-0 bg-[#FEE2E2]"></div>
+                <div class="relative z-10 text-center max-w-4xl px-6">
+                    <div class="inline-block bg-white/80 text-red-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Common Issue</div>
+                    <h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Spam & Bulk <br>Messaging Bans.</h2>
+                    <p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Banned for sending too many messages? We fix it.</p>
+                </div>
+            </div>
+            <div class="cycle-slide" id="slide-2">
+                <div class="absolute inset-0 z-0 bg-[#FEF3C7]"></div>
+                <div class="relative z-10 text-center max-w-4xl px-6">
+                    <div class="inline-block bg-white/80 text-yellow-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Policy Violation</div>
+                    <h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Commerce Policy <br>Violations.</h2>
+                    <p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Flagged for selling restricted items? We handle the appeal.</p>
+                </div>
+            </div>
+            <div class="cycle-slide" id="slide-3">
+                <div class="absolute inset-0 z-0 bg-[#E0F2FE]"></div>
+                <div class="relative z-10 text-center max-w-4xl px-6">
+                    <div class="inline-block bg-white/80 text-blue-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Business API</div>
+                    <h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">WhatsApp Business <br>API Blocks.</h2>
+                    <p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">We recover high-value API numbers for brands.</p>
+                </div>
+            </div>
+             <div class="cycle-slide" id="slide-4">
+                 <div class="absolute inset-0 z-0 bg-[#DCFCE7]"></div>
+                 <div class="relative z-10 text-center max-w-4xl px-6">
+                    <div class="inline-block bg-white/80 text-green-900 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-6 shadow-sm backdrop-blur">Resolution</div>
+                    <h2 class="text-5xl md:text-7xl font-bold mb-8 display-text text-gray-900">Back to <br>Business.</h2>
+                    <p class="text-xl text-gray-800 mb-8 max-w-2xl mx-auto font-medium">Get your chats, history, and customers back.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUCCESS STATS SECTION -->
+    <section id="advantages" class="py-24 bg-white">
+        <div class="max-w-[1400px] mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-bold text-[#075E54] mb-6 display-text">Why Trust Us?</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">Real numbers from our recovery cases in India.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+                <!-- Metric 1: Success Rate -->
+                <div class="lg:col-span-4 bg-[#F3F4F6] rounded-[2rem] p-8 flex flex-col justify-between">
+                    <h3 class="text-xl font-bold text-gray-500 uppercase tracking-wider mb-4">Recovery Success</h3>
+                    <div class="flex items-end gap-4">
+                        <div>
+                            <span class="text-6xl font-bold text-[#075E54]">98%</span>
+                            <p class="text-sm text-gray-500 mt-2">Successful Unbans</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-[#25D366] w-[98%]"></div>
+                    </div>
+                    <p class="text-sm text-[#25D366] font-bold mt-2">Highest in Industry</p>
+                </div>
+
+                <!-- Metric 2: Process Visualization -->
+                <div class="lg:col-span-8 bg-[#075E54] rounded-[2rem] p-8 text-white relative overflow-hidden roi-card-gradient shadow-2xl">
+                   <div class="absolute top-0 right-0 w-64 h-64 bg-[#25D366] rounded-full blur-[80px] opacity-20 pointer-events-none"></div>
+                   
+                   <div class="relative z-10 h-full flex flex-col justify-between">
+                       <h3 class="text-xl font-bold uppercase tracking-wider mb-8 text-white/80">Recovery Timeline</h3>
+                       
+                       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 text-center md:text-left items-center">
+                           <!-- Step 1 -->
+                           <div class="bg-white/10 p-4 rounded-xl border border-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                               <p class="text-sm text-white/70 mb-1 font-medium uppercase tracking-wide">Analysis</p>
+                               <p class="text-3xl font-bold text-white">1 Hour</p>
+                               <p class="text-xs text-white/50 mt-1">Diagnosis</p>
+                           </div>
+                           <!-- Arrow 1 -->
+                           <div class="hidden md:flex justify-center text-[#25D366] text-2xl"><i class="fas fa-arrow-right"></i></div>
+                           <div class="md:hidden text-[#25D366] text-xl py-2"><i class="fas fa-arrow-down"></i></div>
+
+                           <!-- Step 2 -->
+                           <div class="bg-white/10 p-4 rounded-xl border border-white/10 backdrop-blur-sm relative hover:bg-white/20 transition-colors">
+                               <p class="text-sm text-white/70 mb-1 font-medium uppercase tracking-wide">Appeal</p>
+                               <p class="text-3xl font-bold text-white">2-4 Hrs</p>
+                               <p class="text-xs text-white/50 mt-1">Submission</p>
+                           </div>
+                           <!-- Arrow 2 -->
+                           <div class="hidden md:flex justify-center text-[#25D366] text-2xl"><i class="fas fa-arrow-right"></i></div>
+                           <div class="md:hidden text-[#25D366] text-xl py-2"><i class="fas fa-arrow-down"></i></div>
+
+                           <!-- Step 3 -->
+                           <div class="bg-white p-4 rounded-xl shadow-lg border-2 border-[#25D366] transform scale-105">
+                               <p class="text-sm text-[#075E54] mb-1 font-bold uppercase tracking-wide">Unban</p>
+                               <p class="text-3xl font-bold text-[#25D366]">24-48h</p>
+                               <p class="text-xs text-gray-500 mt-1">Total Time</p>
+                           </div>
+                       </div>
+                   </div>
+                </div>
+            </div>
+
+            <!-- Detailed Table -->
+            <div class="bg-white border border-gray-200 rounded-[1.5rem] overflow-hidden shadow-lg">
+                <div class="p-6 bg-gray-50 border-b border-gray-200">
+                     <h4 class="text-lg font-bold text-gray-800">Why choose professional recovery?</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-600">
+                        <thead class="bg-gray-100 text-gray-500 uppercase font-bold text-xs">
+                            <tr>
+                                <th class="px-6 py-4">Method</th>
+                                <th class="px-6 py-4">Success Chance</th>
+                                <th class="px-6 py-4 text-right">Time Taken</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 font-medium">Standard Email Appeal (Do it yourself)</td>
+                                <td class="px-6 py-4">10-15% (Often Automated Rejection)</td>
+                                <td class="px-6 py-4 text-right font-bold">1-2 Weeks</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 font-medium">Repeated Appeals</td>
+                                <td class="px-6 py-4">5% (Risk of Permanent Ban)</td>
+                                <td class="px-6 py-4 text-right">Indefinite</td>
+                            </tr>
+                            <tr class="bg-green-50/50 hover:bg-green-50">
+                                <td class="px-6 py-4 font-medium text-[#075E54]">iDigitalWorks Professional Service</td>
+                                <td class="px-6 py-4 text-[#075E54]">98% (Manual Verification)</td>
+                                <td class="px-6 py-4 text-right font-bold text-[#075E54]">24-48 Hours</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PRICING SECTION -->
+    <section id="pricing" class="bg-white py-24 border-t border-gray-100">
+        <div class="max-w-[1600px] mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-5">
+                    <h2 class="text-4xl font-bold text-[#075E54] display-text mb-6">Simple,<br>One-Time Fee.</h2>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        No hidden charges. You pay for the expertise and the successful recovery of your valuable account.
+                    </p>
+                    <a href="#contact" class="rivian-btn border border-[#25D366] text-[#075E54] px-8 py-4 rounded-full hover:bg-gradient-to-r hover:from-[#25D366] hover:to-[#128C7E] hover:text-white hover:border-transparent transition-all inline-block shadow-md interactable">Contact Support</a>
+                </div>
+                <div class="lg:col-span-7 space-y-6">
+                    <!-- Pricing Plan: Recovery -->
+                    <div class="border-2 border-[#25D366] p-8 rounded-[2rem] shadow-2xl relative overflow-hidden interactable bg-[#f0fdf4]">
+                        <div class="absolute top-0 right-0 bg-[#25D366] text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-widest">Guaranteed</div>
+                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-6">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-2xl font-bold text-[#075E54]">ACCOUNT UNBAN</h3>
+                                </div>
+                                <p class="text-sm text-gray-500">Full service recovery for any ban type.</p>
+                                <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 text-sm text-gray-700 font-medium">
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> Spam Ban Removal</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> Business API Unblocking</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> 24-48 Hour Turnaround</div>
+                                    <div class="flex items-center"><i class="fas fa-check text-[#25D366] mr-2"></i> Future Ban Protection Guide</div>
+                                </div>
+                            </div>
+                            <div class="text-right min-w-[120px]">
+                                <span class="block text-4xl font-bold text-[#075E54]">₹5,000</span>
+                                <span class="text-xs text-gray-500 uppercase tracking-wide">One Time Fee</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#075E54] text-white py-20 px-6 relative" id="contact">
+        <div class="max-w-[1600px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-white/10 pb-12 mb-12">
+             <div class="col-span-1">
+                <a href="#" class="text-2xl font-extrabold tracking-tighter flex items-center gap-2">
+                    <!-- UPDATED: Logo in Footer -->
+                    <img src="idigitgalworkslogo1.png" alt="iDigitalWorks" class="w-10 h-10 rounded-lg shadow-lg object-contain bg-white">
+                    iDigitalWorks
+                </a>
+                <p class="mt-6 text-gray-300 text-sm leading-relaxed max-w-md">
+                    The #1 WhatsApp Account Recovery Service in India. We help businesses and individuals reclaim their digital identity.
+                </p>
+             </div>
+             
+             <!-- CONTACT SECTION -->
+             <div class="col-span-1 flex flex-col justify-center items-start md:items-end">
+                 <h4 class="font-bold text-white mb-6 text-2xl">Start Recovery</h4>
+                 <div class="space-y-4 text-right">
+                     <p class="text-xl text-white font-bold flex items-center gap-3 justify-end interactable">
+                         <i class="fas fa-phone-alt text-[#25D366]"></i> +91-9493509921
+                     </p>
+                     <!-- UPDATED: Email Address -->
+                     <a href="mailto:team@idigitalworks.com" class="text-lg text-gray-300 hover:text-white transition-colors interactable">
+                         team@idigitalworks.com
+                     </a>
+                 </div>
+             </div>
+        </div>
+        <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+            <p>&copy; 2025 iDigitalWorks Inc. All rights reserved.</p>
+            <!-- UPDATED: Social Icons in Footer -->
+            <div class="flex gap-6 mt-4 md:mt-0 text-xl">
+                <a href="#" class="hover:text-[#25D366] transition-colors interactable"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-[#25D366] transition-colors interactable"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="hover:text-[#25D366] transition-colors interactable"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="flex gap-6 mt-4 md:mt-0 text-xs">
+                <a href="#" class="hover:text-white transition-colors interactable">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors interactable">Terms of Service</a>
+                <a href="#" class="hover:text-white transition-colors interactable">Refund Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/919493509921" target="_blank" class="fixed bottom-8 right-8 z-[9999] whatsapp-float transition-transform hover:scale-110 interactable">
+        <div class="w-16 h-16 bg-[#25D366] rounded-full flex items-center justify-center shadow-2xl border-4 border-white">
+            <i class="fab fa-whatsapp text-white text-4xl"></i>
+        </div>
+    </a>
+
+    <!-- Interactions Script -->
+    <script>
+        // Menu Toggle
+        function toggleMenu() {
+            const overlay = document.getElementById('radial-menu');
+            overlay.classList.toggle('open');
+        }
+
+        // Highlight/Reset Line functions
+        function highlightLine(lineId) {
+            const line = document.getElementById(lineId);
+            if(line) {
+                line.setAttribute('stroke', '#25D366');
+                line.setAttribute('stroke-width', '4');
+                line.style.filter = 'drop-shadow(0 0 5px #25D366)';
+                line.setAttribute('stroke-opacity', '1');
+            }
+        }
+
+        function resetLine(lineId) {
+            const line = document.getElementById(lineId);
+            if(line) {
+                line.setAttribute('stroke', '#25D366');
+                line.setAttribute('stroke-width', '2');
+                line.style.filter = 'none';
+                line.setAttribute('stroke-opacity', '0.5');
+            }
+        }
+
+        // Typewriter
+        const textElement = document.getElementById('typewriter');
+        const phrases = ["We Recover It.", "Fast & Secure.", "Guaranteed."];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 100;
+        function type() {
+            const currentPhrase = phrases[phraseIndex];
+            if (isDeleting) { textElement.textContent = currentPhrase.substring(0, charIndex - 1); charIndex--; typeSpeed = 50; } 
+            else { textElement.textContent = currentPhrase.substring(0, charIndex + 1); charIndex++; typeSpeed = 150; }
+            if (!isDeleting && charIndex === currentPhrase.length) { isDeleting = true; typeSpeed = 2000; } 
+            else if (isDeleting && charIndex === 0) { isDeleting = false; phraseIndex = (phraseIndex + 1) % phrases.length; typeSpeed = 500; }
+            setTimeout(type, typeSpeed);
+        }
+        document.addEventListener('DOMContentLoaded', type);
+
+        // --- CURSOR LOGIC ---
+        const cursor = document.getElementById('sennep-cursor');
+        const cursorTargets = document.querySelectorAll('#radial-menu, #radial-menu *, #menu-trigger, .menu-interactable, a, button');
+
+        document.addEventListener('mousemove', (e) => {
+            if(cursor) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            }
+        });
+
+        cursorTargets.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('custom-cursor-active');
+                document.body.classList.add('is-hovering');
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('custom-cursor-active');
+                document.body.classList.remove('is-hovering');
+            });
+        });
+
+        // --- SCROLL LOGIC ---
+        const hSection = document.querySelector('.horizontal-scroll-wrapper');
+        const hTrack = document.querySelector('.horizontal-track');
+        const cSection = document.querySelector('.cycle-wrapper');
+        const cSlides = document.querySelectorAll('.cycle-slide');
+        const headerFinger = document.getElementById('header-finger');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            
+            // Header Finger Parallax
+            if (headerFinger && scrollY < windowHeight) {
+                headerFinger.style.transform = `translate(-50%, ${scrollY * 0.5}px)`;
+            }
+
+            // Horizontal Scroll
+            if (hSection) {
+                const sectionRect = hSection.getBoundingClientRect();
+                const sectionTop = sectionRect.top;
+                
+                if (sectionTop < windowHeight && sectionRect.bottom > 0) {
+                    let percentage = -sectionTop / (sectionRect.height - windowHeight);
+                    percentage = Math.max(0, Math.min(1, percentage));
+                    const trackWidth = hTrack.scrollWidth;
+                    const viewportWidth = window.innerWidth;
+                    const maxTranslate = trackWidth - viewportWidth + 100; // Buffer
+                    hTrack.style.transform = `translateX(-${percentage * maxTranslate}px)`;
+                }
+            }
+
+            // Vertical Cycle Scroll
+            if(cSection) {
+                const rect = cSection.getBoundingClientRect();
+                const totalHeight = rect.height - windowHeight;
+                const scrolled = -rect.top;
+                if (scrolled < 0) { 
+                    cSlides.forEach((s, i) => s.classList.toggle('active', i === 0)); 
+                    return; 
+                }
+                const segmentHeight = totalHeight / cSlides.length;
+                const activeIndex = Math.min(cSlides.length - 1, Math.floor(scrolled / segmentHeight));
+                
+                cSlides.forEach((slide, index) => {
+                    if (index === activeIndex) { slide.classList.add('active'); } 
+                    else { slide.classList.remove('active'); }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
