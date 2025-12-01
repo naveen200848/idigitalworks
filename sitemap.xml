@@ -10,15 +10,8 @@
 <url>
   <loc>https://www.idigitalworks.com/whatsapp-recovery.html</loc>
   <priority>0.90</priority>
-  <changefreq>weekly</changefreq>
+  <changefreq>daily</changefreq>
 </url>
-
-<url>
-  <loc>https://www.idigitalworks.com/automation.html</loc>
-  <priority>0.80</priority>
-  <changefreq>weekly</changefreq>
-</url>
-
 
 
 </urlset>
