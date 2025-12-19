@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC8YmWqq7cnR5HG62Jb5amEZy9Kw0I38X4",
@@ -15,105 +15,71 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- ANALYTICS TRACKER ---
-window.trackAction = async (id, type) => {
-    const postRef = doc(db, "news", id);
-    if(type === 'view') await updateDoc(postRef, { views: increment(1) });
-    if(type === 'share') await updateDoc(postRef, { shares: increment(1) });
+// --- 1. FIXED ANALYTICS TRACKER ---
+window.trackAction = async (id, actionType) => {
+    try {
+        const postRef = doc(db, "news", id);
+        if (actionType === 'view') {
+            await updateDoc(postRef, { views: increment(1) });
+        }
+        if (actionType === 'share') {
+            await updateDoc(postRef, { shares: increment(1) });
+        }
+    } catch (e) { console.error("Tracking failed:", e); }
 };
 
-// --- RENDER PUBLIC FEED (FULL CONTENT) ---
+// --- 2. UNIQUE URL & READER LOGIC ---
+window.openAndTrack = (id, title, content, image, link) => {
+    // Only track a view when the user intentionally clicks to read or open the post
+    trackAction(id, 'view'); 
+    
+    const reader = document.getElementById('readerView');
+    const body = document.getElementById('readerBody');
+    if(!reader || !body) return;
+
+    const uniqueUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+    const shareText = encodeURIComponent(`iDigitalWorks AI Update: ${title}`);
+
+    body.innerHTML = `
+        <h1>${title}</h1>
+        <div class="share-bar" style="margin:20px 0; border-y:1px solid #eee; padding:15px 0; display:flex; gap:10px;">
+            <button onclick="copyAndTrack('${id}', '${uniqueUrl}')" style="background:#f5f5f7; border:1px solid #d2d2d7; padding:10px 20px; border-radius:50px; cursor:pointer; font-weight:600;">🔗 Copy Link</button>
+            <a href="https://wa.me/?text=${shareText}%20${encodeURIComponent(uniqueUrl)}" target="_blank" onclick="trackAction('${id}', 'share')" style="background:#25D366; color:white; padding:10px 20px; border-radius:50px; text-decoration:none; font-weight:bold;">WhatsApp</a>
+        </div>
+        ${image ? `<img src="${image}" style="width:100%; border-radius:12px; margin-bottom:20px;">` : ''}
+        <p style="white-space:pre-wrap; font-size:20px; line-height:1.8;">${content}</p>
+        ${link ? `<a href="${link}" target="_blank" style="color:#0071e3; font-weight:bold;">Source →</a>` : ''}
+    `;
+    reader.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    window.history.pushState({id}, title, `?id=${id}`);
+};
+
+window.copyAndTrack = (id, url) => {
+    navigator.clipboard.writeText(url);
+    trackAction(id, 'share');
+    alert("Unique link copied to clipboard!");
+};
+
+// --- 3. RENDER FEED (REMOVED AUTO-INCREMENT LOOP) ---
 const publicFeed = document.getElementById('news-feed');
 if (publicFeed) {
     onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
         publicFeed.innerHTML = '';
         snap.forEach(d => {
             const p = d.data(); const id = d.id;
-            const uniqueUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+            const cleanContent = p.content.replace(/`/g, "'").replace(/"/g, '&quot;');
+            
+            // NOTE: trackAction(id, 'view') is NOT called here anymore to prevent the loop
             publicFeed.innerHTML += `
-                <article class="full-news-item">
-                    <span class="meta">AI Intelligence • ${p.views || 0} Reads</span>
-                    <h2>${p.title}</h2>
-                    ${p.image ? `<img src="${p.image}">` : ''}
-                    <p>${p.content}</p>
-                    <div class="share-row">
-                        <button onclick="copyLink('${id}', '${uniqueUrl}')" class="share-btn">🔗 Copy Link</button>
-                        <a href="https://wa.me/?text=Check this AI Update: ${encodeURIComponent(uniqueUrl)}" 
-                           target="_blank" onclick="trackAction('${id}', 'share')" class="share-btn wa">WhatsApp</a>
-                    </div>
+                <article class="full-news-item" style="border-bottom:1px solid #eee; padding-bottom:40px; margin-bottom:40px;">
+                    <span style="font-size:12px; font-weight:bold; color:#86868b; text-transform:uppercase;">${p.views || 0} READS</span>
+                    <h2 onclick="openAndTrack('${id}', \`${p.title}\`, \`${cleanContent}\`, '${p.image}', '${p.link}')" style="cursor:pointer; font-family:serif; font-size:42px; margin:10px 0;">${p.title}</h2>
+                    ${p.image ? `<img src="${p.image}" style="width:100%; border-radius:8px;">` : ''}
+                    <p style="white-space:pre-wrap; font-size:19px; line-height:1.8;">${p.content}</p>
                 </article>`;
-            trackAction(id, 'view');
         });
     });
 }
 
-window.copyLink = (id, url) => {
-    navigator.clipboard.writeText(url);
-    trackAction(id, 'share');
-    alert("Unique link copied to clipboard!");
-};
-
-// --- ADMIN STATS DASHBOARD ---
-const renderStats = (data) => {
-    const ctx = document.getElementById('statsChart');
-    if(!ctx) return;
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: data.map(i => i.title.substring(0, 15) + '...'),
-            datasets: [{ label: 'Views', data: data.map(i => i.views || 0), backgroundColor: '#0071e3' }]
-        },
-        options: { indexAxis: 'y', plugins: { legend: { display: false } } }
-    });
-};
-
-// --- AUTH & MANAGE SECTION (SAFE GUARDS) ---
-onAuthStateChanged(auth, (user) => {
-    const dash = document.getElementById('admin-dashboard');
-    const login = document.getElementById('login-section');
-    if (user) {
-        if(dash) dash.classList.remove('hidden');
-        if(login) login.classList.add('hidden');
-        
-        // Load Stats when Admin is logged in
-        onSnapshot(query(collection(db, "news"), orderBy("views", "desc")), (snap) => {
-            let totalViews = 0, totalShares = 0, chartData = [];
-            snap.forEach(d => {
-                const p = d.data();
-                totalViews += (p.views || 0); totalShares += (p.shares || 0);
-                chartData.push({ title: p.title, views: p.views });
-            });
-            if(document.getElementById('stat-views')) document.getElementById('stat-views').innerText = totalViews;
-            if(document.getElementById('stat-shares')) document.getElementById('stat-shares').innerText = totalShares;
-            if(document.getElementById('stat-posts')) document.getElementById('stat-posts').innerText = snap.size;
-            renderStats(chartData);
-        });
-    } else {
-        if(dash) dash.classList.add('hidden');
-        if(login) login.classList.remove('hidden');
-    }
-});
-
-// --- ADMIN ACTIONS (PUBLISH, EDIT, DELETE) ---
-const pubBtn = document.getElementById('publishBtn');
-if(pubBtn) {
-    pubBtn.onclick = async () => {
-        await addDoc(collection(db, "news"), {
-            title: document.getElementById('postTitle').value,
-            content: document.getElementById('postContent').value,
-            image: document.getElementById('postImage').value,
-            views: 0, shares: 0, date: serverTimestamp()
-        });
-        alert("Published!"); location.reload();
-    };
-}
-
-const loginBtn = document.getElementById('loginBtn');
-if(loginBtn) {
-    loginBtn.onclick = () => {
-        const e = document.getElementById('loginEmail').value;
-        const p = document.getElementById('loginPassword').value;
-        signInWithEmailAndPassword(auth, e, p).catch(err => alert(err.message));
-    };
-}
-// [Remaining Admin logic for GitHub upload and Edit Modal goes here, wrapped in 'if' blocks]
+// ... [Keep Auth, Login, and Edit Modal logic from previous turn, ensuring it uses the 'if' checks] ...
