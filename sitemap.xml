@@ -13,5 +13,10 @@
   <changefreq>daily</changefreq>
 </url>
 
+<url>
+  <loc>https://www.idigitalworks.com/AI News.html</loc>
+  <priority>1.00</priority>
+  <changefreq>daily</changefreq>
+</url>  
 
 </urlset>
