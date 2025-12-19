@@ -15,68 +15,88 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- GITHUB UPLOAD LOGIC ---
+// --- GITHUB UPLOAD ---
 const uploadBtn = document.getElementById('uploadBtn');
 if (uploadBtn) {
     uploadBtn.onclick = async () => {
         const file = document.getElementById('imageFile').files[0];
         const token = document.getElementById('githubToken').value;
         if (!file || !token) return alert("Select file and enter token!");
-
-        if (document.getElementById('rememberToken').checked) {
-            localStorage.setItem('gh_token', token);
-        }
+        if (document.getElementById('rememberToken').checked) localStorage.setItem('gh_token', token);
 
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = async () => {
             const content = reader.result.split(',')[1];
             const fileName = `newsimages/${Date.now()}_${file.name}`;
-            const apiLink = `https://api.github.com/repos/naveen200848/idigitalworks/contents/${fileName}`;
+            const api = `https://api.github.com/repos/naveen200848/idigitalworks/contents/${fileName}`;
 
-            const res = await fetch(apiLink, {
+            const res = await fetch(api, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: "Upload", content: content, branch: "main" })
             });
 
             if (res.ok) {
-                const rawUrl = `https://cdn.jsdelivr.net/gh/naveen200848/idigitalworks@main/${fileName}`;
-                document.getElementById('postImage').value = rawUrl;
-                document.getElementById('imagePreviewTarget').src = rawUrl;
-                document.getElementById('imagePreviewContainer').style.display = "block";
-                alert("GitHub Upload Successful!");
+                const url = `https://cdn.jsdelivr.net/gh/naveen200848/idigitalworks@main/${fileName}`;
+                document.getElementById('postImage').value = url;
+                alert("Image Uploaded to GitHub!");
             }
         };
     };
 }
 
-// --- REMEMBER TOKEN ON LOAD ---
-window.onload = () => {
-    const saved = localStorage.getItem('gh_token');
-    if (saved && document.getElementById('githubToken')) {
-        document.getElementById('githubToken').value = saved;
-        document.getElementById('rememberToken').checked = true;
-    }
+// --- READER & SHARING ---
+window.openReader = (title, content, image, link) => {
+    const reader = document.getElementById('readerView');
+    const body = document.getElementById('readerBody');
+    const shareText = encodeURIComponent(`Check out this AI Update: ${title}`);
+    const shareUrl = encodeURIComponent(window.location.href);
+
+    body.innerHTML = `
+        <h1>${title}</h1>
+        <div class="share-bar">
+            <a href="https://wa.me/?text=${shareText}%20${shareUrl}" target="_blank" class="share-btn wa">WhatsApp</a>
+            <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" class="share-btn tw">Twitter</a>
+        </div>
+        ${image ? `<img src="${image}">` : ''}
+        <p>${content}</p>
+        ${link ? `<a href="${link}" target="_blank" style="display:block; margin-top:20px; color:#0071e3;">External Source →</a>` : ''}
+    `;
+    reader.style.display = 'block';
+    document.body.style.overflow = 'hidden';
 };
 
-// --- AUTH LOGIC ---
-const loginBtn = document.getElementById('loginBtn');
-if (loginBtn) {
-    loginBtn.onclick = () => {
-        signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value).catch(e => alert(e.message));
+const closeReader = document.getElementById('closeReader');
+if (closeReader) {
+    closeReader.onclick = () => {
+        document.getElementById('readerView').style.display = 'none';
+        document.body.style.overflow = 'auto';
     };
 }
-document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('gh_token'); signOut(auth); };
+
+// --- AUTH & DASHBOARD ---
+const loginBtn = document.getElementById('loginBtn');
+if (loginBtn) {
+    loginBtn.onclick = () => signInWithEmailAndPassword(auth, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value).catch(e => alert(e.message));
+}
+if(document.getElementById('logoutBtn')) document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
 onAuthStateChanged(auth, (user) => {
     const dash = document.getElementById('admin-dashboard');
     const login = document.getElementById('login-section');
-    if (user) { dash.classList.remove('hidden'); login.classList.add('hidden'); }
-    else { dash.classList.add('hidden'); login.classList.remove('hidden'); }
+    if (user) { 
+        dash?.classList.remove('hidden'); 
+        login?.classList.add('hidden'); 
+        const saved = localStorage.getItem('gh_token');
+        if(saved && document.getElementById('githubToken')) document.getElementById('githubToken').value = saved;
+    } else { 
+        dash?.classList.add('hidden'); 
+        login?.classList.remove('hidden'); 
+    }
 });
 
-// --- PUBLISH & MANAGE ---
+// --- PUBLISH & SYNC ---
 const pubBtn = document.getElementById('publishBtn');
 if (pubBtn) {
     pubBtn.onclick = async () => {
@@ -91,7 +111,6 @@ if (pubBtn) {
     };
 }
 
-// --- FEED LOGIC (PUBLIC & ADMIN) ---
 const publicFeed = document.getElementById('news-feed');
 const adminFeed = document.getElementById('admin-feed');
 
@@ -99,36 +118,44 @@ onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
     if (publicFeed) publicFeed.innerHTML = '';
     if (adminFeed) adminFeed.innerHTML = '';
     snap.forEach(d => {
-        const post = d.data(); const id = d.id;
+        const p = d.data(); const id = d.id;
         if (publicFeed) {
-            publicFeed.innerHTML += `<div class="news-card">
-                ${post.image ? `<img src="${post.image}">` : ''}
-                <span class="tag">AI UPDATE</span>
-                <h3>${post.title}</h3>
-                <p>${post.content}</p>
-                ${post.link ? `<a class="btn" href="${post.link}" target="_blank">Read More →</a>` : ''}
-            </div>`;
+            publicFeed.innerHTML += `
+                <div class="news-card" onclick="openReader(\`${p.title}\`, \`${p.content.replace(/`/g, "'")}\`, '${p.image}', '${p.link}')">
+                    ${p.image ? `<img src="${p.image}">` : ''}
+                    <h3>${p.title}</h3>
+                    <p>${p.content}</p>
+                </div>`;
         }
         if (adminFeed) {
             const el = document.createElement('div'); el.style = "padding:10px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;";
-            el.innerHTML = `<span>${post.title}</span> <div><button onclick="editPost('${id}', \`${post.title}\`, \`${post.content}\`, '${post.image}', '${post.link}')">Edit</button> <button onclick="deletePost('${id}')" style="color:red">Delete</button></div>`;
+            el.innerHTML = `<span>${p.title}</span> <div><button onclick="editPost('${id}', \`${p.title}\`, \`${p.content.replace(/`/g, "'")}\`, '${p.image}', '${p.link}')">Edit</button> <button onclick="deletePost('${id}')" style="color:red">Delete</button></div>`;
             adminFeed.appendChild(el);
         }
     });
 });
 
-// --- EDIT & DELETE ---
+// --- EDIT LOGIC (FIXED) ---
 let editId = null;
 window.editPost = (id, t, c, i, l) => {
-    editId = id; document.getElementById('editTitle').value = t; document.getElementById('editContent').value = c;
-    document.getElementById('editImage').value = i; document.getElementById('editLink').value = l;
+    editId = id; 
+    document.getElementById('editTitle').value = t; 
+    document.getElementById('editContent').value = c;
+    document.getElementById('editImage').value = i; 
+    document.getElementById('editLink').value = l;
     document.getElementById('editModal').classList.remove('hidden');
 };
+
 document.getElementById('saveEditBtn').onclick = async () => {
-    await updateDoc(doc(db, "news", editId), {
-        title: document.getElementById('editTitle').value, content: document.getElementById('editContent').value,
-        image: document.getElementById('editImage').value, link: document.getElementById('editLink').value
+    const postRef = doc(db, "news", editId);
+    await updateDoc(postRef, {
+        title: document.getElementById('editTitle').value,
+        content: document.getElementById('editContent').value,
+        image: document.getElementById('editImage').value,
+        link: document.getElementById('editLink').value
     });
-    alert("Updated!"); document.getElementById('editModal').classList.add('hidden');
+    alert("Article Republished!");
+    document.getElementById('editModal').classList.add('hidden');
 };
-window.deletePost = async (id) => { if (confirm("Delete?")) await deleteDoc(doc(db, "news", id)); };
+
+window.deletePost = async (id) => { if (confirm("Delete permanently?")) await deleteDoc(doc(db, "news", id)); };
