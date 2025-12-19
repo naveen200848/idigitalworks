@@ -3,59 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iDigitalWorks Admin | AI News</title>
+    <title>iDigitalWorks Admin Portal</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #fbfbfd; padding: 40px; color: #1d1d1f; }
-        .admin-container { max-width: 600px; margin: 0 auto; }
+        body { font-family: -apple-system, sans-serif; background: #fbfbfd; padding: 40px; }
+        .hidden { display: none !important; }
+        .card { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto 30px; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: 1px solid #d2d2d7; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; }
+        .primary-btn { background: #000; color: #fff; }
         
-        /* Form Styling */
-        .card { background: #fff; padding: 32px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        h2 { font-size: 28px; letter-spacing: -0.02em; margin-bottom: 24px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #d2d2d7; box-sizing: border-box; font-size: 16px; }
-        
-        button { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        #publishBtn { background: #000; color: #fff; }
-        #publishBtn:hover { background: #333; }
-
-        /* Management List Styling */
-        .post-item { background: #fff; padding: 20px; border-radius: 16px; border: 1px solid #e5e5e5; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .post-info { flex-grow: 1; }
-        .btn-group { display: flex; gap: 8px; }
-        .edit-btn { background: #f5f5f7; color: #0071e3; padding: 8px 12px; border-radius: 8px; font-size: 13px; width: auto; }
-        .delete-btn { background: #fff1f0; color: #ff3b30; padding: 8px 12px; border-radius: 8px; font-size: 13px; width: auto; }
+        /* Edit Modal */
+        #editModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
     </style>
 </head>
 <body>
 
-<div class="admin-container">
-    <div class="card">
-        <h2>Post AI Update</h2>
-        
-        <label>Article Title</label>
-        <input type="text" id="postTitle" placeholder="Ex: WhatsApp AI Agents">
-        
-        <label>Image URL</label>
-        <input type="text" id="postImage" placeholder="https://image-link.jpg">
-        
-        <label>Action Link (Hyperlink)</label>
-        <input type="text" id="postLink" placeholder="https://wa.me/yournumber">
-        
-        <label>Summary Content</label>
-        <textarea id="postContent" placeholder="Describe the update..."></textarea>
-        
-        <button id="publishBtn">Publish to Website</button>
+    <div id="login-section" class="card">
+        <h2>Admin Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button id="loginBtn" class="primary-btn">Sign In</button>
     </div>
 
-    <div class="card">
-        <h2>Manage Updates</h2>
-        <div id="admin-feed">
-            <p style="color: #86868b;">Loading your updates...</p>
+    <div id="admin-dashboard" class="hidden">
+        <div class="card">
+            <div style="display:flex; justify-content: space-between;">
+                <h2>Post AI Update</h2>
+                <button id="logoutBtn" style="width:auto; padding:5px 10px; background:none; color:red;">Logout</button>
+            </div>
+            <input type="text" id="postTitle" placeholder="Title">
+            <input type="text" id="postImage" placeholder="Image URL">
+            <input type="text" id="postLink" placeholder="Link URL">
+            <textarea id="postContent" placeholder="Content"></textarea>
+            <button id="publishBtn" class="primary-btn">Publish Update</button>
+        </div>
+
+        <div class="card">
+            <h2>Manage Updates</h2>
+            <div id="admin-feed">Loading...</div>
         </div>
     </div>
-</div>
 
-<script type="module" src="firebase-config.js"></script>
+    <div id="editModal" class="hidden">
+        <div class="card" style="width: 90%;">
+            <h3>Edit Post</h3>
+            <input type="text" id="editTitle">
+            <input type="text" id="editImage">
+            <input type="text" id="editLink">
+            <textarea id="editContent" style="height:100px;"></textarea>
+            <div style="display:flex; gap:10px;">
+                <button id="saveEditBtn" class="primary-btn">Save Changes</button>
+                <button onclick="closeEditModal()" style="background:#f5f5f7;">Cancel</button>
+            </div>
+        </div>
+    </div>
 
+    <script type="module" src="firebase-config.js"></script>
 </body>
 </html>
