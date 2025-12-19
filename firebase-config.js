@@ -1,4 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -12,98 +13,90 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-// --- ADMIN: CREATE NEW POST ---
-const publishBtn = document.getElementById('publishBtn');
-if(publishBtn) {
-    publishBtn.onclick = async () => {
-        // Getting values from the Admin HTML inputs
-        const titleVal = document.getElementById('postTitle').value;
-        const contentVal = document.getElementById('postContent').value;
-        const imageVal = document.getElementById('postImage').value;
-        const linkVal = document.getElementById('postLink').value;
+// --- AUTHENTICATION LOGIC ---
+const loginBtn = document.getElementById('loginBtn');
+if(loginBtn) {
+    loginBtn.onclick = () => {
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+        signInWithEmailAndPassword(auth, email, pass).catch(err => alert(err.message));
+    };
+}
 
-        if(!titleVal || !contentVal) {
-            alert("Please fill in at least the Title and Content.");
-            return;
-        }
+document.getElementById('logoutBtn').onclick = () => signOut(auth);
 
-        try {
-            // We save with these exact keys so ainews.html can read them
-            await addDoc(collection(db, "news"), { 
-                title: titleVal, 
-                content: contentVal, 
-                image: imageVal, 
-                link: linkVal, 
-                date: serverTimestamp() // Using 'date' as the key
-            });
-            alert("Published to iDigitalWorks!");
-            location.reload();
-        } catch (e) {
-            console.error("Error adding document: ", e);
-            alert("Error publishing: " + e.message);
-        }
+onAuthStateChanged(auth, (user) => {
+    const loginSec = document.getElementById('login-section');
+    const adminDash = document.getElementById('admin-dashboard');
+    if (user) {
+        loginSec.classList.add('hidden');
+        adminDash.classList.remove('hidden');
+    } else {
+        loginSec.classList.remove('hidden');
+        adminDash.classList.add('hidden');
     }
-}
+});
 
-// --- ADMIN: MANAGE POSTS ---
-const adminFeed = document.getElementById('admin-feed');
-if(adminFeed) {
-    const q = query(collection(db, "news"), orderBy("date", "desc"));
-    onSnapshot(q, (snapshot) => {
-        adminFeed.innerHTML = '';
-        snapshot.forEach(postDoc => {
-            const post = postDoc.data();
-            const id = postDoc.id;
+// --- PUBLISH LOGIC ---
+document.getElementById('publishBtn').onclick = async () => {
+    const data = {
+        title: document.getElementById('postTitle').value,
+        content: document.getElementById('postContent').value,
+        image: document.getElementById('postImage').value,
+        link: document.getElementById('postLink').value,
+        date: serverTimestamp()
+    };
+    await addDoc(collection(db, "news"), data);
+    alert("Published!");
+    location.reload();
+};
 
-            const postEl = document.createElement('div');
-            postEl.className = "post-item"; // Matches your admin.html CSS
-            postEl.style = "padding:15px; border:1px solid #ddd; border-radius:12px; margin-bottom:10px; background:#fafafa; display:flex; justify-content:space-between; align-items:center;";
-            postEl.innerHTML = `
-                <div>
-                    <strong>${post.title}</strong>
-                </div>
-                <div>
-                    <button onclick="editPost('${id}', '${post.title}')" style="background:#0071e3; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Edit</button>
-                    <button onclick="deletePost('${id}')" style="background:#ff3b30; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer; margin-left:10px;">Delete</button>
-                </div>
-            `;
-            adminFeed.appendChild(postEl);
-        });
+// --- MANAGE & EDIT LOGIC ---
+let currentEditId = null;
+
+onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snapshot) => {
+    const adminFeed = document.getElementById('admin-feed');
+    if(!adminFeed) return;
+    adminFeed.innerHTML = '';
+    snapshot.forEach(postDoc => {
+        const post = postDoc.data();
+        const id = postDoc.id;
+        const el = document.createElement('div');
+        el.style = "padding:15px; border-bottom:1px solid #eee; display:flex; justify-content:space-between;";
+        el.innerHTML = `<span>${post.title}</span> 
+            <div>
+                <button onclick="openEditModal('${id}', \`${post.title}\`, \`${post.content}\`, '${post.image}', '${post.link}')" style="color:blue; cursor:pointer; background:none; border:none;">Edit</button>
+                <button onclick="deletePost('${id}')" style="color:red; cursor:pointer; background:none; border:none; margin-left:10px;">Delete</button>
+            </div>`;
+        adminFeed.appendChild(el);
     });
-}
+});
 
-// --- GLOBAL FUNCTIONS FOR BUTTONS ---
+window.openEditModal = (id, title, content, image, link) => {
+    currentEditId = id;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editContent').value = content;
+    document.getElementById('editImage').value = image;
+    document.getElementById('editLink').value = link;
+    document.getElementById('editModal').classList.remove('hidden');
+};
+
+window.closeEditModal = () => document.getElementById('editModal').classList.add('hidden');
+
+document.getElementById('saveEditBtn').onclick = async () => {
+    const postRef = doc(db, "news", currentEditId);
+    await updateDoc(postRef, {
+        title: document.getElementById('editTitle').value,
+        content: document.getElementById('editContent').value,
+        image: document.getElementById('editImage').value,
+        link: document.getElementById('editLink').value
+    });
+    alert("Updated!");
+    closeEditModal();
+};
+
 window.deletePost = async (id) => {
-    if(confirm("Are you sure you want to delete this post?")) {
-        await deleteDoc(doc(db, "news", id));
-    }
-}
-
-window.editPost = async (id, oldTitle) => {
-    const newTitle = prompt("Enter new title:", oldTitle);
-    if(newTitle && newTitle !== oldTitle) {
-        await updateDoc(doc(db, "news", id), { title: newTitle });
-    }
-}
-
-// --- PUBLIC: RENDER TO AINEWS.HTML ---
-const publicFeed = document.getElementById('news-feed');
-if(publicFeed) {
-    const q = query(collection(db, "news"), orderBy("date", "desc"));
-    onSnapshot(q, (snapshot) => {
-        publicFeed.innerHTML = '';
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            // This builds the card using the exact keys we saved above
-            publicFeed.innerHTML += `
-                <div class="news-card">
-                    ${data.image ? `<img src="${data.image}" style="width:100%; height:180px; object-fit:cover; border-radius:16px; margin-bottom:15px;">` : ''}
-                    <span class="tag">AI UPDATE</span>
-                    <h3>${data.title}</h3>
-                    <p style="color:#6e6e73; font-size:15px;">${data.content}</p>
-                    ${data.link ? `<a href="${data.link}" target="_blank" style="color:#0066cc; text-decoration:none; font-weight:600; margin-top:10px; display:inline-block;">Learn more →</a>` : ''}
-                </div>`;
-        });
-    });
-}
+    if(confirm("Delete this?")) await deleteDoc(doc(db, "news", id));
+};
