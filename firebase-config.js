@@ -1,7 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
+// [Use your actual Firebase Config]
 const firebaseConfig = {
   apiKey: "AIzaSyC8YmWqq7cnR5HG62Jb5amEZy9Kw0I38X4",
   authDomain: "iDigitalWorks-News.firebaseapp.com",
@@ -15,128 +16,75 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- 1. GITHUB IMAGE UPLOAD ---
-const uploadBtn = document.getElementById('uploadBtn');
-if (uploadBtn) {
-    uploadBtn.onclick = async () => {
-        const file = document.getElementById('imageFile').files[0];
-        const token = document.getElementById('githubToken').value;
-        if (!file || !token) return alert("Select a file and enter your GitHub token.");
-        
-        if (document.getElementById('rememberToken').checked) localStorage.setItem('gh_token', token);
+// --- 1. TRACKING & READER ---
+window.trackAndOpen = async (id, title, content, image, link) => {
+    // Increment view only on intentional click
+    try {
+        await updateDoc(doc(db, "news", id), { views: increment(1) });
+    } catch (e) { console.error("Tracking Error:", e); }
 
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            const content = reader.result.split(',')[1];
-            const fileName = `newsimages/${Date.now()}_${file.name}`;
-            const api = `https://api.github.com/repos/naveen200848/idigitalworks/contents/${fileName}`;
+    const reader = document.getElementById('readerView');
+    const body = document.getElementById('readerBody');
+    if(!reader || !body) return;
 
-            const res = await fetch(api, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: "Upload news image", content: content, branch: "main" })
-            });
-            if (res.ok) {
-                const url = `https://cdn.jsdelivr.net/gh/naveen200848/idigitalworks@main/${fileName}`;
-                document.getElementById('postImage').value = url;
-                alert("Upload Successful!");
-            } else { alert("GitHub Upload Failed. Check token."); }
-        };
-    };
-}
+    const uniqueUrl = `${window.location.origin}${window.location.pathname}?id=${id}`;
+    const shareText = encodeURIComponent(`AI News: ${title}`);
 
-// --- 2. AUTH & DASHBOARD LOGIC ---
-const loginBtn = document.getElementById('loginBtn');
-if (loginBtn) {
-    loginBtn.onclick = () => {
-        const e = document.getElementById('loginEmail').value;
-        const p = document.getElementById('loginPassword').value;
-        signInWithEmailAndPassword(auth, e, p).catch(err => alert(err.message));
-    };
-}
-
-const logoutBtn = document.getElementById('logoutBtn');
-if (logoutBtn) logoutBtn.onclick = () => signOut(auth);
-
-onAuthStateChanged(auth, (user) => {
-    const dash = document.getElementById('admin-dashboard');
-    const login = document.getElementById('login-section');
-    if (user) {
-        if (dash) dash.classList.remove('hidden');
-        if (login) login.classList.add('hidden');
-        const saved = localStorage.getItem('gh_token');
-        if (saved && document.getElementById('githubToken')) document.getElementById('githubToken').value = saved;
-        
-        // Load Statistics for Dashboard
-        onSnapshot(query(collection(db, "news"), orderBy("views", "desc")), (snap) => {
-            let tViews = 0, tShares = 0;
-            snap.forEach(d => { tViews += (d.data().views || 0); tShares += (d.data().shares || 0); });
-            if(document.getElementById('stat-views')) document.getElementById('stat-views').innerText = tViews;
-            if(document.getElementById('stat-shares')) document.getElementById('stat-shares').innerText = tShares;
-            if(document.getElementById('stat-posts')) document.getElementById('stat-posts').innerText = snap.size;
-        });
-    } else {
-        if (dash) dash.classList.add('hidden');
-        if (login) login.classList.remove('hidden');
-    }
-});
-
-// --- 3. DATA MANAGEMENT (PUBLISH, EDIT, DELETE) ---
-const publishBtn = document.getElementById('publishBtn');
-if (publishBtn) {
-    publishBtn.onclick = async () => {
-        await addDoc(collection(db, "news"), {
-            title: document.getElementById('postTitle').value,
-            content: document.getElementById('postContent').value,
-            image: document.getElementById('postImage').value,
-            link: document.getElementById('postLink').value,
-            views: 0, shares: 0, date: serverTimestamp()
-        });
-        alert("Published!"); location.reload();
-    };
-}
-
-let currentEditId = null;
-window.editPost = (id, t, c, i, l) => {
-    currentEditId = id;
-    document.getElementById('editTitle').value = t;
-    document.getElementById('editContent').value = c;
-    document.getElementById('editImage').value = i;
-    document.getElementById('editLink').value = l;
-    document.getElementById('editModal').classList.remove('hidden');
+    body.innerHTML = `
+        <h1>${title}</h1>
+        <div class="share-bar">
+            <button onclick="copyAndTrack('${id}', '${uniqueUrl}')" class="share-btn cp">🔗 Copy Link</button>
+            <a href="https://wa.me/?text=${shareText}%20${encodeURIComponent(uniqueUrl)}" target="_blank" onclick="trackAction('${id}', 'share')" class="share-btn wa">WhatsApp</a>
+            <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent(uniqueUrl)}" target="_blank" class="share-btn tw">Twitter (X)</a>
+        </div>
+        ${image ? `<img src="${image}">` : ''}
+        <div class="reader-text">${content}</div>
+        ${link ? `<a href="${link}" target="_blank" style="color:#0071e3; font-weight:bold;">Source Link →</a>` : ''}
+    `;
+    
+    reader.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    window.history.pushState({id}, title, `?id=${id}`);
 };
 
-const saveEditBtn = document.getElementById('saveEditBtn');
-if (saveEditBtn) {
-    saveEditBtn.onclick = async () => {
-        await updateDoc(doc(db, "news", currentEditId), {
-            title: document.getElementById('editTitle').value,
-            content: document.getElementById('editContent').value,
-            image: document.getElementById('editImage').value,
-            link: document.getElementById('editLink').value
+window.copyAndTrack = (id, url) => {
+    navigator.clipboard.writeText(url);
+    updateDoc(doc(db, "news", id), { shares: increment(1) });
+    alert("Unique link copied!");
+};
+
+// --- 2. RENDER THE BENTO GRID ---
+const publicFeed = document.getElementById('news-feed');
+if (publicFeed) {
+    onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
+        publicFeed.innerHTML = '';
+        snap.forEach(d => {
+            const p = d.data();
+            const id = d.id;
+            const cleanC = p.content.replace(/`/g, "'").replace(/"/g, '&quot;');
+            
+            // Bento Grid Card
+            publicFeed.innerHTML += `
+                <div class="news-card" onclick="trackAndOpen('${id}', \`${p.title}\`, \`${cleanC}\`, '${p.image}', '${p.link}')">
+                    ${p.image ? `<img src="${p.image}">` : ''}
+                    <h3>${p.title}</h3>
+                    <p>${p.content}</p>
+                    <div style="margin-top:auto; font-size:11px; font-weight:bold; color:#86868b; text-transform:uppercase;">
+                        ${p.views || 0} READS
+                    </div>
+                </div>`;
         });
-        alert("Updated!"); document.getElementById('editModal').classList.add('hidden');
+    });
+}
+
+// Close Reader logic
+const closeReaderBtn = document.getElementById('closeReader');
+if (closeReaderBtn) {
+    closeReaderBtn.onclick = () => {
+        document.getElementById('readerView').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        window.history.pushState({}, '', window.location.pathname);
     };
 }
 
-window.deletePost = async (id) => { if (confirm("Delete permanently?")) await deleteDoc(doc(db, "news", id)); };
-
-// --- 4. RENDER LISTS ---
-const adminFeed = document.getElementById('admin-feed');
-onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
-    if (adminFeed) {
-        adminFeed.innerHTML = '';
-        snap.forEach(d => {
-            const p = d.data(); const id = d.id;
-            const cleanC = p.content.replace(/`/g, "'").replace(/"/g, '&quot;');
-            const row = document.createElement('div');
-            row.className = "admin-post-item";
-            row.innerHTML = `<span>${p.title}</span><div>
-                <button onclick="editPost('${id}', \`${p.title}\`, \`${cleanC}\`, '${p.image}', '${p.link}')" style="background:#eee;">Edit</button>
-                <button onclick="deletePost('${id}')" style="color:#ff3b30; background:none; margin-left:10px;">Delete</button>
-            </div>`;
-            adminFeed.appendChild(row);
-        });
-    }
-});
+// ... [Keep the Login and Admin dashboard logic from the "Safe" version] ...
