@@ -3,50 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard | iDigitalWorks</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #fbfbfd; padding: 20px; }
-        .card { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto 20px; }
+        body { font-family: -apple-system, sans-serif; background: #f5f5f7; padding: 20px; }
+        .card { background: #fff; padding: 25px; border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); max-width: 800px; margin: 0 auto 20px; }
         .hidden { display: none !important; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .stat-box { background: #fff; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #eee; }
+        .stat-box h4 { margin: 0; font-size: 12px; color: #86868b; text-transform: uppercase; }
+        .stat-box p { margin: 5px 0 0; font-size: 24px; font-weight: bold; color: #000; }
         input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #d2d2d7; border-radius: 10px; box-sizing: border-box; }
-        button { padding: 12px 20px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; }
+        textarea { height: 150px; }
+        button { padding: 12px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
         .black-btn { background: #000; color: #fff; width: 100%; }
         #editModal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify:center; z-index:999; }
     </style>
 </head>
 <body>
 
-    <div id="login-section" class="card">
-        <h2>Admin Login</h2>
+    <div id="login-section" class="card" style="max-width: 400px;">
+        <h2>Admin Sign In</h2>
         <input type="email" id="loginEmail" placeholder="Email">
         <input type="password" id="loginPassword" placeholder="Password">
         <button id="loginBtn" class="black-btn">Login</button>
     </div>
 
     <div id="admin-dashboard" class="hidden">
+        
         <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>Create Update</h2>
-                <button id="logoutBtn" style="color:red; background:none;">Sign Out</button>
+            <h2>Performance Insights</h2>
+            <div class="stats-grid">
+                <div class="stat-box"><h4>Total Views</h4><p id="stat-views">0</p></div>
+                <div class="stat-box"><h4>Total Shares</h4><p id="stat-shares">0</p></div>
+                <div class="stat-box"><h4>Total Posts</h4><p id="stat-posts">0</p></div>
             </div>
-            
-            <div style="background:#f5f5f7; padding:15px; border-radius:12px; margin-bottom:15px;">
-                <input type="password" id="githubToken" placeholder="GitHub Token">
-                <input type="checkbox" id="rememberToken"> <span style="font-size:12px">Remember Token</span>
-            </div>
-
-            <input type="text" id="postTitle" placeholder="Headline">
-            <div style="display:flex; gap:10px;">
-                <input type="file" id="imageFile" accept="image/*">
-                <button id="uploadBtn" style="background:#0071e3; color:white;">Upload</button>
-            </div>
-            <input type="text" id="postImage" placeholder="Image URL">
-            <input type="text" id="postLink" placeholder="External Link (Optional)">
-            <textarea id="postContent" style="height:200px;" placeholder="Use points or line breaks here..."></textarea>
-            <button id="publishBtn" class="black-btn">Publish Article</button>
+            <canvas id="statsChart" height="100"></canvas>
         </div>
 
         <div class="card">
-            <h3>Manage Articles</h3>
+            <div style="display:flex; justify-content:space-between">
+                <h2>Create Update</h2>
+                <button id="logoutBtn" style="color:red; background:none;">Logout</button>
+            </div>
+            <input type="password" id="githubToken" placeholder="GitHub Token">
+            <input type="checkbox" id="rememberToken"> <span style="font-size:12px">Remember Token</span>
+            <input type="text" id="postTitle" placeholder="Headline">
+            <div style="display:flex; gap:10px; margin: 10px 0;">
+                <input type="file" id="imageFile">
+                <button id="uploadBtn" style="background:#0071e3; color:white;">Upload to GH</button>
+            </div>
+            <input type="text" id="postImage" placeholder="Image URL">
+            <textarea id="postContent" placeholder="Points/Content..."></textarea>
+            <button id="publishBtn" class="black-btn">Publish to Website</button>
+        </div>
+
+        <div class="card">
+            <h3>Published Content</h3>
             <div id="admin-feed"></div>
         </div>
     </div>
@@ -56,10 +68,9 @@
             <h2>Edit Article</h2>
             <input type="text" id="editTitle">
             <input type="text" id="editImage">
-            <input type="text" id="editLink">
-            <textarea id="editContent" style="height:200px;"></textarea>
+            <textarea id="editContent" style="height: 200px;"></textarea>
             <button id="saveEditBtn" class="black-btn">Republish Changes</button>
-            <button onclick="document.getElementById('editModal').classList.add('hidden')" style="margin-top:10px; background:none; width:100%;">Cancel</button>
+            <button onclick="document.getElementById('editModal').classList.add('hidden')" style="background:none; margin-top:10px; width:100%;">Cancel</button>
         </div>
     </div>
 
