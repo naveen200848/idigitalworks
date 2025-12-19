@@ -3,7 +3,7 @@ import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTim
 
 // PASTE YOUR FIREBASE SETTINGS HERE
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyC8YmWqq7cnR5HG62Jb5amEZy9Kw0I38X4",
   authDomain: "iDigitalWorks-News.firebaseapp.com",
   projectId: "idigitalworks-news",
   storageBucket: "iDigitalWorks-News.appspot.com",
