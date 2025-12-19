@@ -5,7 +5,7 @@ import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTim
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "iDigitalWorks-News.firebaseapp.com",
-  projectId: "idigitalworks-new",
+  projectId: "idigitalworks-news",
   storageBucket: "iDigitalWorks-News.appspot.com",
   messagingSenderId: "182576210440",
   appId: "1:182576210440:web:ada14cf66380ffa77f67bd"
