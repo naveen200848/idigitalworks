@@ -2,104 +2,64 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard | iDigitalWorks</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #0071e3; --bg: #f5f5f7; --card: #ffffff; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #1d1d1f; }
+        body { font-family: -apple-system, sans-serif; background: #fbfbfd; padding: 20px; }
+        .card { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto 20px; }
         .hidden { display: none !important; }
-        .card { background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.04); max-width: 800px; margin: 0 auto 25px; }
-        
-        /* Stats Dashboard */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .stat-box { background: #fff; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #eee; }
-        .stat-box h4 { margin: 0; font-size: 11px; color: #86868b; text-transform: uppercase; letter-spacing: 0.05em; }
-        .stat-box p { margin: 5px 0 0; font-size: 28px; font-weight: bold; color: #000; }
-
-        label { display: block; font-size: 11px; font-weight: 700; color: #86868b; margin-bottom: 5px; text-transform: uppercase; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #d2d2d7; border-radius: 10px; box-sizing: border-box; font-size: 15px; }
-        textarea { height: 150px; white-space: pre-wrap; }
-        
-        button { padding: 12px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .primary-btn { background: #000; color: #fff; width: 100%; }
-        .blue-btn { background: var(--accent); color: #fff; }
-        
-        /* Manage Feed Section */
-        .admin-post-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
-        .admin-post-item:last-child { border-bottom: none; }
-        .action-btns button { font-size: 13px; padding: 6px 12px; }
-
-        #editModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #d2d2d7; border-radius: 10px; box-sizing: border-box; }
+        button { padding: 12px 20px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; }
+        .black-btn { background: #000; color: #fff; width: 100%; }
+        #editModal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:flex; align-items:center; justify:center; z-index:999; }
     </style>
 </head>
 <body>
 
-    <div id="login-section" class="card" style="max-width: 400px;">
-        <h2>Admin Sign In</h2>
-        <input type="email" id="loginEmail" placeholder="team@idigitalworks.com">
+    <div id="login-section" class="card">
+        <h2>Admin Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email">
         <input type="password" id="loginPassword" placeholder="Password">
-        <button id="loginBtn" class="primary-btn">Login to Dashboard</button>
+        <button id="loginBtn" class="black-btn">Login</button>
     </div>
 
     <div id="admin-dashboard" class="hidden">
-        
-        <div class="card">
-            <h2>Performance Insights</h2>
-            <div class="stats-grid">
-                <div class="stat-box"><h4>Total Reads</h4><p id="stat-views">0</p></div>
-                <div class="stat-box"><h4>Total Shares</h4><p id="stat-shares">0</p></div>
-                <div class="stat-box"><h4>Total Posts</h4><p id="stat-posts">0</p></div>
-            </div>
-            <canvas id="statsChart" height="120"></canvas>
-        </div>
-
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <h2>Create Update</h2>
-                <button id="logoutBtn" style="color:red; background:none;">Logout</button>
+                <button id="logoutBtn" style="color:red; background:none;">Sign Out</button>
             </div>
             
-            <div style="background:#f5f5f7; padding:15px; border-radius:12px; margin-bottom:20px;">
-                <label>GitHub Token</label>
-                <input type="password" id="githubToken" placeholder="Paste Token">
-                <input type="checkbox" id="rememberToken"> <span style="font-size:12px">Remember on this device</span>
-                <div style="margin-top:10px; display:flex; gap:10px;">
-                    <input type="file" id="imageFile">
-                    <button id="uploadBtn" class="blue-btn">Upload to GitHub</button>
-                </div>
-                <div id="uploadProgress" style="font-size:12px; color:var(--accent); margin-top:5px;"></div>
+            <div style="background:#f5f5f7; padding:15px; border-radius:12px; margin-bottom:15px;">
+                <input type="password" id="githubToken" placeholder="GitHub Token">
+                <input type="checkbox" id="rememberToken"> <span style="font-size:12px">Remember Token</span>
             </div>
 
-            <label>Headline</label>
             <input type="text" id="postTitle" placeholder="Headline">
-            <label>Image URL (Auto-fills)</label>
+            <div style="display:flex; gap:10px;">
+                <input type="file" id="imageFile" accept="image/*">
+                <button id="uploadBtn" style="background:#0071e3; color:white;">Upload</button>
+            </div>
             <input type="text" id="postImage" placeholder="Image URL">
-            <label>Action Link</label>
-            <input type="text" id="postLink" placeholder="External URL">
-            <label>Content (Points & Breaks Preserved)</label>
-            <textarea id="postContent" placeholder="• Item 1..."></textarea>
-            <button id="publishBtn" class="primary-btn">Publish to Website</button>
+            <input type="text" id="postLink" placeholder="External Link (Optional)">
+            <textarea id="postContent" style="height:200px;" placeholder="Use points or line breaks here..."></textarea>
+            <button id="publishBtn" class="black-btn">Publish Article</button>
         </div>
 
         <div class="card">
-            <h3>Manage Published Content</h3>
-            <div id="admin-feed">Loading articles...</div>
+            <h3>Manage Articles</h3>
+            <div id="admin-feed"></div>
         </div>
     </div>
 
     <div id="editModal" class="hidden">
-        <div class="card" style="width:90%;">
+        <div class="card">
             <h2>Edit Article</h2>
             <input type="text" id="editTitle">
             <input type="text" id="editImage">
             <input type="text" id="editLink">
             <textarea id="editContent" style="height:200px;"></textarea>
-            <div style="display:flex; gap:10px;">
-                <button id="saveEditBtn" class="primary-btn">Save Changes</button>
-                <button onclick="document.getElementById('editModal').classList.add('hidden')" style="background:#eee; width:100%;">Cancel</button>
-            </div>
+            <button id="saveEditBtn" class="black-btn">Republish Changes</button>
+            <button onclick="document.getElementById('editModal').classList.add('hidden')" style="margin-top:10px; background:none; width:100%;">Cancel</button>
         </div>
     </div>
 
