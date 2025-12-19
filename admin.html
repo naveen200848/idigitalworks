@@ -2,23 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin | iDigitalWorks</title>
+    <title>Admin Dashboard | iDigitalWorks</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #fbfbfd; padding: 20px; }
-        .card { background: #fff; padding: 25px; border-radius: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto 20px; }
+        body { font-family: -apple-system, sans-serif; background: #fbfbfd; padding: 20px; color: #1d1d1f; }
+        .card { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); max-width: 600px; margin: 0 auto 20px; }
         .hidden { display: none !important; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #d2d2d7; border-radius: 10px; box-sizing: border-box; }
-        button { padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; }
-        .black-btn { background: #000; color: #fff; width: 100%; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #d2d2d7; border-radius: 10px; box-sizing: border-box; font-size: 15px; }
+        button { padding: 12px 20px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .black-btn { background: #000; color: #fff; width: 100%; margin-top: 10px; }
         .blue-btn { background: #0071e3; color: #fff; }
-        .preview-box { margin: 15px 0; padding: 10px; border: 1px dashed #d2d2d7; border-radius: 10px; text-align: center; display: none; }
-        #editModal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify:center; z-index:99; }
+        #editModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 999; }
     </style>
 </head>
 <body>
 
     <div id="login-section" class="card">
-        <h2>Admin Sign In</h2>
+        <h2>Admin Login</h2>
         <input type="email" id="loginEmail" placeholder="Email">
         <input type="password" id="loginPassword" placeholder="Password">
         <button id="loginBtn" class="black-btn">Login</button>
@@ -26,51 +25,45 @@
 
     <div id="admin-dashboard" class="hidden">
         <div class="card">
-            <div style="display:flex; justify-content:space-between">
-                <h2>New AI Update</h2>
-                <button id="logoutBtn" style="color:red; background:none;">Logout</button>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2>Create Update</h2>
+                <button id="logoutBtn" style="color:red; background:none;">Sign Out</button>
             </div>
             
             <div style="background:#f5f5f7; padding:15px; border-radius:12px; margin-bottom:15px;">
-                <label>GitHub Token</label>
-                <input type="password" id="githubToken" placeholder="Paste GitHub Token">
+                <label style="font-size:12px;">GitHub Personal Access Token</label>
+                <input type="password" id="githubToken" placeholder="Paste Token">
                 <input type="checkbox" id="rememberToken"> <span style="font-size:12px">Remember on this device</span>
             </div>
 
-            <input type="text" id="postTitle" placeholder="Update Title">
+            <input type="text" id="postTitle" placeholder="Article Headline">
             
-            <label>Image Selection</label>
+            <label style="font-size:12px;">Image Attachment (GitHub)</label>
             <div style="display:flex; gap:10px;">
                 <input type="file" id="imageFile" accept="image/*">
-                <button id="uploadBtn" class="blue-btn">Upload to GH</button>
+                <button id="uploadBtn" class="blue-btn">Upload</button>
             </div>
-            <div id="uploadProgress" style="font-size:12px; color:#0071e3"></div>
-            
             <input type="text" id="postImage" placeholder="Image URL (Auto-fills)">
-            <div id="imagePreviewContainer" class="preview-box">
-                <img id="imagePreviewTarget" style="max-width:100%; max-height:150px; border-radius:8px;">
-            </div>
-
-            <input type="text" id="postLink" placeholder="Action Link (URL)">
-            <textarea id="postContent" placeholder="Brief summary..."></textarea>
-            <button id="publishBtn" class="black-btn">Publish to Website</button>
+            <input type="text" id="postLink" placeholder="External Link (Optional)">
+            <textarea id="postContent" style="height:150px;" placeholder="Write your news here..."></textarea>
+            <button id="publishBtn" class="black-btn">Publish Article</button>
         </div>
 
         <div class="card">
-            <h3>Manage Updates</h3>
+            <h3>Published Articles</h3>
             <div id="admin-feed"></div>
         </div>
     </div>
 
     <div id="editModal" class="hidden">
-        <div class="card" style="margin-top:50px;">
-            <h3>Edit Post</h3>
+        <div class="card">
+            <h2>Edit Article</h2>
             <input type="text" id="editTitle">
             <input type="text" id="editImage">
             <input type="text" id="editLink">
-            <textarea id="editContent"></textarea>
-            <button id="saveEditBtn" class="black-btn">Save Changes</button>
-            <button onclick="document.getElementById('editModal').classList.add('hidden')" style="margin-top:10px; background:none;">Cancel</button>
+            <textarea id="editContent" style="height:200px;"></textarea>
+            <button id="saveEditBtn" class="black-btn">Republish Changes</button>
+            <button onclick="document.getElementById('editModal').classList.add('hidden')" style="margin-top:10px; background:none; border:1px solid #ccc; width:100%;">Cancel</button>
         </div>
     </div>
 
