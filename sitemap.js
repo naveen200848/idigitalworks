@@ -1,17 +1,21 @@
 import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
+/**
+ * Generates a dynamic XML sitemap for iDigitalWorks.
+ * This ensures Google's crawlers find every unique news post.
+ */
 export async function generateSitemap() {
     const db = getFirestore();
     const querySnapshot = await getDocs(query(collection(db, "news"), orderBy("date", "desc")));
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     
-    // Static Pages
+    // Add Static Core Pages
     ["index.html", "ainews.html", "whatsapp-automation.html"].forEach(page => {
         xml += `  <url>\n    <loc>https://www.idigitalworks.com/${page}</loc>\n    <priority>1.0</priority>\n  </url>\n`;
     });
 
-    // Dynamic News URLs
+    // Add Dynamic News Article URLs
     querySnapshot.forEach((doc) => {
         const post = doc.data();
         const date = post.date ? new Date(post.date.seconds * 1000).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
