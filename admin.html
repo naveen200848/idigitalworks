@@ -13,17 +13,17 @@
         .hidden { display: none !important; }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .stat-box { background: #f9f9fb; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #eee; }
-        .stat-box h4 { margin: 0; font-size: 11px; color: #86868b; text-transform: uppercase; }
         .stat-box p { font-size: 28px; font-weight: bold; margin: 5px 0 0; }
-        
-        /* Indexing Monitor */
         .index-status { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; }
         .status-indexed { background: #34a853; box-shadow: 0 0 8px #34a853; }
         .status-pending { background: #fbbc05; box-shadow: 0 0 8px #fbbc05; }
-        
         input, textarea, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #d2d2d7; border-radius: 10px; box-sizing: border-box; }
-        .primary-btn { background: #000; color: #fff; width: 100%; border: none; padding: 15px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-bottom: 10px; }
+        button { padding: 12px 20px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
+        .primary-btn { background: #000; color: #fff; width: 100%; margin-bottom: 10px; }
+        .green-btn { background: #34a853; color: #fff; width: 100%; }
+        .blue-btn { background: var(--accent); color: #fff; }
         .admin-post-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #eee; }
+        #editModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000; }
     </style>
 </head>
 <body>
@@ -44,16 +44,9 @@
                 </select>
             </div>
             <div class="stats-grid">
-                <div class="stat-box"><h4>Title Reads</h4><p id="stat-title-views">0</p></div>
-                <div class="stat-box"><h4>Discovery Traffic</h4><p id="stat-discovery">0</p></div>
-                <div class="stat-box"><h4>Total Posts</h4><p id="stat-posts">0</p></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>Discovery Source (Referrals & UTMs)</h3>
-            <div id="discovery-list" style="max-height: 200px; overflow-y: auto; font-size: 13px;">
-                <p style="color: #86868b;">Tracking landing data...</p>
+                <div class="stat-box"><h4>Reads</h4><p id="stat-title-views">0</p></div>
+                <div class="stat-box"><h4>Discovery</h4><p id="stat-discovery">0</p></div>
+                <div class="stat-box"><h4>Posts</h4><p id="stat-posts">0</p></div>
             </div>
         </div>
 
@@ -62,12 +55,23 @@
                 <h2>Create AI Update</h2>
                 <button id="logoutBtn" style="color:red; background:none; font-size: 14px;">Logout</button>
             </div>
+
+            <div style="background:#f9f9fb; padding:20px; border-radius:15px; margin-bottom:20px; border: 1px solid #efeff4;">
+                <input type="password" id="githubToken" placeholder="GitHub Access Token">
+                <div style="display:flex; gap:10px; align-items: center;">
+                    <input type="file" id="imageFile" style="margin:0;">
+                    <button id="uploadBtn" class="blue-btn">Upload Image to GitHub</button>
+                </div>
+                <div id="uploadProgress" style="font-size:12px; color:var(--accent); margin-top:10px;"></div>
+            </div>
+
             <input type="text" id="postTitle" placeholder="Update Headline">
-            <input type="text" id="postImage" placeholder="Image URL">
-            <input type="text" id="postLink" placeholder="Source URL (Optional)">
+            <input type="text" id="postImage" placeholder="Image URL (Auto-fills on upload)">
+            <input type="text" id="postLink" placeholder="Source/Source Link (Optional)">
+            <input type="text" id="redirectUrl" placeholder="Redirect URL (Paste any link here)">
             <textarea id="postContent" placeholder="Article Content..."></textarea>
-            <button id="publishBtn" class="primary-btn">Publish & Update Sitemap</button>
-            <button id="indexBtn" class="primary-btn" style="background:#34a853;">🚀 Submit Sitemap to Google</button>
+            
+            <button id="publishBtn" class="primary-btn">Publish & Push Sitemap to GitHub</button>
         </div>
 
         <div class="card">
@@ -75,6 +79,22 @@
             <div id="admin-feed">Loading content list...</div>
         </div>
     </div>
+
+    <div id="editModal" class="hidden">
+        <div class="card" style="width: 90%; max-width: 600px;">
+            <h2>Modify Article</h2>
+            <input type="text" id="editTitle">
+            <input type="text" id="editImage">
+            <input type="text" id="editLink">
+            <input type="text" id="editRedirect">
+            <textarea id="editContent" style="height: 200px;"></textarea>
+            <div style="display:flex; gap:10px;">
+                <button id="saveEditBtn" class="primary-btn">Save Changes</button>
+                <button onclick="document.getElementById('editModal').classList.add('hidden')" style="background:#eee; width: 100%;">Discard</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="firebase-config.js"></script>
 </body>
 </html>
