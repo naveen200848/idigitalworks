@@ -2,13 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebas
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, getDocs, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
-// Safety check for sitemap import
+// Safety check for sitemap generator to prevent login crashes
 let generateSitemap;
 try {
     const sitemapModule = await import('./sitemap.js');
     generateSitemap = sitemapModule.generateSitemap;
 } catch (e) {
-    console.error("sitemap.js not found or error in file. Sitemap features will be disabled.", e);
+    console.error("sitemap.js not found. Sitemap automation disabled.", e);
 }
 
 const firebaseConfig = {
@@ -28,19 +28,15 @@ const auth = getAuth(app);
 const loginBtn = document.getElementById('loginBtn');
 if (loginBtn) {
     loginBtn.onclick = () => {
-        const e = document.getElementById('loginEmail').value;
-        const p = document.getElementById('loginPassword').value;
-        if (!e || !p) return alert("Please enter email and password.");
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+        if (!email || !pass) return alert("Credentials required.");
         
-        loginBtn.disabled = true;
-        loginBtn.innerText = "Checking Credentials...";
-        
-        signInWithEmailAndPassword(auth, e, p)
-            .catch(err => {
-                alert("Login Error: " + err.message);
-                loginBtn.disabled = false;
-                loginBtn.innerText = "Login to Dashboard";
-            });
+        loginBtn.innerText = "Checking...";
+        signInWithEmailAndPassword(auth, email, pass).catch(err => {
+            alert(err.message);
+            loginBtn.innerText = "Login to Dashboard";
+        });
     };
 }
 
@@ -48,27 +44,27 @@ onAuthStateChanged(auth, (user) => {
     const dash = document.getElementById('admin-dashboard');
     const login = document.getElementById('login-section');
     if (user) {
-        if(dash) dash.classList.remove('hidden');
-        if(login) login.classList.add('hidden');
+        if (dash) dash.classList.remove('hidden');
+        if (login) login.classList.add('hidden');
         loadAnalytics('30d');
         loadAdminList();
     } else {
-        if(dash) dash.classList.add('hidden');
-        if(login) login.classList.remove('hidden');
+        if (dash) dash.classList.add('hidden');
+        if (login) login.classList.remove('hidden');
     }
 });
 
-// --- 2. GITHUB API AUTOMATION (IMAGES & SITEMAP) ---
+// --- 2. GITHUB API (SITEMAP & IMAGES) ---
 const owner = "naveen200848";
 const repo = "idigitalworks";
 
-async function pushSitemapToGitHub() {
+async function updateGithubSitemap() {
     const token = document.getElementById('githubToken').value;
     if (!token || !generateSitemap) return console.warn("Sitemap sync skipped.");
 
     try {
         const xml = await generateSitemap();
-        const encoded = btoa(unescape(encodeURIComponent(xml)));
+        const contentBase64 = btoa(unescape(encodeURIComponent(xml)));
         const url = `https://api.github.com/repos/${owner}/${repo}/contents/sitemap.xml`;
 
         const getFile = await fetch(url, { headers: { Authorization: `token ${token}` } });
@@ -77,9 +73,8 @@ async function pushSitemapToGitHub() {
         await fetch(url, {
             method: "PUT",
             headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
-            body: JSON.stringify({ message: "Update Sitemap", content: encoded, sha: fileData.sha, branch: "main" })
+            body: JSON.stringify({ message: "Update Sitemap", content: contentBase64, sha: fileData.sha, branch: "main" })
         });
-        console.log("GitHub sitemap.xml updated.");
     } catch (e) { console.error("GitHub Sync Error:", e); }
 }
 
@@ -105,36 +100,30 @@ if (uploadBtn) {
             if (res.ok) {
                 const imgUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${fileName}`;
                 document.getElementById('postImage').value = imgUrl;
-                alert("Image uploaded to GitHub!");
+                alert("Image Uploaded Successfully!");
             }
         };
     };
 }
 
-// --- 3. ANALYTICS ---
+// --- 3. ANALYTICS (TITLE CLICKS ONLY) ---
 async function loadAnalytics(range) {
     const now = Date.now();
     let start = now - (30 * 24 * 3600000);
     if (range === '60m') start = now - 3600000;
 
     onSnapshot(collection(db, "news"), (snap) => {
-        let totalClicks = 0;
-        snap.forEach(d => totalClicks += (d.data().title_clicks || 0));
-        if (document.getElementById('stat-title-views')) document.getElementById('stat-title-views').innerText = totalClicks;
-        if (document.getElementById('stat-posts')) document.getElementById('stat-posts').innerText = snap.size;
+        let total = 0;
+        snap.forEach(d => total += (d.data().title_clicks || 0));
+        const clicksEl = document.getElementById('stat-title-views');
+        if (clicksEl) clicksEl.innerText = total;
+        const postsEl = document.getElementById('stat-posts');
+        if (postsEl) postsEl.innerText = snap.size;
     });
 
     const dSnap = await getDocs(query(collection(db, "discovery"), where("timestamp", ">=", new Date(start))));
-    if (document.getElementById('stat-discovery')) document.getElementById('stat-discovery').innerText = dSnap.size;
-    
-    const list = document.getElementById('discovery-list');
-    if(list) {
-        list.innerHTML = '';
-        dSnap.forEach(d => {
-            const data = d.data();
-            list.innerHTML += `<div style="padding:5px; border-bottom:1px solid #eee;"><b>${data.source}</b> | Ref: ${data.referrer?.substring(0,30)}</div>`;
-        });
-    }
+    const discEl = document.getElementById('stat-discovery');
+    if (discEl) discEl.innerText = dSnap.size;
 }
 
 // --- 4. ADMIN MANAGEMENT (EDIT/DELETE) ---
@@ -147,15 +136,14 @@ function loadAdminList() {
             const p = d.data();
             const ageH = (Date.now() - (p.date?.seconds * 1000)) / 3600000;
             const status = (ageH > 24 || p.title_clicks > 10) ? 'status-indexed' : 'status-pending';
-            const row = document.createElement('div');
-            row.className = "admin-post-item";
-            row.innerHTML = `
-                <span><span class="index-status ${status}"></span> ${p.title}</span>
-                <div>
-                    <button onclick="editPost('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.image}', '${p.link || ''}', '${p.redirectUrl || ''}')">Edit</button>
-                    <button onclick="deletePost('${d.id}')" style="color:red; background:none; margin-left:10px;">Delete</button>
+            adminFeed.innerHTML += `
+                <div class="admin-post-item">
+                    <span><span class="index-status ${status}"></span> ${p.title}</span>
+                    <div>
+                        <button onclick="editPost('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.image}', '${p.link || ''}', '${p.redirectUrl || ''}')">Edit</button>
+                        <button onclick="deletePost('${d.id}')" style="color:red; background:none; margin-left:10px;">Delete</button>
+                    </div>
                 </div>`;
-            adminFeed.appendChild(row);
         });
     });
 }
@@ -173,23 +161,25 @@ window.editPost = (id, title, content, image, link, redirect) => {
 const saveEditBtn = document.getElementById('saveEditBtn');
 if (saveEditBtn) {
     saveEditBtn.onclick = async () => {
-        await updateDoc(doc(db, "news", window.currentEditId), {
-            title: document.getElementById('editTitle').value,
-            content: document.getElementById('editContent').value,
-            image: document.getElementById('editImage').value,
-            link: document.getElementById('editLink').value,
-            redirectUrl: document.getElementById('editRedirect').value
-        });
-        await pushSitemapToGitHub();
-        alert("Post Updated!");
-        document.getElementById('editModal').classList.add('hidden');
+        try {
+            await updateDoc(doc(db, "news", window.currentEditId), {
+                title: document.getElementById('editTitle').value,
+                content: document.getElementById('editContent').value,
+                image: document.getElementById('editImage').value,
+                link: document.getElementById('editLink').value,
+                redirectUrl: document.getElementById('editRedirect').value
+            });
+            await updateGithubSitemap();
+            alert("Post Updated!");
+            document.getElementById('editModal').classList.add('hidden');
+        } catch (e) { alert("Save Failed: " + e.message); }
     };
 }
 
 window.deletePost = async (id) => { 
-    if(confirm("Delete?")) {
+    if(confirm("Delete permanently?")) {
         await deleteDoc(doc(db, "news", id));
-        await pushSitemapToGitHub();
+        await updateGithubSitemap();
     }
 };
 
@@ -197,7 +187,7 @@ window.deletePost = async (id) => {
 const publishBtn = document.getElementById('publishBtn');
 if (publishBtn) {
     publishBtn.onclick = async () => {
-        publishBtn.innerText = "Publishing...";
+        publishBtn.innerText = "Processing...";
         try {
             await addDoc(collection(db, "news"), {
                 title: document.getElementById('postTitle').value,
@@ -207,8 +197,8 @@ if (publishBtn) {
                 redirectUrl: document.getElementById('redirectUrl').value,
                 title_clicks: 0, date: serverTimestamp()
             });
-            await pushSitemapToGitHub();
-            alert("Success!");
+            await updateGithubSitemap();
+            alert("Published & GitHub Sitemap Updated!");
             location.reload();
         } catch(e) { alert(e.message); publishBtn.innerText = "Publish & Update Sitemap"; }
     };
