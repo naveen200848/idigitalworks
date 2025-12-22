@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, getDoc, serverTimestamp, where } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 import { generateSitemap } from './sitemap.js';
 
 const firebaseConfig = {
@@ -16,45 +16,17 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- 1. DISCOVERY TRACKING ---
-const trackDiscovery = async () => {
-    const referrer = document.referrer;
-    let source = "Direct / Social";
-    if (referrer.includes('google.com')) source = "Google Search";
-    if (referrer.includes('wa.me')) source = "WhatsApp";
-
-    if (!sessionStorage.getItem('landed')) {
-        await addDoc(collection(db, "discovery"), {
-            source,
-            timestamp: serverTimestamp(),
-            path: window.location.pathname
-        });
-        sessionStorage.setItem('landed', 'true');
-    }
+// --- 1. INDEXING MONITOR LOGIC ---
+const getIndexStatus = (date, discoveryCount) => {
+    const ageHours = (Date.now() - (date.seconds * 1000)) / 3600000;
+    return (ageHours > 24 || discoveryCount > 10) ? 'status-indexed' : 'status-pending';
 };
 
-// --- 2. FULL FEED RENDER (SEO VIEW) ---
-const feed = document.getElementById('news-feed');
-if (feed) {
-    trackDiscovery();
-    onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
-        feed.innerHTML = '';
-        snap.forEach(d => {
-            const p = d.data();
-            feed.innerHTML += `
-                <article class="article-block">
-                    <span class="article-meta">AI UPDATE • ${p.views || 0} READS</span>
-                    <h2 onclick="openAndTrack('${d.id}', \`${p.title}\`, \`${p.content.replace(/"/g, '&quot;')}\`, '${p.image}')">${p.title}</h2>
-                    ${p.image ? `<img src="${p.image}" alt="${p.title}">` : ''}
-                    <div class="article-content">${p.content}</div>
-                </article>`;
-        });
-    });
-}
-
+// --- 2. ANALYTICS & DISCOVERY ---
 window.openAndTrack = async (id, title, content, image) => {
     await updateDoc(doc(db, "news", id), { views: increment(1) });
-    // Scroll to top or open modal for focus
+    gtag('event', 'article_read', { 'title': title });
+
     const reader = document.getElementById('readerView');
     const body = document.getElementById('readerBody');
     if(!reader || !body) return;
@@ -63,14 +35,54 @@ window.openAndTrack = async (id, title, content, image) => {
     window.history.pushState({id}, title, `?id=${id}`);
 };
 
-// --- 3. SITEMAP SUBMISSION ---
+// --- 3. RENDER ADMIN FEED WITH MONITOR ---
+const adminFeed = document.getElementById('admin-feed');
+if (adminFeed) {
+    onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
+        adminFeed.innerHTML = '';
+        snap.forEach(d => {
+            const p = d.data();
+            const statusClass = getIndexStatus(p.date || {seconds: Date.now()/1000}, p.views || 0);
+            const row = document.createElement('div');
+            row.className = "admin-post-item";
+            row.innerHTML = `
+                <span><span class="index-status ${statusClass}"></span> ${p.title}</span>
+                <div>
+                    <button onclick="deletePost('${d.id}')" style="color:red; background:none; font-size:12px;">Delete</button>
+                </div>`;
+            adminFeed.appendChild(row);
+        });
+    });
+}
+
+// --- 4. SITEMAP SUBMISSION TRIGGER ---
 const indexBtn = document.getElementById('indexBtn');
 if (indexBtn) {
     indexBtn.onclick = async () => {
-        const xml = await generateSitemap();
-        console.log("Sitemap Generated");
+        const sitemap = await generateSitemap();
+        console.log("Sitemap ready for submission");
+        // Modern "Ping": Redirect to GSC Sitemaps Report
         window.open("https://search.google.com/search-console/sitemaps?resource_id=https://www.idigitalworks.com/", "_blank");
     };
 }
 
-// ... [Auth Login/Logout & Admin Feed Logic remain same as provided in previous stable version] ...
+// ... [Include standard Auth Logic] ...
+const loginBtn = document.getElementById('loginBtn');
+if (loginBtn) {
+    loginBtn.onclick = () => {
+        const e = document.getElementById('loginEmail').value;
+        const p = document.getElementById('loginPassword').value;
+        signInWithEmailAndPassword(auth, e, p).catch(err => alert(err.message));
+    };
+}
+onAuthStateChanged(auth, (user) => {
+    const dash = document.getElementById('admin-dashboard');
+    const login = document.getElementById('login-section');
+    if (user) {
+        if(dash) dash.classList.remove('hidden');
+        if(login) login.classList.add('hidden');
+    } else {
+        if(dash) dash.classList.add('hidden');
+        if(login) login.classList.remove('hidden');
+    }
+});
