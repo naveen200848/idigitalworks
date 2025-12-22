@@ -11,7 +11,7 @@ export async function generateSitemap() {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     
     // Add Static Core Pages
-    ["index.html", "ainews.html", "whatsapp-automation.html"].forEach(page => {
+    ["index.html", "ainews.html", "whatsapp-automation.html","whatsapp-recovery.html"].forEach(page => {
         xml += `  <url>\n    <loc>https://www.idigitalworks.com/${page}</loc>\n    <priority>1.0</priority>\n  </url>\n`;
     });
 
