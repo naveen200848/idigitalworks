@@ -16,69 +16,106 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- GITHUB INTEGRATION (SITEMAP & IMAGES) ---
-const repoOwner = "naveen200848";
-const repoName = "idigitalworks";
-
-async function pushSitemapToGitHub() {
-    const token = document.getElementById('githubToken').value;
-    if (!token) return alert("Enter GitHub Token to update sitemap.xml");
-
-    const xmlContent = await generateSitemap();
-    const encodedContent = btoa(unescape(encodeURIComponent(xmlContent)));
-    const path = "sitemap.xml";
-    const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`;
-
-    try {
-        const getRes = await fetch(url, { headers: { "Authorization": `token ${token}` } });
-        const getData = await getRes.json();
-        const sha = getData.sha;
-
-        const res = await fetch(url, {
-            method: "PUT",
-            headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-                message: "Automated Sitemap Update",
-                content: encodedContent,
-                sha: sha,
-                branch: "main"
-            })
+// --- AUTH ---
+const loginBtn = document.getElementById('loginBtn');
+if (loginBtn) {
+    loginBtn.onclick = () => {
+        const e = document.getElementById('loginEmail').value;
+        const p = document.getElementById('loginPassword').value;
+        if (!e || !p) return alert("Credentials required.");
+        loginBtn.innerText = "Authenticating...";
+        signInWithEmailAndPassword(auth, e, p).catch(err => {
+            alert(err.message);
+            loginBtn.innerText = "Login to Dashboard";
         });
-
-        if (res.ok) console.log("Sitemap.xml successfully pushed to GitHub.");
-    } catch (e) { console.error("GitHub Sitemap Error:", e); }
-}
-
-// IMAGE UPLOAD LOGIC
-const uploadBtn = document.getElementById('uploadBtn');
-if (uploadBtn) {
-    uploadBtn.onclick = async () => {
-        const file = document.getElementById('imageFile').files[0];
-        const token = document.getElementById('githubToken').value;
-        if (!file || !token) return alert("Select file and enter GitHub token.");
-
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            const content = reader.result.split(',')[1];
-            const fileName = `newsimages/${Date.now()}_${file.name}`;
-            const api = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${fileName}`;
-
-            const res = await fetch(api, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: "Upload news image", content: content, branch: "main" })
-            });
-            if (res.ok) {
-                const url = `https://cdn.jsdelivr.net/gh/${repoOwner}/${repoName}@main/${fileName}`;
-                document.getElementById('postImage').value = url;
-                alert("Image Uploaded Successfully!");
-            }
-        };
     };
 }
 
-// --- ADMIN MANAGEMENT (LIST, EDIT, DELETE) ---
+onAuthStateChanged(auth, (user) => {
+    const dash = document.getElementById('admin-dashboard');
+    const login = document.getElementById('login-section');
+    if (user) {
+        if (dash) dash.classList.remove('hidden');
+        if (login) login.classList.add('hidden');
+        loadAnalytics('30d');
+        loadAdminList();
+    } else {
+        if (dash) dash.classList.add('hidden');
+        if (login) login.classList.remove('hidden');
+    }
+});
+
+// --- GITHUB API HELPERS ---
+const owner = "naveen200848";
+const repo = "idigitalworks";
+
+async function updateGithubSitemap() {
+    const token = document.getElementById('githubToken').value;
+    if (!token) return console.log("No token: Sitemap.xml update skipped.");
+
+    const xml = await generateSitemap();
+    const encoded = btoa(unescape(encodeURIComponent(xml)));
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/sitemap.xml`;
+
+    try {
+        const getFile = await fetch(url, { headers: { Authorization: `token ${token}` } });
+        const data = await getFile.json();
+        await fetch(url, {
+            method: "PUT",
+            headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ message: "Update Sitemap", content: encoded, sha: data.sha })
+        });
+    } catch (e) { console.error("Sitemap Push Failed:", e); }
+}
+
+// --- ANALYTICS ---
+async function loadAnalytics(range) {
+    const now = Date.now();
+    let start = now - (30 * 24 * 3600000);
+    if (range === '60m') start = now - 3600000;
+
+    onSnapshot(collection(db, "news"), (snap) => {
+        let clicks = 0;
+        snap.forEach(d => clicks += (d.data().title_clicks || d.data().views || 0));
+        if (document.getElementById('stat-title-views')) document.getElementById('stat-title-views').innerText = clicks;
+        if (document.getElementById('stat-posts')) document.getElementById('stat-posts').innerText = snap.size;
+    });
+
+    const dSnap = await getDocs(query(collection(db, "discovery"), where("timestamp", ">=", new Date(start))));
+    if (document.getElementById('stat-discovery')) document.getElementById('stat-discovery').innerText = dSnap.size;
+}
+
+// --- PUBLIC FEED ---
+const feed = document.getElementById('news-feed');
+if (feed) {
+    onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
+        feed.innerHTML = '';
+        snap.forEach(d => {
+            const p = d.data();
+            const id = d.id;
+            feed.innerHTML += `
+                <article class="article-block">
+                    <span class="article-meta">AI NEWS • ${p.title_clicks || p.views || 0} READS</span>
+                    <h2 onclick="openArticle('${id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.content.replace(/'/g, "\\'").replace(/\n/g, '<br>')}\`, '${p.image}')">${p.title}</h2>
+                    ${p.image ? `<img src="${p.image}">` : ''}
+                    <div class="article-content">${p.content}</div>
+                </article>`;
+        });
+    });
+}
+
+window.openArticle = async (id, title, content, image) => {
+    await updateDoc(doc(db, "news", id), { title_clicks: increment(1) });
+    const reader = document.getElementById('readerView');
+    const body = document.getElementById('readerBody');
+    if (reader && body) {
+        body.innerHTML = `<h1>${title}</h1>${image ? `<img src="${image}" style="width:100%">` : ''}<div style="font-size:20px; line-height:1.8;">${content}</div>`;
+        reader.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+};
+
+// --- ADMIN LIST & EDIT ---
 function loadAdminList() {
     const adminFeed = document.getElementById('admin-feed');
     if (!adminFeed) return;
@@ -91,19 +128,18 @@ function loadAdminList() {
             const row = document.createElement('div');
             row.className = "admin-post-item";
             row.innerHTML = `
-                <span><span class="index-status ${status}"></span> ${p.title} <small>(ID: ${d.id})</small></span>
+                <span><span class="index-status ${status}"></span> ${p.title} <small>(${d.id})</small></span>
                 <div>
-                    <button onclick="editPost('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.image}', '${p.link}', '${p.redirectUrl || ''}')" style="background:#eee; margin-right:5px;">Edit</button>
-                    <button onclick="deletePost('${d.id}')" style="color:red; background:none;">Delete</button>
+                    <button onclick="editPost('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.image}', '${p.link}', '${p.redirectUrl || ''}')">Edit</button>
+                    <button onclick="deletePost('${d.id}')" style="color:red; background:none; margin-left:10px;">Delete</button>
                 </div>`;
             adminFeed.appendChild(row);
         });
     });
 }
 
-let currentEditId = null;
 window.editPost = (id, title, content, image, link, redirect) => {
-    currentEditId = id;
+    window.currentEditId = id;
     document.getElementById('editTitle').value = title;
     document.getElementById('editContent').value = content;
     document.getElementById('editImage').value = image;
@@ -115,23 +151,23 @@ window.editPost = (id, title, content, image, link, redirect) => {
 const saveEditBtn = document.getElementById('saveEditBtn');
 if (saveEditBtn) {
     saveEditBtn.onclick = async () => {
-        await updateDoc(doc(db, "news", currentEditId), {
+        await updateDoc(doc(db, "news", window.currentEditId), {
             title: document.getElementById('editTitle').value,
             content: document.getElementById('editContent').value,
             image: document.getElementById('editImage').value,
             link: document.getElementById('editLink').value,
             redirectUrl: document.getElementById('editRedirect').value
         });
-        await pushSitemapToGitHub();
-        alert("Post Updated & Sitemap Refreshed!");
+        await updateGithubSitemap();
+        alert("Updated!");
         document.getElementById('editModal').classList.add('hidden');
     };
 }
 
-window.deletePost = async (id) => { 
-    if(confirm("Delete permanently?")) {
+window.deletePost = async (id) => {
+    if (confirm("Delete?")) {
         await deleteDoc(doc(db, "news", id));
-        await pushSitemapToGitHub();
+        await updateGithubSitemap();
     }
 };
 
@@ -139,7 +175,7 @@ window.deletePost = async (id) => {
 const publishBtn = document.getElementById('publishBtn');
 if (publishBtn) {
     publishBtn.onclick = async () => {
-        publishBtn.innerText = "Publishing & Syncing GitHub...";
+        publishBtn.innerText = "Publishing...";
         try {
             await addDoc(collection(db, "news"), {
                 title: document.getElementById('postTitle').value,
@@ -149,11 +185,19 @@ if (publishBtn) {
                 redirectUrl: document.getElementById('redirectUrl').value,
                 title_clicks: 0, date: serverTimestamp()
             });
-            await pushSitemapToGitHub();
-            alert("Success! Sitemap.xml has been updated on GitHub.");
+            await updateGithubSitemap();
+            alert("Success!");
             location.reload();
-        } catch(e) { alert(e.message); publishBtn.innerText = "Publish & Push Sitemap to GitHub"; }
+        } catch (e) {
+            alert(e.message);
+            publishBtn.innerText = "Publish & Update Sitemap";
+        }
     };
 }
 
-// ... [Keep Login and Analytics logic same as previous working version] ...
+// Global scope attachments
+window.deletePost = window.deletePost;
+window.editPost = window.editPost;
+
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) logoutBtn.onclick = () => signOut(auth).then(() => location.reload());
