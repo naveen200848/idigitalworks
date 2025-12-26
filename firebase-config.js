@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, doc, updateDoc, query, orderBy, onSnapshot, increment, getDocs, where, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, getDocs, where, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
-const firebaseConfig = { /* Your Config */ };
+const firebaseConfig = { /* Your Config Here */ };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -14,6 +14,7 @@ async function loadAnalytics(range) {
     if (range === '60m') startTime = new Date(now.getTime() - (60 * 60 * 1000));
     if (range === '7d') startTime = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
 
+    // CRITICAL: Must use Timestamp.fromDate for Firestore queries
     const dq = query(collection(db, "discovery"), where("timestamp", ">=", Timestamp.fromDate(startTime)));
     const dSnap = await getDocs(dq);
     if(document.getElementById('stat-discovery')) document.getElementById('stat-discovery').innerText = dSnap.size;
@@ -28,40 +29,58 @@ async function loadAnalytics(range) {
     }
 }
 
-const timeFilter = document.getElementById('timeFilter');
-if (timeFilter) timeFilter.onchange = (e) => loadAnalytics(e.target.value);
-
-// --- AI NEWS: BANNERS (TOP 10) AND GRID ---
-const bannerSection = document.getElementById('banner-section');
+// --- NEWS FEED & SLIDER LOGIC ---
+let currentSlide = 0;
+const bannerTrack = document.getElementById('banner-track');
 const newsFeed = document.getElementById('news-feed');
-if (bannerSection && newsFeed) {
+
+if (bannerTrack && newsFeed) {
     onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
-        bannerSection.innerHTML = '';
+        bannerTrack.innerHTML = '';
         newsFeed.innerHTML = '';
         let count = 0;
         snap.forEach(d => {
             const p = d.data();
             if (count < 10) {
-                bannerSection.innerHTML += `
-                    <div class="banner-card" onclick="openArticle('${d.id}', \`${p.title}\`, \`${p.content}\`, '${p.image}')">
+                bannerTrack.innerHTML += `
+                    <div class="slide" onclick="openArticle('${d.id}', \`${p.title}\`, \`${p.content}\`, '${p.image}')">
                         <img src="${p.image}">
-                        <div class="banner-info"><h2>${p.title}</h2></div>
+                        <div class="slide-content"><h2>${p.title}</h2></div>
                     </div>`;
             } else {
                 newsFeed.innerHTML += `
                     <div class="article-block">
-                        <span class="article-meta">${p.title_clicks || 0} READS</span>
+                        <span style="font-size:11px; font-weight:700; color:#0071e3;">${p.title_clicks || 0} READS</span>
                         <h3 onclick="openArticle('${d.id}', \`${p.title}\`, \`${p.content}\`, '${p.image}')">${p.title}</h3>
                         ${p.image ? `<img src="${p.image}">` : ''}
-                        <div class="article-content">${p.content}</div>
                     </div>`;
             }
             count++;
         });
     });
+
+    document.getElementById('nextSlide').onclick = () => { if(currentSlide < 9) moveSlide(1); };
+    document.getElementById('prevSlide').onclick = () => { if(currentSlide > 0) moveSlide(-1); };
+    function moveSlide(dir) { currentSlide += dir; bannerTrack.style.transform = `translateX(-${currentSlide * 100}%)`; }
 }
 
-// --- AI TOOLS GRID ---
+// --- AI TOOLS PUBLISHING & FEED ---
+const publishToolBtn = document.getElementById('publishToolBtn');
+if (publishToolBtn) {
+    publishToolBtn.onclick = async () => {
+        await addDoc(collection(db, "ai_tools"), {
+            name: document.getElementById('toolName').value,
+            category: document.getElementById('toolCategory').value,
+            pricing: document.getElementById('toolPricing').value,
+            image: document.getElementById('toolImage').value,
+            link: document.getElementById('toolLink').value,
+            description: document.getElementById('toolDesc').value,
+            date: serverTimestamp()
+        });
+        alert("Tool Published!"); location.reload();
+    };
+}
+
 const toolsGrid = document.getElementById('tools-grid');
 if (toolsGrid) {
     onSnapshot(query(collection(db, "ai_tools"), orderBy("date", "desc")), (snap) => {
@@ -78,21 +97,4 @@ if (toolsGrid) {
         });
     });
 }
-
-// --- PUBLISHING LOGIC ---
-const publishToolBtn = document.getElementById('publishToolBtn');
-if (publishToolBtn) {
-    publishToolBtn.onclick = async () => {
-        await addDoc(collection(db, "ai_tools"), {
-            name: document.getElementById('toolName').value,
-            category: document.getElementById('toolCategory').value,
-            pricing: document.getElementById('toolPricing').value,
-            image: document.getElementById('toolImage').value,
-            link: document.getElementById('toolLink').value,
-            description: document.getElementById('toolDesc').value,
-            date: serverTimestamp()
-        });
-        alert("AI Tool Published!"); location.reload();
-    };
-}
-// ... [Continue news publishing & Auth Logic] ...
+// ... [Remaining Publish News & Auth Logic from previous working versions] ...
