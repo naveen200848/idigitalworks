@@ -2,69 +2,106 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebas
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, getDocs, where, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
-const firebaseConfig = { /* Your Config Here */ };
+// Import sitemap logic safely
+let generateSitemap;
+try {
+    const sitemapModule = await import('./sitemap.js');
+    generateSitemap = sitemapModule.generateSitemap;
+} catch (e) { console.error("sitemap.js error", e); }
+
+const firebaseConfig = {
+    apiKey: "AIzaSyC8YmWqq7cnR5HG62Jb5amEZy9Kw0I38X4",
+    authDomain: "iDigitalWorks-News.firebaseapp.com",
+    projectId: "idigitalworks-news",
+    storageBucket: "iDigitalWorks-News.appspot.com",
+    messagingSenderId: "182576210440",
+    appId: "1:182576210440:web:ada14cf66380ffa77f67bd"
+};
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- DASHBOARD ANALYTICS FIX ---
+// --- 1. LOGIN (Shielded) ---
+const loginBtn = document.getElementById('loginBtn');
+if (loginBtn) {
+    loginBtn.onclick = () => {
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+        if (!email || !pass) return alert("Fill credentials.");
+        loginBtn.innerText = "Checking...";
+        signInWithEmailAndPassword(auth, email, pass).catch(err => {
+            alert(err.message);
+            loginBtn.innerText = "Login to Dashboard";
+        });
+    };
+}
+
+onAuthStateChanged(auth, (user) => {
+    const dash = document.getElementById('admin-dashboard');
+    const login = document.getElementById('login-section');
+    if (user) {
+        if (dash) dash.classList.remove('hidden');
+        if (login) login.classList.add('hidden');
+        loadAnalytics('30d');
+    } else {
+        if (dash) dash.classList.add('hidden');
+        if (login) login.classList.remove('hidden');
+    }
+});
+
+// --- 2. ANALYTICS (FIXED WITH TIMESTAMP) ---
 async function loadAnalytics(range) {
     const now = new Date();
-    let startTime = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
-    if (range === '60m') startTime = new Date(now.getTime() - (60 * 60 * 1000));
-    if (range === '7d') startTime = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+    let start = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
+    if (range === '60m') start = new Date(now.getTime() - 3600000);
+    if (range === '7d') start = new Date(now.getTime() - (7 * 24 * 3600000));
 
-    // CRITICAL: Must use Timestamp.fromDate for Firestore queries
-    const dq = query(collection(db, "discovery"), where("timestamp", ">=", Timestamp.fromDate(startTime)));
+    // Discovery tracking must use Timestamp.fromDate()
+    const dq = query(collection(db, "discovery"), where("timestamp", ">=", Timestamp.fromDate(start)));
     const dSnap = await getDocs(dq);
-    if(document.getElementById('stat-discovery')) document.getElementById('stat-discovery').innerText = dSnap.size;
+    if (document.getElementById('stat-discovery')) document.getElementById('stat-discovery').innerText = dSnap.size;
 
     const list = document.getElementById('discovery-list');
-    if(list) {
+    if (list) {
         list.innerHTML = '';
         dSnap.forEach(d => {
             const data = d.data();
-            list.innerHTML += `<div style="padding:8px; border-bottom:1px solid #eee;"><b>${data.source}</b> | Ref: ${data.referrer?.substring(0,30)}...</div>`;
+            list.innerHTML += `<div style="padding:8px; border-bottom:1px solid #eee;"><b>${data.source}</b> | Ref: ${data.referrer?.substring(0, 30)}...</div>`;
         });
     }
-}
 
-// --- NEWS FEED & SLIDER LOGIC ---
-let currentSlide = 0;
-const bannerTrack = document.getElementById('banner-track');
-const newsFeed = document.getElementById('news-feed');
-
-if (bannerTrack && newsFeed) {
-    onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
-        bannerTrack.innerHTML = '';
-        newsFeed.innerHTML = '';
-        let count = 0;
-        snap.forEach(d => {
-            const p = d.data();
-            if (count < 10) {
-                bannerTrack.innerHTML += `
-                    <div class="slide" onclick="openArticle('${d.id}', \`${p.title}\`, \`${p.content}\`, '${p.image}')">
-                        <img src="${p.image}">
-                        <div class="slide-content"><h2>${p.title}</h2></div>
-                    </div>`;
-            } else {
-                newsFeed.innerHTML += `
-                    <div class="article-block">
-                        <span style="font-size:11px; font-weight:700; color:#0071e3;">${p.title_clicks || 0} READS</span>
-                        <h3 onclick="openArticle('${d.id}', \`${p.title}\`, \`${p.content}\`, '${p.image}')">${p.title}</h3>
-                        ${p.image ? `<img src="${p.image}">` : ''}
-                    </div>`;
-            }
-            count++;
-        });
+    onSnapshot(collection(db, "news"), snap => {
+        let clicks = 0;
+        snap.forEach(d => clicks += (d.data().title_clicks || 0));
+        if (document.getElementById('stat-title-views')) document.getElementById('stat-title-views').innerText = clicks;
+        if (document.getElementById('stat-posts')) document.getElementById('stat-posts').innerText = snap.size;
     });
-
-    document.getElementById('nextSlide').onclick = () => { if(currentSlide < 9) moveSlide(1); };
-    document.getElementById('prevSlide').onclick = () => { if(currentSlide > 0) moveSlide(-1); };
-    function moveSlide(dir) { currentSlide += dir; bannerTrack.style.transform = `translateX(-${currentSlide * 100}%)`; }
 }
 
-// --- AI TOOLS PUBLISHING & FEED ---
+const timeFilter = document.getElementById('timeFilter');
+if (timeFilter) timeFilter.onchange = (e) => loadAnalytics(e.target.value);
+
+// --- 3. PUBLISHING ---
+const publishBtn = document.getElementById('publishBtn');
+if (publishBtn) {
+    publishBtn.onclick = async () => {
+        publishBtn.innerText = "Publishing...";
+        try {
+            await addDoc(collection(db, "news"), {
+                title: document.getElementById('postTitle').value,
+                content: document.getElementById('postContent').value,
+                image: document.getElementById('postImage').value,
+                link: document.getElementById('postLink').value,
+                redirectUrl: document.getElementById('redirectUrl').value,
+                title_clicks: 0, date: serverTimestamp()
+            });
+            if (generateSitemap) await generateSitemap();
+            alert("Success!"); location.reload();
+        } catch (e) { alert(e.message); publishBtn.innerText = "Post to Newsroom"; }
+    };
+}
+
 const publishToolBtn = document.getElementById('publishToolBtn');
 if (publishToolBtn) {
     publishToolBtn.onclick = async () => {
@@ -77,24 +114,7 @@ if (publishToolBtn) {
             description: document.getElementById('toolDesc').value,
             date: serverTimestamp()
         });
-        alert("Tool Published!"); location.reload();
+        alert("AI Tool Added!"); location.reload();
     };
 }
-
-const toolsGrid = document.getElementById('tools-grid');
-if (toolsGrid) {
-    onSnapshot(query(collection(db, "ai_tools"), orderBy("date", "desc")), (snap) => {
-        toolsGrid.innerHTML = '';
-        snap.forEach(d => {
-            const t = d.data();
-            toolsGrid.innerHTML += `
-                <div class="tool-card" onclick="window.open('${t.link}', '_blank')">
-                    <img src="${t.image}">
-                    <h3>${t.name}</h3>
-                    <p>${t.description}</p>
-                    <div class="tool-meta"><span class="pricing">${t.pricing}</span><span class="tag">${t.category}</span></div>
-                </div>`;
-        });
-    });
-}
-// ... [Remaining Publish News & Auth Logic from previous working versions] ...
+// ... [Logout & Discovery tracking same as previous versions] ...
