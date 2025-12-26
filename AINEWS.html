@@ -3,30 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Intelligence | iDigitalWorks</title>
+    <title>AI News | iDigitalWorks</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --serif: 'Playfair Display', serif; --sans: 'Inter', sans-serif; --accent: #0071e3; }
+        :root { --serif: 'Playfair Display', serif; --sans: 'Inter', sans-serif; }
         body { font-family: var(--sans); background: #ffffff; margin: 0; padding: 0; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
 
         /* Slider Styles */
-        .slider-container { position: relative; max-width: 850px; margin: 40px auto; overflow: hidden; border-radius: 24px; background: #000; height: 400px; }
-        .slider-track { display: flex; transition: transform 0.5s ease-in-out; height: 100%; }
-        .slide { min-width: 100%; height: 100%; position: relative; cursor: pointer; }
+        .slider-section { position: relative; max-width: 900px; margin: 40px auto; border-radius: 24px; overflow: hidden; height: 450px; background: #000; }
+        .slider-track { display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); height: 100%; }
+        .slide { min-width: 100%; position: relative; cursor: pointer; }
         .slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
         .slide-content { position: absolute; bottom: 40px; left: 40px; right: 40px; color: #fff; }
-        .slide-content h2 { font-family: var(--serif); font-size: 32px; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); color: #fff; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 24px; backdrop-filter: blur(5px); }
-        .nav-btn:hover { background: rgba(255,255,255,0.4); }
+        .slide-content h2 { font-family: var(--serif); font-size: 36px; margin: 0; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.2); color: #fff; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 24px; }
         .prev { left: 20px; } .next { right: 20px; }
 
-        /* Feed Styles */
-        .editorial-feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 40px; margin-top: 50px; }
+        /* News Grid */
+        .editorial-feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 40px; margin-top: 60px; }
         .article-block { border-bottom: 1px solid #eee; padding-bottom: 30px; }
-        .article-block h3 { font-family: var(--serif); font-size: 26px; margin: 15px 0; cursor: pointer; }
-        .article-block img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; }
-
+        .article-block h3 { font-family: var(--serif); font-size: 26px; cursor: pointer; }
+        .article-block img { width: 100%; height: 220px; object-fit: cover; border-radius: 14px; }
         #readerView { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 10000; display: none; overflow-y: auto; padding: 20px; box-sizing: border-box; }
         .reader-content { max-width: 750px; margin: 60px auto; }
     </style>
@@ -35,20 +33,26 @@
     <div class="container">
         <h1 style="font-family: var(--serif); font-size: 48px; text-align: center; margin-top: 40px;">AI Trending</h1>
         
-        <div class="slider-container">
+        <div class="slider-section">
             <button class="nav-btn prev" id="prevSlide">&#10094;</button>
             <div class="slider-track" id="banner-track"></div>
             <button class="nav-btn next" id="nextSlide">&#10095;</button>
         </div>
 
-        <h2 style="font-family: var(--serif); font-size: 32px; border-top: 2px solid #000; padding-top: 40px; margin-top: 60px;">More Intelligence</h2>
+        <h2 style="font-family: var(--serif); font-size: 32px; border-top: 2px solid #000; padding-top: 40px; margin-top: 60px;">Deep Dives</h2>
         <div id="news-feed" class="editorial-feed"></div>
     </div>
-
     <div id="readerView">
         <span style="position:fixed; top:20px; right:30px; font-size:40px; cursor:pointer;" onclick="document.getElementById('readerView').style.display='none'; document.body.style.overflow='auto';">&times;</span>
         <div class="reader-content" id="readerBody"></div>
     </div>
     <script type="module" src="firebase-config.js"></script>
+    <script>
+        // Simple slider logic attached after data loads
+        let cur = 0;
+        document.getElementById('nextSlide').onclick = () => { if(cur < 9) move(1); };
+        document.getElementById('prevSlide').onclick = () => { if(cur > 0) move(-1); };
+        function move(dir) { cur += dir; document.getElementById('banner-track').style.transform = `translateX(-${cur * 100}%)`; }
+    </script>
 </body>
 </html>
