@@ -1,20 +1,42 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, getDocs, where, serverTimestamp, Timestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
-import { generateSitemap } from './sitemap.js';
+import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, query, orderBy, onSnapshot, increment, getDocs, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
-const firebaseConfig = { /* Your Config Here */ };
+// Safety check for sitemap generator to prevent login crashes
+let generateSitemap;
+try {
+    const sitemapModule = await import('./sitemap.js');
+    generateSitemap = sitemapModule.generateSitemap;
+} catch (e) {
+    console.error("sitemap.js not found. Sitemap automation disabled.", e);
+}
+
+const firebaseConfig = {
+    apiKey: "AIzaSyC8YmWqq7cnR5HG62Jb5amEZy9Kw0I38X4",
+    authDomain: "iDigitalWorks-News.firebaseapp.com",
+    projectId: "idigitalworks-news",
+    storageBucket: "iDigitalWorks-News.appspot.com",
+    messagingSenderId: "182576210440",
+    appId: "1:182576210440:web:ada14cf66380ffa77f67bd"
+};
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// --- 1. SHIELDED LOGIN ---
+// --- 1. LOGIN LOGIC ---
 const loginBtn = document.getElementById('loginBtn');
 if (loginBtn) {
     loginBtn.onclick = () => {
-        const e = document.getElementById('loginEmail').value;
-        const p = document.getElementById('loginPassword').value;
-        signInWithEmailAndPassword(auth, e, p).catch(err => alert(err.message));
+        const email = document.getElementById('loginEmail').value;
+        const pass = document.getElementById('loginPassword').value;
+        if (!email || !pass) return alert("Credentials required.");
+        
+        loginBtn.innerText = "Checking...";
+        signInWithEmailAndPassword(auth, email, pass).catch(err => {
+            alert(err.message);
+            loginBtn.innerText = "Login to Dashboard";
+        });
     };
 }
 
@@ -25,97 +47,162 @@ onAuthStateChanged(auth, (user) => {
         if (dash) dash.classList.remove('hidden');
         if (login) login.classList.add('hidden');
         loadAnalytics('30d');
-        loadAdminLists();
+        loadAdminList();
+    } else {
+        if (dash) dash.classList.add('hidden');
+        if (login) login.classList.remove('hidden');
     }
 });
 
-// --- 2. FIXED ANALYTICS & DISCOVERY ---
-async function loadAnalytics(range) {
-    const now = new Date();
-    let startTime = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
-    if (range === '60m') startTime = new Date(now.getTime() - 3600000);
-    if (range === '7d') startTime = new Date(now.getTime() - (7 * 24 * 3600000));
+// --- 2. GITHUB API (SITEMAP & IMAGES) ---
+const owner = "naveen200848";
+const repo = "idigitalworks";
 
-    const dq = query(collection(db, "discovery"), where("timestamp", ">=", Timestamp.fromDate(startTime)));
-    const dSnap = await getDocs(dq);
-    if(document.getElementById('stat-discovery')) document.getElementById('stat-discovery').innerText = dSnap.size;
+async function updateGithubSitemap() {
+    const token = document.getElementById('githubToken').value;
+    if (!token || !generateSitemap) return console.warn("Sitemap sync skipped.");
 
-    const list = document.getElementById('discovery-list');
-    if(list) {
-        list.innerHTML = '';
-        dSnap.forEach(d => {
-            const data = d.data();
-            list.innerHTML += `<div style="padding:5px; border-bottom:1px solid #eee;"><b>${data.source}</b> | Ref: ${data.referrer?.substring(0,30)}...</div>`;
+    try {
+        const xml = await generateSitemap();
+        const contentBase64 = btoa(unescape(encodeURIComponent(xml)));
+        const url = `https://api.github.com/repos/${owner}/${repo}/contents/sitemap.xml`;
+
+        const getFile = await fetch(url, { headers: { Authorization: `token ${token}` } });
+        const fileData = await getFile.json();
+        
+        await fetch(url, {
+            method: "PUT",
+            headers: { Authorization: `token ${token}`, "Content-Type": "application/json" },
+            body: JSON.stringify({ message: "Update Sitemap", content: contentBase64, sha: fileData.sha, branch: "main" })
         });
-    }
-
-    onSnapshot(collection(db, "news"), snap => {
-        let clicks = 0;
-        snap.forEach(d => clicks += (d.data().title_clicks || 0));
-        if (document.getElementById('stat-title-views')) document.getElementById('stat-title-views').innerText = clicks;
-        if (document.getElementById('stat-posts')) document.getElementById('stat-posts').innerText = snap.size;
-    });
+    } catch (e) { console.error("GitHub Sync Error:", e); }
 }
 
-// --- 3. NEWSROOM LOGIC (10 BANNERS + GRID) ---
-const bannerTrack = document.getElementById('banner-track');
-const newsFeed = document.getElementById('news-feed');
-if (bannerTrack && newsFeed) {
+const uploadBtn = document.getElementById('uploadBtn');
+if (uploadBtn) {
+    uploadBtn.onclick = async () => {
+        const file = document.getElementById('imageFile').files[0];
+        const token = document.getElementById('githubToken').value;
+        if (!file || !token) return alert("Token and file required.");
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+            const content = reader.result.split(',')[1];
+            const fileName = `newsimages/${Date.now()}_${file.name}`;
+            const api = `https://api.github.com/repos/${owner}/${repo}/contents/${fileName}`;
+
+            const res = await fetch(api, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: "Upload news image", content: content, branch: "main" })
+            });
+            if (res.ok) {
+                const imgUrl = `https://cdn.jsdelivr.net/gh/${owner}/${repo}@main/${fileName}`;
+                document.getElementById('postImage').value = imgUrl;
+                alert("Image Uploaded Successfully!");
+            }
+        };
+    };
+}
+
+// --- 3. ANALYTICS (TITLE CLICKS ONLY) ---
+async function loadAnalytics(range) {
+    const now = Date.now();
+    let start = now - (30 * 24 * 3600000);
+    if (range === '60m') start = now - 3600000;
+
+    onSnapshot(collection(db, "news"), (snap) => {
+        let total = 0;
+        snap.forEach(d => total += (d.data().title_clicks || 0));
+        const clicksEl = document.getElementById('stat-title-views');
+        if (clicksEl) clicksEl.innerText = total;
+        const postsEl = document.getElementById('stat-posts');
+        if (postsEl) postsEl.innerText = snap.size;
+    });
+
+    const dSnap = await getDocs(query(collection(db, "discovery"), where("timestamp", ">=", new Date(start))));
+    const discEl = document.getElementById('stat-discovery');
+    if (discEl) discEl.innerText = dSnap.size;
+}
+
+// --- 4. ADMIN MANAGEMENT (EDIT/DELETE) ---
+function loadAdminList() {
+    const adminFeed = document.getElementById('admin-feed');
+    if (!adminFeed) return;
     onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
-        bannerTrack.innerHTML = ''; newsFeed.innerHTML = '';
-        let count = 0;
+        adminFeed.innerHTML = '';
         snap.forEach(d => {
             const p = d.data();
-            if (count < 10) {
-                bannerTrack.innerHTML += `
-                    <div class="slide" onclick="openArticle('${d.id}', \`${p.title}\`, \`${p.content}\`, '${p.image}', '${p.redirectUrl}')">
-                        <img src="${p.image}"><div class="slide-info"><h2>${p.title}</h2></div>
-                    </div>`;
-            } else {
-                newsFeed.innerHTML += `
-                    <div class="article-block">
-                        <span class="article-meta">${p.title_clicks || 0} READS</span>
-                        <h3 onclick="openArticle('${d.id}', \`${p.title}\`, \`${p.content}\`, '${p.image}', '${p.redirectUrl}')">${p.title}</h3>
-                        ${p.image ? `<img src="${p.image}">` : ''}
-                        <p>${p.content}</p>
-                    </div>`;
-            }
-            count++;
-        });
-    });
-}
-
-// --- 4. AI TOOLS DIRECTORY ---
-const toolsGrid = document.getElementById('tools-grid');
-if (toolsGrid) {
-    onSnapshot(query(collection(db, "ai_tools"), orderBy("date", "desc")), snap => {
-        toolsGrid.innerHTML = '';
-        snap.forEach(doc => {
-            const t = doc.data();
-            toolsGrid.innerHTML += `
-                <div class="tool-card" onclick="window.open('${t.link}', '_blank')">
-                    <img src="${t.image}"><h3>${t.name}</h3>
-                    <p>${t.description}</p>
-                    <div class="tool-footer"><span>${t.pricing}</span><span class="tag">${t.category}</span></div>
+            const ageH = (Date.now() - (p.date?.seconds * 1000)) / 3600000;
+            const status = (ageH > 24 || p.title_clicks > 10) ? 'status-indexed' : 'status-pending';
+            adminFeed.innerHTML += `
+                <div class="admin-post-item">
+                    <span><span class="index-status ${status}"></span> ${p.title}</span>
+                    <div>
+                        <button onclick="editPost('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.image}', '${p.link || ''}', '${p.redirectUrl || ''}')">Edit</button>
+                        <button onclick="deletePost('${d.id}')" style="color:red; background:none; margin-left:10px;">Delete</button>
+                    </div>
                 </div>`;
         });
     });
 }
 
-// --- 5. PUBLISHING LOGIC ---
-const publishToolBtn = document.getElementById('publishToolBtn');
-if (publishToolBtn) {
-    publishToolBtn.onclick = async () => {
-        await addDoc(collection(db, "ai_tools"), {
-            name: document.getElementById('toolName').value,
-            category: document.getElementById('toolCategory').value,
-            pricing: document.getElementById('toolPricing').value,
-            image: document.getElementById('toolImage').value,
-            link: document.getElementById('toolLink').value,
-            description: document.getElementById('toolDesc').value,
-            date: serverTimestamp()
-        });
-        alert("AI Tool Added!"); location.reload();
+window.editPost = (id, title, content, image, link, redirect) => {
+    window.currentEditId = id;
+    document.getElementById('editTitle').value = title;
+    document.getElementById('editContent').value = content;
+    document.getElementById('editImage').value = image;
+    document.getElementById('editLink').value = link;
+    document.getElementById('editRedirect').value = redirect;
+    document.getElementById('editModal').classList.remove('hidden');
+};
+
+const saveEditBtn = document.getElementById('saveEditBtn');
+if (saveEditBtn) {
+    saveEditBtn.onclick = async () => {
+        try {
+            await updateDoc(doc(db, "news", window.currentEditId), {
+                title: document.getElementById('editTitle').value,
+                content: document.getElementById('editContent').value,
+                image: document.getElementById('editImage').value,
+                link: document.getElementById('editLink').value,
+                redirectUrl: document.getElementById('editRedirect').value
+            });
+            await updateGithubSitemap();
+            alert("Post Updated!");
+            document.getElementById('editModal').classList.add('hidden');
+        } catch (e) { alert("Save Failed: " + e.message); }
     };
 }
-// ... [Continue Publishing News Logic] ...
+
+window.deletePost = async (id) => { 
+    if(confirm("Delete permanently?")) {
+        await deleteDoc(doc(db, "news", id));
+        await updateGithubSitemap();
+    }
+};
+
+// --- 5. PUBLISH ---
+const publishBtn = document.getElementById('publishBtn');
+if (publishBtn) {
+    publishBtn.onclick = async () => {
+        publishBtn.innerText = "Processing...";
+        try {
+            await addDoc(collection(db, "news"), {
+                title: document.getElementById('postTitle').value,
+                content: document.getElementById('postContent').value,
+                image: document.getElementById('postImage').value,
+                link: document.getElementById('postLink').value,
+                redirectUrl: document.getElementById('redirectUrl').value,
+                title_clicks: 0, date: serverTimestamp()
+            });
+            await updateGithubSitemap();
+            alert("Published & GitHub Sitemap Updated!");
+            location.reload();
+        } catch(e) { alert(e.message); publishBtn.innerText = "Publish & Update Sitemap"; }
+    };
+}
+
+const logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) logoutBtn.onclick = () => signOut(auth).then(() => location.reload());
