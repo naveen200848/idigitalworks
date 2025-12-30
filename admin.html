@@ -44,15 +44,24 @@
                 </select>
             </div>
             <div class="stats-grid">
-                <div class="stat-box"><h4>Total Clicks</h4><p id="stat-title-views">0</p></div>
+                <div class="stat-box"><h4>Total Clicks (News)</h4><p id="stat-title-views">0</p></div>
                 <div class="stat-box"><h4>Discovery Traffic</h4><p id="stat-discovery">0</p></div>
                 <div class="stat-box"><h4>Total Posts</h4><p id="stat-posts">0</p></div>
+                <div class="stat-box"><h4>Total AI Tools</h4><p id="stat-tools">0</p></div>
             </div>
         </div>
 
         <div class="card">
             <h3>Discovery Sources (Referrals & UTMs)</h3>
             <div id="discovery-list" style="max-height: 200px; overflow-y: auto; font-size: 13px;"></div>
+        </div>
+
+        <div class="card">
+            <h2>Post AI Tool</h2>
+            <input type="text" id="toolTitle" placeholder="Tool Title">
+            <input type="text" id="toolLink" placeholder="Tool Hyperlink (URL)">
+            <textarea id="toolDesc" placeholder="Tool Description..."></textarea>
+            <button id="publishToolBtn" class="primary-btn">Publish AI Tool</button>
         </div>
 
         <div class="card">
@@ -78,8 +87,24 @@
         </div>
 
         <div class="card">
+            <h3>Manage AI Tools</h3>
+            <div id="admin-tools-feed">Loading tools list...</div>
+        </div>
+
+        <div class="card">
             <h3>Manage Content & Indexing Monitor</h3>
             <div id="admin-feed">Loading content list...</div>
+        </div>
+    </div>
+
+    <div id="editToolModal" class="hidden">
+        <div class="card" style="width: 90%; max-width: 600px; margin-top: 100px;">
+            <h2>Modify AI Tool</h2>
+            <input type="text" id="editToolTitle" placeholder="Title">
+            <input type="text" id="editToolLink" placeholder="Tool Link">
+            <textarea id="editToolDesc" style="height: 150px;" placeholder="Description..."></textarea>
+            <button id="saveToolBtn" class="primary-btn" style="background:#0071e3;">Save Changes</button>
+            <button onclick="document.getElementById('editToolModal').classList.add('hidden')" style="background:#eee; width: 100%; margin-top:10px;">Discard</button>
         </div>
     </div>
 
