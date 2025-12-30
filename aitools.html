@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tools | iDigitalWorks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --serif: 'Playfair Display', serif; --sans: 'Inter', sans-serif; --accent: #0071e3; }
+        body { font-family: var(--sans); background: #ffffff; margin: 0; padding: 20px; color: #1d1d1f; }
+        .header { max-width: 800px; margin: 40px auto; border-bottom: 5px solid #000; padding-bottom: 20px; }
+        .header h1 { font-family: var(--serif); font-size: clamp(40px, 8vw, 64px); margin: 0; letter-spacing: -2px; }
+        .tools-feed { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+        .tool-block { border-bottom: 1px solid #eee; padding-bottom: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .tool-meta { font-size: 12px; font-weight: 700; color: var(--accent); text-transform: uppercase; }
+        .tool-block h2 { font-family: var(--serif); font-size: 32px; line-height: 1.1; margin: 0; }
+        .tool-block a { text-decoration: none; color: inherit; }
+        .tool-block a:hover h2 { color: var(--accent); }
+        .tool-desc { font-size: 18px; line-height: 1.6; color: #333; white-space: pre-wrap; }
+        .visit-btn { display: inline-block; padding: 10px 20px; background-color: var(--accent); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; align-self: flex-start; margin-top: 10px; }
+        .visit-btn:hover { background-color: #005bb5; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI Tools Directory</h1>
+        <p><b>IDIGITALWORKS</b> &nbsp; | &nbsp; CURATED AI TOOLS</p>
+    </div>
+    <div id="tools-feed" class="tools-feed">Loading AI tools...</div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, increment, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC8YmWqq7cnR5HG62Jb5amEZy9Kw0I38X4",
+            authDomain: "iDigitalWorks-News.firebaseapp.com",
+            projectId: "idigitalworks-news",
+            storageBucket: "iDigitalWorks-News.appspot.com",
+            messagingSenderId: "182576210440",
+            appId: "1:182576210440:web:ada14cf66380ffa77f67bd"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Discovery Tracking
+        if(!sessionStorage.getItem('trkd_tools')) {
+            const params = new URLSearchParams(window.location.search);
+            addDoc(collection(db, "discovery_tools"), {
+                source: params.get('utm_source') || 'Direct',
+                referrer: document.referrer || 'None',
+                timestamp: serverTimestamp()
+            });
+            sessionStorage.setItem('trkd_tools', '1');
+        }
+
+        const feed = document.getElementById('tools-feed');
+        onSnapshot(query(collection(db, "ai_tools"), orderBy("date", "desc")), (snap) => {
+            feed.innerHTML = '';
+            snap.forEach(d => {
+                const p = d.data();
+                feed.innerHTML += `
+                    <div class="tool-block">
+                        <span class="tool-meta">AI TOOL</span>
+                        <a href="${p.link}" target="_blank" onclick="trackClick('${d.id}')">
+                            <h2>${p.title}</h2>
+                        </a>
+                        <div class="tool-desc">${p.description}</div>
+                        <a href="${p.link}" target="_blank" class="visit-btn" onclick="trackClick('${d.id}')">Visit Tool</a>
+                    </div>`;
+            });
+            if (snap.empty) {
+                feed.innerHTML = '<p>No AI tools found.</p>';
+            }
+        });
+
+        window.trackClick = async (id) => {
+            await updateDoc(doc(db, "ai_tools", id), { clicks: increment(1) });
+        };
+    </script>
+</body>
+</html>

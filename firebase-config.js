@@ -121,6 +121,11 @@ async function loadAnalytics(range) {
         if (postsEl) postsEl.innerText = snap.size;
     });
 
+    onSnapshot(collection(db, "ai_tools"), (snap) => {
+        const toolsEl = document.getElementById('stat-tools');
+        if (toolsEl) toolsEl.innerText = snap.size;
+    });
+
     const dSnap = await getDocs(query(collection(db, "discovery"), where("timestamp", ">=", new Date(start))));
     const discEl = document.getElementById('stat-discovery');
     if (discEl) discEl.innerText = dSnap.size;
@@ -129,23 +134,42 @@ async function loadAnalytics(range) {
 // --- 4. ADMIN MANAGEMENT (EDIT/DELETE) ---
 function loadAdminList() {
     const adminFeed = document.getElementById('admin-feed');
-    if (!adminFeed) return;
-    onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
-        adminFeed.innerHTML = '';
-        snap.forEach(d => {
-            const p = d.data();
-            const ageH = (Date.now() - (p.date?.seconds * 1000)) / 3600000;
-            const status = (ageH > 24 || p.title_clicks > 10) ? 'status-indexed' : 'status-pending';
-            adminFeed.innerHTML += `
-                <div class="admin-post-item">
-                    <span><span class="index-status ${status}"></span> ${p.title}</span>
-                    <div>
-                        <button onclick="editPost('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.image}', '${p.link || ''}', '${p.redirectUrl || ''}')">Edit</button>
-                        <button onclick="deletePost('${d.id}')" style="color:red; background:none; margin-left:10px;">Delete</button>
-                    </div>
-                </div>`;
+    if (adminFeed) {
+        onSnapshot(query(collection(db, "news"), orderBy("date", "desc")), (snap) => {
+            adminFeed.innerHTML = '';
+            snap.forEach(d => {
+                const p = d.data();
+                const ageH = (Date.now() - (p.date?.seconds * 1000)) / 3600000;
+                const status = (ageH > 24 || p.title_clicks > 10) ? 'status-indexed' : 'status-pending';
+                adminFeed.innerHTML += `
+                    <div class="admin-post-item">
+                        <span><span class="index-status ${status}"></span> ${p.title}</span>
+                        <div>
+                            <button onclick="editPost('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.content.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.image}', '${p.link || ''}', '${p.redirectUrl || ''}')">Edit</button>
+                            <button onclick="deletePost('${d.id}')" style="color:red; background:none; margin-left:10px;">Delete</button>
+                        </div>
+                    </div>`;
+            });
         });
-    });
+    }
+
+    const adminToolsFeed = document.getElementById('admin-tools-feed');
+    if (adminToolsFeed) {
+        onSnapshot(query(collection(db, "ai_tools"), orderBy("date", "desc")), (snap) => {
+            adminToolsFeed.innerHTML = '';
+            snap.forEach(d => {
+                const p = d.data();
+                adminToolsFeed.innerHTML += `
+                    <div class="admin-post-item">
+                        <span>${p.title}</span>
+                        <div>
+                            <button onclick="editTool('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.description.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.link}')">Edit</button>
+                            <button onclick="deleteTool('${d.id}')" style="color:red; background:none; margin-left:10px;">Delete</button>
+                        </div>
+                    </div>`;
+            });
+        });
+    }
 }
 
 window.editPost = (id, title, content, image, link, redirect) => {
@@ -156,6 +180,14 @@ window.editPost = (id, title, content, image, link, redirect) => {
     document.getElementById('editLink').value = link;
     document.getElementById('editRedirect').value = redirect;
     document.getElementById('editModal').classList.remove('hidden');
+};
+
+window.editTool = (id, title, description, link) => {
+    window.currentToolEditId = id;
+    document.getElementById('editToolTitle').value = title;
+    document.getElementById('editToolDesc').value = description;
+    document.getElementById('editToolLink').value = link;
+    document.getElementById('editToolModal').classList.remove('hidden');
 };
 
 const saveEditBtn = document.getElementById('saveEditBtn');
@@ -176,10 +208,31 @@ if (saveEditBtn) {
     };
 }
 
+const saveToolBtn = document.getElementById('saveToolBtn');
+if (saveToolBtn) {
+    saveToolBtn.onclick = async () => {
+        try {
+            await updateDoc(doc(db, "ai_tools", window.currentToolEditId), {
+                title: document.getElementById('editToolTitle').value,
+                description: document.getElementById('editToolDesc').value,
+                link: document.getElementById('editToolLink').value
+            });
+            alert("Tool Updated!");
+            document.getElementById('editToolModal').classList.add('hidden');
+        } catch (e) { alert("Save Failed: " + e.message); }
+    };
+}
+
 window.deletePost = async (id) => { 
     if(confirm("Delete permanently?")) {
         await deleteDoc(doc(db, "news", id));
         await updateGithubSitemap();
+    }
+};
+
+window.deleteTool = async (id) => {
+    if(confirm("Delete permanently?")) {
+        await deleteDoc(doc(db, "ai_tools", id));
     }
 };
 
@@ -201,6 +254,23 @@ if (publishBtn) {
             alert("Published & GitHub Sitemap Updated!");
             location.reload();
         } catch(e) { alert(e.message); publishBtn.innerText = "Publish & Update Sitemap"; }
+    };
+}
+
+const publishToolBtn = document.getElementById('publishToolBtn');
+if (publishToolBtn) {
+    publishToolBtn.onclick = async () => {
+        publishToolBtn.innerText = "Processing...";
+        try {
+            await addDoc(collection(db, "ai_tools"), {
+                title: document.getElementById('toolTitle').value,
+                description: document.getElementById('toolDesc').value,
+                link: document.getElementById('toolLink').value,
+                clicks: 0, date: serverTimestamp()
+            });
+            alert("AI Tool Published!");
+            location.reload();
+        } catch(e) { alert(e.message); publishToolBtn.innerText = "Publish AI Tool"; }
     };
 }
 
