@@ -17,8 +17,19 @@
         .tool-block a { text-decoration: none; color: inherit; }
         .tool-block a:hover h2 { color: var(--accent); }
         .tool-desc { font-size: 18px; line-height: 1.6; color: #333; white-space: pre-wrap; }
+        .tool-image { width: 100%; border-radius: 12px; margin-bottom: 15px; object-fit: cover; max-height: 300px; }
         .visit-btn { display: inline-block; padding: 10px 20px; background-color: var(--accent); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; align-self: flex-start; margin-top: 10px; }
         .visit-btn:hover { background-color: #005bb5; }
+
+        /* SPIDER WEB UI STYLES */
+        #spider-web-container { position: relative; width: 100%; height: 600px; margin: 0 auto; display: none; }
+        .web-node { position: absolute; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; cursor: pointer; transition: 0.3s; font-weight: 600; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .center-node { width: 120px; height: 120px; background: #000; color: #fff; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; font-size: 18px; }
+        .cat-node { width: 100px; height: 100px; background: #fff; border: 2px solid var(--accent); color: var(--accent); font-size: 14px; padding: 5px; z-index: 5; }
+        .cat-node:hover { background: var(--accent); color: #fff; transform: scale(1.1); }
+        .web-line { position: absolute; height: 2px; background: #eee; transform-origin: 0 50%; z-index: 1; }
+        #category-detail { display: none; }
+        .back-btn { background: #eee; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -26,7 +37,15 @@
         <h1>AI Tools Directory</h1>
         <p><b>IDIGITALWORKS</b> &nbsp; | &nbsp; CURATED AI TOOLS</p>
     </div>
-    <div id="tools-feed" class="tools-feed">Loading AI tools...</div>
+
+    <div id="loading-msg">Loading AI tools...</div>
+    <div id="spider-web-container"></div>
+
+    <div id="category-detail">
+        <button class="back-btn" onclick="showSpiderWeb()">← Back to Categories</button>
+        <h2 id="cat-title" style="margin-bottom:30px; font-family:var(--serif); font-size:36px;"></h2>
+        <div id="tools-list" class="tools-feed"></div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
@@ -54,25 +73,89 @@
             sessionStorage.setItem('trkd_tools', '1');
         }
 
-        const feed = document.getElementById('tools-feed');
+        let allTools = [];
+        const container = document.getElementById('spider-web-container');
+        const detailView = document.getElementById('category-detail');
+        const toolsList = document.getElementById('tools-list');
+        const loadingMsg = document.getElementById('loading-msg');
+
         onSnapshot(query(collection(db, "ai_tools"), orderBy("date", "desc")), (snap) => {
-            feed.innerHTML = '';
-            snap.forEach(d => {
-                const p = d.data();
-                feed.innerHTML += `
+            allTools = [];
+            snap.forEach(d => allTools.push({ id: d.id, ...d.data() }));
+            loadingMsg.style.display = 'none';
+            renderSpiderWeb();
+        });
+
+        function renderSpiderWeb() {
+            container.innerHTML = '';
+            container.style.display = 'block';
+            detailView.style.display = 'none';
+
+            // Extract Categories
+            const categories = [...new Set(allTools.map(t => t.category || "Uncategorized"))];
+
+            // Center Node
+            const center = document.createElement('div');
+            center.className = 'web-node center-node';
+            center.innerText = 'AI Tools';
+            container.appendChild(center);
+
+            // Calculate Positions
+            const radius = 200; // Distance from center
+            const centerX = container.clientWidth / 2;
+            const centerY = container.clientHeight / 2;
+
+            categories.forEach((cat, index) => {
+                const angle = (index / categories.length) * 2 * Math.PI;
+                const x = centerX + radius * Math.cos(angle) - 50; // -50 for half width
+                const y = centerY + radius * Math.sin(angle) - 50;
+
+                // Draw Line
+                const line = document.createElement('div');
+                line.className = 'web-line';
+                const dist = Math.sqrt(Math.pow(x + 50 - centerX, 2) + Math.pow(y + 50 - centerY, 2));
+                line.style.width = `${dist}px`;
+                line.style.left = `${centerX}px`;
+                line.style.top = `${centerY}px`;
+                line.style.transform = `rotate(${angle * (180/Math.PI)}deg)`;
+                container.appendChild(line);
+
+                // Draw Node
+                const node = document.createElement('div');
+                node.className = 'web-node cat-node';
+                node.innerText = cat;
+                node.style.left = `${x}px`;
+                node.style.top = `${y}px`;
+                node.onclick = () => showCategory(cat);
+                container.appendChild(node);
+            });
+        }
+
+        window.showCategory = (cat) => {
+            container.style.display = 'none';
+            detailView.style.display = 'block';
+            document.getElementById('cat-title').innerText = cat;
+            toolsList.innerHTML = '';
+
+            const filtered = allTools.filter(t => (t.category || "Uncategorized") === cat);
+            filtered.forEach(p => {
+                toolsList.innerHTML += `
                     <div class="tool-block">
-                        <span class="tool-meta">AI TOOL</span>
-                        <a href="${p.link}" target="_blank" onclick="trackClick('${d.id}')">
+                        <span class="tool-meta">AI TOOL • ${p.category || 'General'}</span>
+                        <a href="${p.link}" target="_blank" onclick="trackClick('${p.id}')">
                             <h2>${p.title}</h2>
                         </a>
+                        ${p.image ? `<img src="${p.image}" class="tool-image">` : ''}
                         <div class="tool-desc">${p.description}</div>
-                        <a href="${p.link}" target="_blank" class="visit-btn" onclick="trackClick('${d.id}')">Visit Tool</a>
+                        <a href="${p.link}" target="_blank" class="visit-btn" onclick="trackClick('${p.id}')">Visit Tool</a>
                     </div>`;
             });
-            if (snap.empty) {
-                feed.innerHTML = '<p>No AI tools found.</p>';
-            }
-        });
+        };
+
+        window.showSpiderWeb = () => {
+            detailView.style.display = 'none';
+            container.style.display = 'block';
+        };
 
         window.trackClick = async (id) => {
             await updateDoc(doc(db, "ai_tools", id), { clicks: increment(1) });
