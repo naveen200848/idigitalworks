@@ -46,7 +46,15 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         if (dash) dash.classList.remove('hidden');
         if (login) login.classList.add('hidden');
-        loadAnalytics('30d');
+
+        // Default to last 30 days
+        const end = new Date();
+        const start = new Date();
+        start.setDate(end.getDate() - 30);
+        document.getElementById('dateStart').valueAsDate = start;
+        document.getElementById('dateEnd').valueAsDate = end;
+
+        loadAnalytics();
         loadAdminList();
     } else {
         if (dash) dash.classList.add('hidden');
@@ -107,11 +115,19 @@ if (uploadBtn) {
 }
 
 // --- 3. ANALYTICS (TITLE CLICKS ONLY) ---
-async function loadAnalytics(range) {
-    const now = Date.now();
-    let start = now - (30 * 24 * 3600000);
-    if (range === '60m') start = now - 3600000;
+const applyDateBtn = document.getElementById('applyDateBtn');
+if (applyDateBtn) applyDateBtn.onclick = () => loadAnalytics();
 
+async function loadAnalytics() {
+    const startVal = document.getElementById('dateStart').value;
+    const endVal = document.getElementById('dateEnd').value;
+
+    const startDate = startVal ? new Date(startVal) : new Date(Date.now() - 30*24*3600*1000);
+    const endDate = endVal ? new Date(endVal) : new Date();
+    // Set end date to end of day
+    endDate.setHours(23,59,59,999);
+
+    // AI NEWS ANALYTICS
     onSnapshot(collection(db, "news"), (snap) => {
         let total = 0;
         snap.forEach(d => total += (d.data().title_clicks || 0));
@@ -121,14 +137,27 @@ async function loadAnalytics(range) {
         if (postsEl) postsEl.innerText = snap.size;
     });
 
+    const newsDiscQ = query(collection(db, "discovery"), where("timestamp", ">=", startDate), where("timestamp", "<=", endDate));
+    const newsDiscSnap = await getDocs(newsDiscQ);
+    const discEl = document.getElementById('stat-discovery');
+    if (discEl) discEl.innerText = newsDiscSnap.size;
+
+    // AI TOOLS ANALYTICS
     onSnapshot(collection(db, "ai_tools"), (snap) => {
+        let totalClicks = 0;
+        snap.forEach(d => totalClicks += (d.data().clicks || 0));
         const toolsEl = document.getElementById('stat-tools');
         if (toolsEl) toolsEl.innerText = snap.size;
+        const toolClicksEl = document.getElementById('stat-tool-clicks');
+        if (toolClicksEl) toolClicksEl.innerText = totalClicks;
     });
 
-    const dSnap = await getDocs(query(collection(db, "discovery"), where("timestamp", ">=", new Date(start))));
-    const discEl = document.getElementById('stat-discovery');
-    if (discEl) discEl.innerText = dSnap.size;
+    try {
+        const toolDiscQ = query(collection(db, "discovery_tools"), where("timestamp", ">=", startDate), where("timestamp", "<=", endDate));
+        const toolDiscSnap = await getDocs(toolDiscQ);
+        const toolDiscEl = document.getElementById('stat-tool-discovery');
+        if (toolDiscEl) toolDiscEl.innerText = toolDiscSnap.size;
+    } catch(e) { console.log("Tools discovery collection might be empty/missing"); }
 }
 
 // --- 4. ADMIN MANAGEMENT (EDIT/DELETE) ---
@@ -161,9 +190,12 @@ function loadAdminList() {
                 const p = d.data();
                 adminToolsFeed.innerHTML += `
                     <div class="admin-post-item">
-                        <span>${p.title}</span>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            ${p.image ? `<img src="${p.image}" style="width:30px; height:30px; border-radius:4px; object-fit:cover;">` : ''}
+                            <span>${p.title} <small style="color:#888;">(${p.category || 'Uncategorized'})</small></span>
+                        </div>
                         <div>
-                            <button onclick="editTool('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.description.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.link}')">Edit</button>
+                            <button onclick="editTool('${d.id}', \`${p.title.replace(/'/g, "\\'")}\`, \`${p.description.replace(/'/g, "\\'").replace(/\n/g, '\\n')}\`, '${p.link}', '${p.category || ''}', '${p.image || ''}')">Edit</button>
                             <button onclick="deleteTool('${d.id}')" style="color:red; background:none; margin-left:10px;">Delete</button>
                         </div>
                     </div>`;
@@ -182,11 +214,13 @@ window.editPost = (id, title, content, image, link, redirect) => {
     document.getElementById('editModal').classList.remove('hidden');
 };
 
-window.editTool = (id, title, description, link) => {
+window.editTool = (id, title, description, link, category, image) => {
     window.currentToolEditId = id;
     document.getElementById('editToolTitle').value = title;
     document.getElementById('editToolDesc').value = description;
     document.getElementById('editToolLink').value = link;
+    document.getElementById('editToolCategory').value = category;
+    document.getElementById('editToolImage').value = image;
     document.getElementById('editToolModal').classList.remove('hidden');
 };
 
@@ -215,7 +249,9 @@ if (saveToolBtn) {
             await updateDoc(doc(db, "ai_tools", window.currentToolEditId), {
                 title: document.getElementById('editToolTitle').value,
                 description: document.getElementById('editToolDesc').value,
-                link: document.getElementById('editToolLink').value
+                link: document.getElementById('editToolLink').value,
+                category: document.getElementById('editToolCategory').value,
+                image: document.getElementById('editToolImage').value
             });
             alert("Tool Updated!");
             document.getElementById('editToolModal').classList.add('hidden');
@@ -266,6 +302,8 @@ if (publishToolBtn) {
                 title: document.getElementById('toolTitle').value,
                 description: document.getElementById('toolDesc').value,
                 link: document.getElementById('toolLink').value,
+                category: document.getElementById('toolCategory').value,
+                image: document.getElementById('toolImage').value,
                 clicks: 0, date: serverTimestamp()
             });
             alert("AI Tool Published!");

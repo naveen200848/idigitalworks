@@ -38,16 +38,26 @@
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
                 <h2>Growth Analytics</h2>
-                <select id="timeFilter" style="width: auto; margin:0;">
-                    <option value="60m">Last 60 Minutes</option>
-                    <option value="30d" selected>Last 30 Days</option>
-                </select>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="date" id="dateStart" style="width:auto; margin:0;">
+                    <span style="font-weight:bold;">to</span>
+                    <input type="date" id="dateEnd" style="width:auto; margin:0;">
+                    <button id="applyDateBtn" class="blue-btn" style="width:auto; padding: 10px 15px;">Apply</button>
+                </div>
             </div>
+
+            <h3 style="margin-top:0;">AI News Analytics</h3>
             <div class="stats-grid">
-                <div class="stat-box"><h4>Total Clicks (News)</h4><p id="stat-title-views">0</p></div>
+                <div class="stat-box"><h4>Total Clicks</h4><p id="stat-title-views">0</p></div>
                 <div class="stat-box"><h4>Discovery Traffic</h4><p id="stat-discovery">0</p></div>
                 <div class="stat-box"><h4>Total Posts</h4><p id="stat-posts">0</p></div>
-                <div class="stat-box"><h4>Total AI Tools</h4><p id="stat-tools">0</p></div>
+            </div>
+
+            <h3 style="border-top: 1px solid #eee; padding-top: 20px;">AI Tools Analytics</h3>
+            <div class="stats-grid">
+                <div class="stat-box"><h4>Total Clicks</h4><p id="stat-tool-clicks">0</p></div>
+                <div class="stat-box"><h4>Discovery Traffic</h4><p id="stat-tool-discovery">0</p></div>
+                <div class="stat-box"><h4>Total Tools</h4><p id="stat-tools">0</p></div>
             </div>
         </div>
 
@@ -60,6 +70,8 @@
             <h2>Post AI Tool</h2>
             <input type="text" id="toolTitle" placeholder="Tool Title">
             <input type="text" id="toolLink" placeholder="Tool Hyperlink (URL)">
+            <input type="text" id="toolCategory" placeholder="Category (e.g. Chatbots, Image Gen)">
+            <input type="text" id="toolImage" placeholder="Image URL">
             <textarea id="toolDesc" placeholder="Tool Description..."></textarea>
             <button id="publishToolBtn" class="primary-btn">Publish AI Tool</button>
         </div>
@@ -102,6 +114,8 @@
             <h2>Modify AI Tool</h2>
             <input type="text" id="editToolTitle" placeholder="Title">
             <input type="text" id="editToolLink" placeholder="Tool Link">
+            <input type="text" id="editToolCategory" placeholder="Category">
+            <input type="text" id="editToolImage" placeholder="Image URL">
             <textarea id="editToolDesc" style="height: 150px;" placeholder="Description..."></textarea>
             <button id="saveToolBtn" class="primary-btn" style="background:#0071e3;">Save Changes</button>
             <button onclick="document.getElementById('editToolModal').classList.add('hidden')" style="background:#eee; width: 100%; margin-top:10px;">Discard</button>
